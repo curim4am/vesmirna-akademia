@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#060812">
+  <title>🚀 Vesmírna akadémia</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+</head>
+<body>
+
+  <!-- Hviezdne pozadie (kreslí sa raz, výkonovo nenáročné) -->
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="nebula-glow" aria-hidden="true"></div>
+
+  <!-- Horná lišta -->
+  <header class="topbar" id="topbar">
+    <button class="topbar__back" id="btnBack" aria-label="Späť">←</button>
+    <div class="topbar__title" id="topbarTitle">VESMÍRNA AKADÉMIA</div>
+    <div class="topbar__xp" id="topbarXp"><span id="topbarXpValue">0</span> XP</div>
+  </header>
+
+  <!-- Progress bar lekcie -->
+  <div class="progress" id="progress" hidden>
+    <div class="progress__fill" id="progressFill"></div>
+  </div>
+
+  <!-- Sem sa vykresľujú všetky obrazovky -->
+  <main id="app"></main>
+
+  <!-- Vrstva pre odznaky / oznámenia -->
+  <div id="overlay" class="overlay" hidden></div>
+  <div id="toasts" class="toasts" aria-live="polite"></div>
+
+  <!-- Dáta (obsah) -->
+  <script src="data/images.js"></script>
+  <script src="data/objects.js"></script>
+  <script src="data/facts.js"></script>
+  <script src="data/terms.js"></script>
+  <script src="data/sims.js"></script>
+  <script src="data/lessons.js"></script>
+  <!-- Aplikácia (logika) -->
+  <script src="sim-engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
