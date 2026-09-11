@@ -1,17 +1,17 @@
 /* =============================================================================
-   INTERAKTÍVNE ÚLOHY – OBSAH  (data/sims.js)
+   INTERAKTIVNÍ ÚLOHY – OBSAH  (data/sims.js)
    -----------------------------------------------------------------------------
-   Tu sú TEXTY a NASTAVENIA simulácií. Samotné kreslenie je v sim-engine.js
-   (jedna funkcia na simuláciu). V lekcii sa použije krokom:
+   Tady jsou TEXTY a NASTAVENÍ simulací. Samotné kreslení je v sim-engine.js
+   (jedna funkce na simulaci). V lekci se použije krokem:
 
        { type: 'sim', simId: 'fotolab', xp: 25 }
 
-   Ovládače (controls):
+   Ovladače (controls):
      { id, label, values:[…], unit, start }          – posuvník s hodnotami
-     { id, label, options:['AZ','EQ'], start:'AZ' }  – prepínač
+     { id, label, options:['AZ','EQ'], start:'AZ' }  – přepínač
      { id, label, min, max, step, start, unit }      – plynulý posuvník
 
-   challenge – nepovinná výzva: keď ju splní, dostane bonusové XP.
+   challenge – nepovinná výzva: když ji splní, dostane bonusové XP.
    ========================================================================== */
 
 const SIMS = {
@@ -19,164 +19,167 @@ const SIMS = {
   /* ---------------------------------------------------------------- FOTOLAB */
   fotolab: {
     title: '🎛️ FOTOLAB',
-    lead: 'Nastav Dwarf ako pri skutočnom fotení a pozeraj, ako sa fotka mení. ' +
-          'Nič sa nedá pokaziť – skúšaj, kým to nebude vyzerať dobre.',
-    target: 'Cieľ: M42 Orionova hmlovina',
+    lead: 'Nastav Dwarf jako při skutečném fotografování a pozoruj, jak se fotka mění. Nic se ' +
+          'nedá pokazit – zkoušej, dokud to nebude vypadat dobře.',
+    target: 'Cíl: M42 Orionova mlhovina',
     controls: [
-      { id: 'exp',    label: 'Expozícia',   unit: 's', values: [2, 5, 15, 30, 60, 90], start: 2 },
+      { id: 'exp',    label: 'Expozice',   unit: 's', values: [2, 5, 15, 30, 60, 90], start: 2 },
       { id: 'gain',   label: 'Gain',        values: [20, 40, 60, 80, 100, 120], start: 20 },
-      { id: 'frames', label: 'Počet snímok', values: [10, 50, 100, 200, 400], start: 10 },
-      { id: 'mode',   label: 'Režim sledovania', options: ['AZ', 'EQ'], start: 'AZ' }
+      { id: 'frames', label: 'Počet snímků', values: [10, 50, 100, 200, 400], start: 10 },
+      { id: 'mode',   label: 'Režim sledování', options: ['AZ', 'EQ'], start: 'AZ' }
     ],
     challenge: {
-      text: 'Nafoť M42 tak, aby bola jasná, hviezdy okrúhle a pozadie hladké – a aby ti to nezabralo viac než 45 minút.',
-      done: '🏆 Výzva splnená! Presne takto by to fungovalo aj vonku.'
+      text: 'Vyfotografuj M42 tak, aby byla jasná, hvězdy kulaté a pozadí hladké – a aby ti to ' +
+            'nezabralo víc než 45 minut.',
+      done: '🏆 Výzva splněna! Přesně takhle by to fungovalo i venku.'
     },
     tips: [
-      'Tmavá fotka? Pridaj expozíciu – to pomôže viac než gain.',
-      'Zašumená fotka? Pridaj snímky alebo uber gain.',
-      'Hviezdy ako čiarky? Prepni na EQ režim.',
-      'Prepálený biely stred? Uber expozíciu alebo gain.'
+      'Tmavá fotka? Přidej expozici – to pomůže víc než gain.',
+      'Zašuměná fotka? Přidej snímky nebo uber gain.',
+      'Hvězdy jako čárky? Přepni na EQ režim.',
+      'Přepálený bílý střed? Uber expozici nebo gain.'
     ]
   },
 
-  /* ------------------------------------------------------ SKLADANIE SNÍMOK */
+  /* ------------------------------------------------------- SKLÁDÁNÍ SNÍMKŮ */
   skladanie: {
-    title: '🧩 KOĽKO SNÍMOK STAČÍ?',
-    lead: 'Expozícia aj gain zostávajú rovnaké. Meníš len počet snímok, ktoré Dwarf poskladá na sebe. ' +
-          'Sleduj pozadie – nie objekt.',
-    target: 'Cieľ: M42, expozícia 30 s, gain 80',
+    title: '🧩 KOLIK SNÍMKŮ STAČÍ?',
+    lead: 'Expozice i gain zůstávají stejné. Měníš jen počet snímků, které Dwarf poskládá na ' +
+          'sebe. Sleduj pozadí – ne objekt.',
+    target: 'Cíl: M42, expozice 30 s, gain 80',
     controls: [
-      { id: 'frames', label: 'Počet snímok', values: [1, 5, 10, 25, 50, 100, 200, 400], start: 1 }
+      { id: 'frames', label: 'Počet snímků', values: [1, 5, 10, 25, 50, 100, 200, 400], start: 1 }
     ],
     challenge: {
-      text: 'Nájdi najmenší počet snímok, pri ktorom už pozadie nešumí.',
-      done: '🏆 Presne tak – od dvesto snímok vyššie je rozdiel už len malý.'
+      text: 'Najdi nejmenší počet snímků, při kterém už pozadí nešumí.',
+      done: '🏆 Přesně tak – od dvou set snímků výš je rozdíl už jen malý.'
     },
-    tips: ['Šum klesá pomalšie, než by si čakal: štyrikrát viac snímok = polovičný šum.']
+    tips: ['Šum klesá pomaleji, než bys čekal: čtyřikrát více snímků = poloviční šum.']
   },
 
-  /* -------------------------------------------------------- FÁZY MESIACA */
+  /* --------------------------------------------------------- FÁZE MĚSÍCE */
   'mesiac-fazy': {
-    title: '🌗 PREČO MÁ MESIAC FÁZY',
-    lead: 'Slnko svieti stále z tej istej strany (zľava). Posúvaj Mesiac po jeho dráhe a pozeraj, ' +
-          'koľko z osvetlenej polovice vidíme zo Zeme.',
-    target: 'Vľavo pohľad zvonku · vpravo pohľad zo Zeme',
+    title: '🌗 PROČ MÁ MĚSÍC FÁZE',
+    lead: 'Slunce svítí stále ze stejné strany (zleva). Posouvej Měsíc po jeho dráze a sleduj, ' +
+          'kolik z osvětlené poloviny vidíme ze Země.',
+    target: 'Vlevo pohled zvenku · vpravo pohled ze Země',
     controls: [
-      { id: 'day', label: 'Deň v cykle', min: 0, max: 29.5, step: 0.5, start: 0, unit: '. deň' }
+      { id: 'day', label: 'Den v cyklu', min: 0, max: 29.5, step: 0.5, start: 0, unit: '. den' }
     ],
     challenge: {
-      text: 'Nastav spln – teda deň, kedy vidíme celý osvetlený kotúč.',
-      done: '🏆 To je spln. Všimni si, kde je vtedy Mesiac: presne na opačnej strane od Slnka.'
+      text: 'Nastav úplněk – tedy den, kdy vidíme celý osvětlený kotouč.',
+      done: '🏆 To je úplněk. Všimni si, kde je tehdy Měsíc: přesně na opačné straně od Slunce.'
     },
     tips: [
-      'Zem nikde nevrhá tieň – fázy nie sú tieň Zeme.',
-      'Osvetlená je vždy presne polovica Mesiaca. Mení sa len to, koľko z nej odtiaľto vidíme.'
+      'Země nikde nevrhá stín – fáze nejsou stín Země.',
+      'Osvětlená je vždy přesně polovina Měsíce. Mění se jen to, kolik z ní odsud vidíme.'
     ]
   },
 
   /* ------------------------------------------------------ NASTAVENIE EQ */
   'eq-nastavenie': {
     title: '⚙️ NASTAV EQ REŽIM',
-    lead: 'Nakloň Dwarf na uhol našej zemepisnej šírky a otoč ho na sever k Polárke. ' +
-          'Náhľad ti hneď ukáže, či hviezdy zostanú okrúhle.',
-    target: 'Skúšobná snímka: 90 sekúnd',
+    lead: 'Nakloň Dwarf na úhel naší zeměpisné šířky a otoč ho na sever k Polárce. Náhled ti hned ' +
+          'ukáže, jestli hvězdy zůstanou kulaté.',
+    target: 'Zkušební snímek: 90 sekund',
     controls: [
-      { id: 'tilt',  label: 'Naklonenie', min: 0, max: 90, step: 1, start: 0, unit: '°' },
-      { id: 'north', label: 'Odchýlka od severu', min: -60, max: 60, step: 1, start: 45, unit: '°' }
+      { id: 'tilt',  label: 'Naklonění', min: 0, max: 90, step: 1, start: 0, unit: '°' },
+      { id: 'north', label: 'Odchylka od severu', min: -60, max: 60, step: 1, start: 45, unit: '°' }
     ],
     challenge: {
-      text: 'Nastav naklonenie na 48° (Slovensko) a otoč Dwarf na sever – odchýlka do 8 stupňov.',
-      done: '🏆 Takto je os Dwarfu rovnobežná s osou Zeme. Presne toto robíš vonku pred fotením.'
+      text: 'Nastav naklonění na 50° (Praha) a otoč Dwarf na sever – odchylka do 8 stupňů.',
+      done: '🏆 Takhle je osa Dwarfu rovnoběžná s osou Země. Přesně tohle děláš venku před focením.'
     },
     tips: [
-      'Uhol naklonenia = zemepisná šírka. Na Slovensku je to 48 – 49 stupňov.',
-      'Nemusí to byť presné na stupeň – appka Dwarfu zvyšok dorovná pri kalibrácii.'
+      'Úhel naklonění = zeměpisná šířka. V Praze je to zhruba 50 stupňů.',
+      'Nemusí to být přesné na stupeň – aplikace Dwarfu zbytek dorovná při kalibraci.'
     ]
   },
 
   /* ---------------------------------------------------------- ZORNÉ POLE */
   'zorne-pole': {
-    title: '🔲 ZMESTÍ SA TO DO ZÁBERU?',
-    lead: 'Rámik je skutočný záber Dwarfu mini – 2,45 stupňa. Prepínaj objekty a pozeraj, ' +
-          'ktoré sa doň zmestia celé.',
-    target: 'Objekty sú nakreslené v skutočnej veľkosti voči záberu',
+    title: '🔲 VEJDE SE TO DO ZÁBĚRU?',
+    lead: 'Rámeček je skutečný záběr Dwarfu mini – 2,45 stupně. Přepínej objekty a sleduj, které ' +
+          'se do něj vejdou celé.',
+    target: 'Objekty jsou nakreslené ve skutečné velikosti vůči záběru',
     controls: [
-      { id: 'obj', label: 'Objekt', options: ['Saturn', 'M13', 'Mesiac', 'M42', 'M45', 'M31'], start: 'Saturn' }
+      { id: 'obj', label: 'Objekt', options: ['Saturn', 'M13', 'Měsíc', 'M42', 'M45', 'M31'], start: 'Saturn' }
     ],
     challenge: {
-      text: 'Nájdi objekt, ktorý sa do záberu Dwarfu celý nezmestí.',
-      done: '🏆 Andromeda je na nebi širšia než 2,45° – odfotíš jej stred, nie celú.'
+      text: 'Najdi objekt, který se do záběru Dwarfu celý nevejde.',
+      done: '🏆 Andromeda je na nebi širší než 2,45° – vyfotíš její střed, ne celou.'
     },
-    tips: ['Mesiac má na nebi pol stupňa. Do záberu Dwarfu sa ich zmestí asi päť vedľa seba.']
+    tips: ['Měsíc má na nebi půl stupně. Do záběru Dwarfu se jich vejde asi pět vedle sebe.']
   },
 
-  /* -------------------------------------------------- TRANZIT EXOPLANÉTY */
+  /* -------------------------------------------------- TRANZIT EXOPLANETY */
   tranzit: {
-    title: '📉 NAJDI EXOPLANÉTU',
-    lead: 'Posúvaj planétu pred hviezdou a pozeraj na graf jasnosti pod ňou. ' +
-          'Presne takto astronómi objavujú cudzie svety.',
-    target: 'Hviezda 51 Pegasi a jej planéta · graf poklesu je zámerne zväčšený',
+    title: '📉 NAJDI EXOPLANETU',
+    lead: 'Posouvej planetu před hvězdou a sleduj graf jasnosti pod ní. Přesně takhle astronomové ' +
+          'objevují cizí světy.',
+    target: 'Hvězda 51 Pegasi a její planeta · graf poklesu je záměrně zvětšený',
     controls: [
-      { id: 'pos',  label: 'Poloha planéty', min: -140, max: 140, step: 2, start: -140 },
-      { id: 'size', label: 'Veľkosť planéty', values: [4, 8, 14, 22], start: 14 }
+      { id: 'pos',  label: 'Poloha planety', min: -140, max: 140, step: 2, start: -140 },
+      { id: 'size', label: 'Velikost planety', values: [4, 8, 14, 22], start: 14 }
     ],
     challenge: {
-      text: 'Posuň planétu presne pred stred hviezdy, aby jasnosť klesla najviac.',
-      done: '🏆 Toto je tranzit. Z hĺbky poklesu astronómi vypočítajú, aká veľká planéta je.'
+      text: 'Posuň planetu přesně před střed hvězdy, aby jasnost klesla nejvíc.',
+      done: '🏆 Tohle je tranzit. Z hloubky poklesu astronomové vypočítají, jak velká planeta je.'
     },
     tips: [
-      'Väčšia planéta zakryje viac svetla, takže pokles je hlbší.',
-      'V skutočnosti je pokles menší než jedno percento – oko by ho nezbadalo, prístroj áno.',
-      'Pozri sa na číslo „pokles jasnosti“: to je skutočná hodnota. Krivka v grafe je len zväčšená.'
+      'Větší planeta zakryje více světla, takže pokles je hlubší.',
+      'Ve skutečnosti je pokles menší než jedno procento – oko by ho nepostřehlo, přístroj ' +
+      'ano.',
+      'Podívej se na číslo „pokles jasnosti“: to je skutečná hodnota. Křivka v grafu je jen ' +
+      'zvětšená.'
     ]
   },
 
   /* ------------------------------------------------------- FARBA HVIEZDY */
   'farba-teplota': {
-    title: '🌈 NASTAV TEPLOTU HVIEZDY',
-    lead: 'Posúvaj teplotu povrchu a pozeraj, ako sa mení farba hviezdy. ' +
-          'Astronómi to robia naopak: zmerajú farbu a z nej vypočítajú teplotu.',
-    target: 'Naše Slnko má na povrchu asi 5 500 °C',
+    title: '🌈 NASTAV TEPLOTU HVĚZDY',
+    lead: 'Posouvej teplotu povrchu a sleduj, jak se mění barva hvězdy. Astronomové to dělají ' +
+          'naopak: změří barvu a z ní vypočítají teplotu.',
+    target: 'Naše Slunce má na povrchu asi 5 500 °C',
     controls: [
       { id: 'temp', label: 'Teplota povrchu', min: 2500, max: 30000, step: 250, start: 2500, unit: ' °C' }
     ],
     challenge: {
-      text: 'Nastav teplotu tak, aby hviezda vyzerala ako naše Slnko (5 000 – 6 000 °C).',
-      done: '🏆 Toto je žltá hviezda ako Slnko. Modré sú horúcejšie, červené chladnejšie.'
+      text: 'Nastav teplotu tak, aby hvězda vypadala jako naše Slunce (5 000 – 6 000 °C).',
+      done: '🏆 Tohle je žlutá hvězda jako Slunce. Modré jsou žhavější, červené chladnější.'
     },
-    tips: ['Je to naopak, ako to máme na kohútikoch: modrá = horúca, červená = chladná.']
+    tips: ['Je to naopak, než jak to máme na kohoutcích: modrá = žhavá, červená = chladná.']
   },
 
-  /* --------------------------------------------------- VESMÍRNE VZDIALENOSTI */
+  /* ---------------------------------------------------- VESMÍRNÉ VZDÁLENOSTI */
   vzdialenosti: {
-    title: '📏 AKO DALEKO TO JE',
-    lead: 'Posúvaj sa od Mesiaca až po vzdialené galaxie. Počítadlo ti hovorí, ' +
-          'ako dlho k nám to svetlo letelo.',
-    target: 'Od 1,3 svetelnej sekundy po 31 miliónov svetelných rokov',
+    title: '📏 JAK DALEKO TO JE',
+    lead: 'Posouvej se od Měsíce až k vzdáleným galaxiím. Počítadlo ti říká, jak dlouho k nám to ' +
+          'světlo letělo.',
+    target: 'Od 1,3 světelné sekundy po 31 milionů světelných let',
     controls: [
       { id: 'step', label: 'Objekt', values: [0, 1, 2, 3, 4, 5, 6, 7], start: 0 }
     ],
     challenge: {
-      text: 'Dostaň sa až k najvzdialenejšiemu objektu v zozname.',
-      done: '🏆 Svetlo z M51 letelo 31 miliónov rokov. Keď vyrazilo, na Zemi ešte neboli ľudia.'
+      text: 'Dostaň se až k nejvzdálenějšímu objektu v seznamu.',
+      done: '🏆 Světlo z M51 letělo 31 milionů let. Když vyrazilo, na Zemi ještě nebyli lidé.'
     },
-    tips: ['Všimni si, aký obrovský skok je medzi Slnkom a najbližšou hviezdou.']
+    tips: ['Všimni si, jak obrovský skok je mezi Sluncem a nejbližší hvězdou.']
   },
 
-  /* --------------------------------------------- SVETELNÉ ZNEČISTENIE */
+  /* ---------------------------------------------- SVĚTELNÉ ZNEČIŠTĚNÍ */
   'svetelne-znecistenie': {
-    title: '🌑 KOĽKO HVIEZD UVIDÍŠ',
-    lead: 'Posúvaj sa od tmavej oblohy v Poloninách po centrum veľkého mesta ' +
-          'a pozeraj, ako hviezdy z oblohy mizli.',
-    target: 'Bortlova stupnica 1 (najtmavšia) až 9 (centrum mesta)',
+    title: '🌑 KOLIK HVĚZD UVIDÍŠ',
+    lead: 'Posouvej se od tmavé oblohy v Jizerských horách po centrum velkého města a sleduj, jak ' +
+          'hvězdy z oblohy mizí.',
+    target: 'Bortleova stupnice 1 (nejtmavší) až 9 (centrum města)',
     controls: [
       { id: 'bortle', label: 'Obloha', min: 1, max: 9, step: 1, start: 1 }
     ],
     challenge: {
-      text: 'Nastav oblohu tak, ako ju máte doma, a potom sa vráť na 1 – 2. Porovnaj rozdiel.',
-      done: '🏆 Rozdiel je desiatky hviezd verzus tisíce. Preto sa vyplatí odviezť sa za mesto.'
+      text: 'Nastav oblohu tak, jakou ji máte doma, a potom přepni na 1 – 2. Porovnej rozdíl.',
+      done: '🏆 Rozdíl je desítky hvězd versus tisíce. Proto se vyplatí odjet za město.'
     },
-    tips: ['Mliečna cesta zmizne z oblohy už okolo stupňa 5.']
+    tips: ['Mléčná dráha zmizí z oblohy už kolem stupně 5.']
   }
 };

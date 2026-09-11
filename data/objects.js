@@ -1,45 +1,45 @@
 /* =============================================================================
-   KATALÓG VESMÍRNYCH OBJEKTOV  (data/objects.js)
+   KATALOG VESMÍRNÝCH OBJEKTŮ  (data/objects.js)
    -----------------------------------------------------------------------------
-   OBJECT_TYPES = typy objektov (aby sa dali neskôr pridať galaxie, hviezdokopy…)
-   SPACE_OBJECTS = konkrétne objekty, ktoré sa dajú "objaviť" a uložiť do zbierky
+   OBJECT_TYPES = typy objektů (aby se daly později přidat galaxie, hvězdokupy…)
+   SPACE_OBJECTS = konkrétní objekty, které se dají "objevit" a uložit do sbírky
 
-   AKO PRIDAŤ NOVÝ OBJEKT: skopíruj jednu položku v SPACE_OBJECTS a zmeň údaje.
-   Dôležité je len unikátne "id" a existujúci "type" + "image".
+   JAK PŘIDAT NOVÝ OBJEKT: zkopíruj jednu položku v SPACE_OBJECTS a změň údaje.
+   Důležité je jen unikátní "id" a existující "type" + "image".
    ========================================================================== */
 
 const OBJECT_TYPES = {
-  nebula:         { name: 'Hmlovina',            icon: '☁️', color: '#ff7ac6' },
-  star:           { name: 'Hviezda',             icon: '⭐', color: '#ffd479' },
-  doubleStar:     { name: 'Dvojhviezda',         icon: '✨', color: '#ffe9a8' },
-  openCluster:    { name: 'Otvorená hviezdokopa',icon: '🌟', color: '#9ad8ff' },
-  globularCluster:{ name: 'Guľová hviezdokopa',  icon: '🔵', color: '#8ab8ff' },
+  nebula:         { name: 'Mlhovina',            icon: '☁️', color: '#ff7ac6' },
+  star:           { name: 'Hvězda',             icon: '⭐', color: '#ffd479' },
+  doubleStar:     { name: 'Dvojhvězda',         icon: '✨', color: '#ffe9a8' },
+  openCluster:    { name: 'Otevřená hvězdokupa',icon: '🌟', color: '#9ad8ff' },
+  globularCluster:{ name: 'Kulová hvězdokupa',  icon: '🔵', color: '#8ab8ff' },
   supernova:      { name: 'Supernova',           icon: '💥', color: '#ff9d5c' },
-  galaxy:         { name: 'Galaxia',             icon: '🌌', color: '#b79dff' },
-  blackHole:      { name: 'Čierna diera',        icon: '⚫', color: '#7f8ba3' },
-  planet:         { name: 'Planéta',             icon: '🪐', color: '#ffc48a' },
-  moon:           { name: 'Mesiac',              icon: '🌙', color: '#dfe6f2' },
-  station:        { name: 'Vesmírna stanica',    icon: '🛰️', color: '#9ad8ff' },
+  galaxy:         { name: 'Galaxie',             icon: '🌌', color: '#b79dff' },
+  blackHole:      { name: 'Černá díra',        icon: '⚫', color: '#7f8ba3' },
+  planet:         { name: 'Planeta',             icon: '🪐', color: '#ffc48a' },
+  moon:           { name: 'Měsíc',              icon: '🌙', color: '#dfe6f2' },
+  station:        { name: 'Vesmírná stanice',    icon: '🛰️', color: '#9ad8ff' },
   meteorShower:   { name: 'Meteorický roj',      icon: '🌠', color: '#ffd479' }
 };
 
-/* Podtypy hmlovín – používa ich lekcia aj karty objektov */
+/* Podtypy mlhovin – používá je lekce i karty objektů */
 const NEBULA_KINDS = {
   emission: {
     id: 'emission',
     icon: '🔥',
-    name: 'Emisná',
-    short: 'Sama žiari.',
-    text: 'Plyn v nej svieti vlastným svetlom, lebo ho rozžiarili blízke horúce hviezdy.',
+    name: 'Emisní',
+    short: 'Sama září.',
+    text: 'Plyn v ní svítí vlastním světlem, protože ho rozzářily blízké horké hvězdy.',
     image: 'm42',
     color: '#ff6aa8'
   },
   reflection: {
     id: 'reflection',
     icon: '💡',
-    name: 'Reflexná',
-    short: 'Odráža svetlo blízkej hviezdy.',
-    text: 'Prach v nej sám nesvieti – iba odráža svetlo hviezdy vedľa seba. Preto býva modrá.',
+    name: 'Reflexní',
+    short: 'Odráží světlo blízké hvězdy.',
+    text: 'Prach v ní sám nesvítí – jen odráží světlo hvězdy vedle sebe. Proto bývá modrá.',
     image: 'm78',
     color: '#69b6ff'
   },
@@ -47,17 +47,18 @@ const NEBULA_KINDS = {
     id: 'dark',
     icon: '🌑',
     name: 'Temná',
-    short: 'Zakrýva svetlo za sebou.',
-    text: 'Je taká hustá, že svetlo hviezd za ňou vôbec neprepustí. Vidíme ju ako tmavú siluetu.',
+    short: 'Zakrývá světlo za sebou.',
+    text: 'Je tak hustá, že světlo hvězd za ní vůbec nepropustí. Vidíme ji jako tmavou siluetu.',
     image: 'horsehead',
     color: '#8b7bd8'
   },
   planetary: {
     id: 'planetary',
     icon: '💀',
-    name: 'Planetárna',
-    short: 'Pozostatok umierajúcej hviezdy.',
-    text: 'Stará hviezda odhodila svoje vonkajšie vrstvy. S planétami nemá nič spoločné – len tak vyzerala v starých ďalekohľadoch.',
+    name: 'Planetární',
+    short: 'Pozůstatek umírající hvězdy.',
+    text: 'Stará hvězda odhodila své vnější vrstvy. S planetami nemá nic společného – jen tak ' +
+          'vypadala ve starých dalekohledech.',
     image: 'ring',
     color: '#5ce0c6'
   }
@@ -66,21 +67,26 @@ const NEBULA_KINDS = {
 const SPACE_OBJECTS = [
   {
     id: 'm42',
-    name: 'Orionova hmlovina',
+    name: 'Orionova mlhovina',
     designation: 'M42',
     type: 'nebula',
-    kind: 'emission',                     // podtyp (viď NEBULA_KINDS)
-    subtypeLabel: 'Emisná hmlovina',
-    constellation: 'Orión',
-    distanceText: 'približne 1 300 – 1 500 svetelných rokov',
-    magnitude: '4,0 – za tmy viditeľná okom',
+    ra: 5.588, dec: -5.3875,          // 05h 35m 16.8s -05° 23' 15" (J2000)
+    sizeArcmin: 65,
+    coordsSource: 'https://en.wikipedia.org/wiki/Orion_Nebula',
+    kind: 'emission',                     // podtyp (viz NEBULA_KINDS)
+    subtypeLabel: 'Emisní mlhovina',
+    constellation: 'Orion',
+    distanceText: 'přibližně 1 300 – 1 500 světelných let',
+    magnitude: '4,0 – za tmy viditelná okem',
     image: 'm42',
-    fact: 'Je to najbližšia veľká „pôrodnica hviezd“ od Zeme – práve teraz sa v nej rodia nové hviezdy.',
-    stellarium: 'Hľadaj v Stellariu: napíš „M42“ a stlač Enter. Je hneď pod tromi hviezdami Orionovho pásu.',
-    dwarfTip: 'Je taká jasná, že je ideálna na prvý pokus. Skús kratšie expozície, aby stred nebol prepálený.',
+    fact: 'Je to nejbližší velká „porodnice hvězd“ od Země – právě teď se v ní rodí nové hvězdy.',
+    stellarium: 'Hledej ve Stellariu: napiš „M42“ a stiskni Enter. Je hned pod třemi hvězdami Orionova ' +
+                'pásu.',
+    dwarfTip: 'Je tak jasná, že je ideální na první pokus. Zkus kratší expozice, aby střed nebyl ' +
+              'přepálený.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-42/',
 
-    // 📸 VLASTNÁ FOTKA Z DWARFU – odkomentuj a doplň cestu, keď ju budeš mať:
+    // 📸 VLASTNÍ FOTKA Z DWARFU – odkomentuj a doplň cestu, když ji budeš mít:
     // myPhoto: 'images/moje/m42-dwarf.jpg'
   },
 
@@ -89,15 +95,20 @@ const SPACE_OBJECTS = [
     name: 'Polárka',
     designation: 'α UMi',
     type: 'star',
+    ra: 2.5303, dec: 89.2641,          // 02h 31m 49.09s +89° 15' 50.8" (J2000)
+    coordsSource: 'https://en.wikipedia.org/wiki/Polaris',
     kind: null,
-    subtypeLabel: 'Trojhviezda – severná hviezda',
-    constellation: 'Malý medveď (Malý voz)',
-    distanceText: 'približne 430 svetelných rokov',
-    magnitude: '2,0 – ľahko viditeľná aj z mesta',
+    subtypeLabel: 'Trojhvězda – severní hvězda',
+    constellation: 'Malý medvěd (Malý vůz)',
+    distanceText: 'přibližně 430 světelných let',
+    magnitude: '2,0 – snadno viditelná i z města',
     image: 'polaris',
-    fact: 'Nie je to najjasnejšia hviezda na nebi, ale najužitočnejšia: leží skoro presne v smere zemskej osi, takže vždy ukazuje na severe.',
-    stellarium: 'Hľadaj v Stellariu: napíš „Polaris“. Nájdeš ju aj na nebi – dve krajné hviezdy Veľkého voza na ňu ukazujú.',
-    dwarfTip: 'Polárku potrebuješ na nastavenie EQ režimu. Nakloň Dwarf na uhol svojej zemepisnej šírky (Slovensko ≈ 48°) a otoč ho na ňu.',
+    fact: 'Není to nejjasnější hvězda na nebi, ale nejužitečnější: leží skoro přesně ve směru ' +
+          'zemské osy, takže vždy ukazuje k severu.',
+    stellarium: 'Hledej ve Stellariu: napiš „Polaris“. Najdeš ji i na nebi – dvě krajní hvězdy Velkého ' +
+                'vozu na ni ukazují.',
+    dwarfTip: 'Polárku potřebuješ na nastavení EQ režimu. Nakloň Dwarf na úhel své zeměpisné šířky ' +
+              '(Praha ≈ 50°) a otoč ho na ni.',
     source: 'https://science.nasa.gov/missions/hubble/theres-more-to-the-north-star-than-meets-the-eye/'
   },
 
@@ -106,126 +117,156 @@ const SPACE_OBJECTS = [
     name: 'Plejády',
     designation: 'M45',
     type: 'openCluster',
-    subtypeLabel: 'Otvorená hviezdokopa',
+    ra: 3.7772, dec: 24.1781,          // 03h 46m 38.0s +24° 10' 41" (J2000)
+    sizeArcmin: 120,
+    coordsSource: 'https://en.wikipedia.org/wiki/Pleiades',
+    subtypeLabel: 'Otevřená hvězdokupa',
     constellation: 'Býk (Taurus)',
-    distanceText: '445 svetelných rokov',
-    magnitude: '1,6 – veľmi ľahko viditeľné okom',
+    distanceText: '445 světelných let',
+    magnitude: '1,6 – velmi snadno viditelné okem',
     image: 'm45',
-    fact: 'Voľným okom v nich väčšina ľudí spočíta šesť hviezd, hoci ich je viac ako tisíc.',
-    stellarium: 'V Stellariu napíš „M45“. Na nebi ich nájdeš v zime nad hlavou, vedľa Býka.',
-    dwarfTip: 'Sú veľké a jasné – ideálne pre Dwarf. Ak fotíš dlho, objaví sa okolo hviezd modrastý prach.',
+    fact: 'Volným okem v nich většina lidí spočítá šest hvězd, i když jich je víc než tisíc.',
+    stellarium: 'Ve Stellariu napiš „M45“. Na nebi je najdeš v zimě nad hlavou, vedle Býka.',
+    dwarfTip: 'Jsou velké a jasné – ideální pro Dwarf. Když fotíš dlouho, objeví se okolo hvězd ' +
+              'modravý prach.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-45/'
   },
 
   {
     id: 'm13',
-    name: 'Guľová hviezdokopa v Herkulovi',
+    name: 'Kulová hvězdokupa v Herkulovi',
     designation: 'M13',
     type: 'globularCluster',
-    subtypeLabel: 'Guľová hviezdokopa',
+    ra: 16.6948, dec: 36.4599,          // 16h 41m 41.24s +36° 27' 35.5" (J2000)
+    sizeArcmin: 20,
+    coordsSource: 'https://en.wikipedia.org/wiki/Messier_13',
+    subtypeLabel: 'Kulová hvězdokupa',
     constellation: 'Herkules',
-    distanceText: '25 000 svetelných rokov',
-    magnitude: '5,8 – za tmy slabo viditeľná okom',
+    distanceText: '25 000 světelných let',
+    magnitude: '5,8 – za tmy slabě viditelná okem',
     image: 'm13',
-    fact: 'Má viac ako 100 000 hviezd a je jednou z najjasnejších hviezdokôp severnej oblohy.',
-    stellarium: 'V Stellariu napíš „M13“. Nájdeš ju v lete a na jeseň vysoko na oblohe.',
-    dwarfTip: 'Krásne vyzerá už po niekoľkých minútach. Nepreexponuj stred – inak sa hviezdy zliejú do bielej gule.',
+    fact: 'Má více než 100 000 hvězd a je jednou z nejjasnějších hvězdokup severní oblohy.',
+    stellarium: 'Ve Stellariu napiš „M13“. Najdeš ji v létě a na podzim vysoko na obloze.',
+    dwarfTip: 'Krásně vypadá už po několika minutách. Nepřeexponuj střed – jinak se hvězdy slijí do ' +
+              'bílé kule.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-13/'
   },
 
   {
     id: 'milkyway',
-    name: 'Mliečna cesta',
-    designation: 'naša galaxia',
+    name: 'Mléčná dráha',
+    designation: 'naše galaxie',
     type: 'galaxy',
-    subtypeLabel: 'Špirálová galaxia s priečkou',
-    constellation: 'vidno ju cez celú oblohu',
-    distanceText: 'sme vnútri – do stredu je to asi 26 000 svetelných rokov',
-    magnitude: 'za tmy jasný pás cez celé nebo',
+    ra: 17.7611, dec: -29.0078,          // 17h 45m 40.0409s -29° 00' 28.118" (J2000)
+    coordsNote: 'střed Galaxie (Sgr A*) – pás Mléčné dráhy vede přes celou oblohu',
+    coordsSource: 'https://en.wikipedia.org/wiki/Galactic_coordinate_system',
+    subtypeLabel: 'Spirální galaxie s příčkou',
+    constellation: 'je vidět přes celou oblohu',
+    distanceText: 'jsme vevnitř – do středu je to asi 26 000 světelných let',
+    magnitude: 'za tmy jasný pás přes celé nebe',
     image: 'milkyway',
-    fact: 'Má v priemere asi 100 000 svetelných rokov. Slnko je na jej predmestí, nie v strede.',
-    stellarium: 'V Stellariu si vypni svetelné znečistenie a uvidíš, kadiaľ pás vedie. Stred je v súhvezdí Strelec.',
-    dwarfTip: 'Na pás potrebuješ širokú fotku – skús Dwarf v širokouhlom režime na tmavom mieste bez lámp.',
+    fact: 'Má v průměru asi 100 000 světelných let. Slunce je na jejím předměstí, ne ve středu.',
+    stellarium: 'Ve Stellariu si vypni světelné znečištění a uvidíš, kudy pás vede. Střed je v ' +
+                'souhvězdí Střelec.',
+    dwarfTip: 'Na pás potřebuješ širokou fotku – zkus Dwarf v širokoúhlém režimu na tmavém místě bez ' +
+              'lamp.',
     source: 'https://imagine.gsfc.nasa.gov/features/cosmic/milkyway_info.html'
   },
 
   {
     id: 'm31',
-    name: 'Galaxia v Andromede',
+    name: 'Galaxie v Andromedě',
     designation: 'M31',
     type: 'galaxy',
-    subtypeLabel: 'Špirálová galaxia',
+    ra: 0.7123, dec: 41.2692,          // 00h 42m 44.3s +41° 16' 09" (J2000)
+    sizeArcmin: 190,
+    coordsSource: 'https://en.wikipedia.org/wiki/Andromeda_Galaxy',
+    subtypeLabel: 'Spirální galaxie',
     constellation: 'Andromeda',
-    distanceText: '2,5 milióna svetelných rokov',
-    magnitude: '3,1 – za tmy viditeľná okom',
+    distanceText: '2,5 milionu světelných let',
+    magnitude: '3,1 – za tmy viditelná okem',
     image: 'm31',
-    fact: 'Je to najbližšia veľká galaxia a najvzdialenejšia vec, akú človek uvidí bez ďalekohľadu.',
-    stellarium: 'V Stellariu napíš „M31“. Na jesennej oblohe je vysoko, nájdeš ju podľa Kasiopeje (písmeno W).',
-    dwarfTip: 'Je väčšia než Mesiac na nebi – celá sa ti do záberu možno ani nezmestí. Chce dlhý čas zbierania svetla.',
+    fact: 'Je to nejbližší velká galaxie a nejvzdálenější věc, jakou člověk uvidí bez ' +
+          'dalekohledu.',
+    stellarium: 'Ve Stellariu napiš „M31“. Na podzimní obloze je vysoko, najdeš ji podle Kasiopeje ' +
+                '(písmeno W).',
+    dwarfTip: 'Je větší než Měsíc na nebi – celá se ti do záběru možná ani nevejde. Chce dlouhý čas ' +
+              'sbírání světla.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/'
   },
 
   {
     id: 'm51',
-    name: 'Galaxia Vír',
+    name: 'Galaxie Vír',
     designation: 'M51',
     type: 'galaxy',
-    subtypeLabel: 'Špirálová galaxia',
-    constellation: 'Poľovné psy (Canes Venatici)',
-    distanceText: '31 miliónov svetelných rokov',
-    magnitude: '8,4 – len ďalekohľadom',
+    ra: 13.498, dec: 47.1953,          // 13h 29m 52.7s +47° 11' 43" (J2000)
+    sizeArcmin: 11.2,
+    coordsSource: 'https://en.wikipedia.org/wiki/Whirlpool_Galaxy',
+    subtypeLabel: 'Spirální galaxie',
+    constellation: 'Honicí psi (Canes Venatici)',
+    distanceText: '31 milionů světelných let',
+    magnitude: '8,4 – jen dalekohledem',
     image: 'm51',
-    fact: 'Menšia galaxia NGC 5195 jej ťahá za rameno – a tie sily v nej rozbehli zrod nových hviezd.',
-    stellarium: 'V Stellariu napíš „M51“. Nájdeš ju blízko konca rukoväte Veľkého voza.',
-    dwarfTip: 'Ťažší cieľ – potrebuje EQ režim, tmavú oblohu a veľa snímok. Odmena je vidieť špirálu.',
+    fact: 'Menší galaxie NGC 5195 ji tahá za rameno – a ty síly v ní rozběhly zrod nových hvězd.',
+    stellarium: 'Ve Stellariu napiš „M51“. Najdeš ji blízko konce rukojeti Velkého vozu.',
+    dwarfTip: 'Těžší cíl – potřebuje EQ režim, tmavou oblohu a mnoho snímků. Odměnou je vidět ' +
+              'spirálu.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-51/'
   },
 
   {
     id: 'moon',
-    name: 'Mesiac',
-    designation: 'náš Mesiac',
+    name: 'Měsíc',
+    designation: 'náš Měsíc',
     type: 'moon',
-    subtypeLabel: 'Mesiac Zeme',
-    constellation: 'putuje po celej oblohe',
-    distanceText: 'v priemere 384 400 km',
-    magnitude: 'najjasnejší objekt nočnej oblohy',
+    moving: true,                     // Měsíc – poloha na obloze se mění, hledej ve Stellariu
+    subtypeLabel: 'Měsíc Země',
+    constellation: 'putuje po celé obloze',
+    distanceText: 'v průměru 384 400 km',
+    magnitude: 'nejjasnější objekt noční oblohy',
     image: 'moon',
-    fact: 'Je široký asi 3 480 km – necelá tretina šírky Zeme. Krátery na ňom zostávajú miliardy rokov.',
-    stellarium: 'Stellarium ti ukáže, v akej fáze je dnes. Najkrajšie krátery sú na hranici svetla a tmy.',
-    dwarfTip: 'Je taký jasný, že potrebuje veľmi krátke expozície. EQ režim tu netreba.',
+    fact: 'Je široký asi 3 480 km – necelá třetina šířky Země. Krátery na něm zůstávají miliardy ' +
+          'let.',
+    stellarium: 'Stellarium ti ukáže, v jaké fázi je dnes. Nejkrásnější krátery jsou na hranici světla ' +
+                'a tmy.',
+    dwarfTip: 'Je tak jasný, že potřebuje velmi krátké expozice. EQ režim tu není potřeba.',
     source: 'https://science.nasa.gov/moon/facts/'
   },
 
   {
     id: 'saturn',
     name: 'Saturn',
-    designation: 'planéta',
+    designation: 'planeta',
     type: 'planet',
-    subtypeLabel: 'Plynný obor s prstencami',
-    constellation: 'putuje medzi hviezdami',
-    distanceText: '1,4 miliardy km od Slnka',
-    magnitude: 'jasná „hviezda“, ktorá nebliká',
+    moving: true,                     // planeta – poloha na obloze se mění, hledej ve Stellariu
+    subtypeLabel: 'Plynný obr s prstenci',
+    constellation: 'putuje mezi hvězdami',
+    distanceText: '1,4 miliardy km od Slunce',
+    magnitude: 'jasná „hvězda“, která nebliká',
     image: 'saturn',
-    fact: 'Prstence siahajú 282 000 km od planéty, ale sú hrubé len asi 10 metrov. Saturn má 274 potvrdených mesiacov.',
-    stellarium: 'V Stellariu napíš „Saturn“ – ukáže ti, kde a kedy je práve teraz na oblohe.',
-    dwarfTip: 'Malý a jasný. Skús krátke expozície a veľa snímok, aby si „prebil“ nepokojný vzduch.',
+    fact: 'Prstence sahají 282 000 km od planety, ale jsou silné jen asi 10 metrů. Saturn má 274 ' +
+          'potvrzených měsíců.',
+    stellarium: 'Ve Stellariu napiš „Saturn“ – ukáže ti, kde a kdy je právě teď na obloze.',
+    dwarfTip: 'Malý a jasný. Zkus krátké expozice a mnoho snímků, abys „přebil“ neklidný vzduch.',
     source: 'https://science.nasa.gov/saturn/facts/'
   },
 
   {
     id: 'jupiter',
     name: 'Jupiter',
-    designation: 'planéta',
+    designation: 'planeta',
     type: 'planet',
-    subtypeLabel: 'Najväčšia planéta Slnečnej soustavy',
-    constellation: 'putuje medzi hviezdami',
-    distanceText: 'asi 780 miliónov km od Slnka',
-    magnitude: 'najjasnejší objekt po Venuši a Mesiaci',
+    moving: true,                     // planeta – poloha na obloze se mění, hledej ve Stellariu
+    subtypeLabel: 'Největší planeta Sluneční soustavy',
+    constellation: 'putuje mezi hvězdami',
+    distanceText: 'asi 780 milionů km od Slunce',
+    magnitude: 'nejjasnější objekt po Venuši a Měsíci',
     image: 'jupiter',
-    fact: 'Jeho štyri veľké mesiace objavil Galileo v roku 1610 – boli to prvé mesiace nájdené pri inej planéte.',
-    stellarium: 'V Stellariu napíš „Jupiter“ a priblíž si ho – uvidíš aj mesiace a ich dnešné poradie.',
-    dwarfTip: 'Skús ho odfotiť dva večery po sebe. Mesiace budú inde – uvidíš, ako obiehajú.',
+    fact: 'Jeho čtyři velké měsíce objevil Galileo v roce 1610 – byly to první měsíce nalezené u ' +
+          'jiné planety.',
+    stellarium: 'Ve Stellariu napiš „Jupiter“ a přibliž si ho – uvidíš i měsíce a jejich dnešní pořadí.',
+    dwarfTip: 'Zkus ho vyfotit dva večery po sobě. Měsíce budou jinde – uvidíš, jak obíhají.',
     source: 'https://science.nasa.gov/jupiter/jupiter-moons/'
   },
 
@@ -234,30 +275,39 @@ const SPACE_OBJECTS = [
     name: 'Albireo',
     designation: 'β Cygni',
     type: 'doubleStar',
-    subtypeLabel: 'Farebná dvojica hviezd',
+    ra: 19.512, dec: 27.9597,          // 19h 30m 43.286s +27° 57' 34.84" (J2000)
+    coordsSource: 'https://en.wikipedia.org/wiki/Albireo',
+    subtypeLabel: 'Barevná dvojice hvězd',
     constellation: 'Labuť (Cygnus)',
-    distanceText: 'približne 400 svetelných rokov',
-    magnitude: '3,1 – okom jedna hviezda, ďalekohľadom dve',
+    distanceText: 'přibližně 400 světelných let',
+    magnitude: '3,1 – okem jedna hvězda, dalekohledem dvě',
     image: 'albireo',
-    fact: 'Jedna z dvojice je modrá, druhá žltá. Astronómi zatiaľ nemajú isté, či sa naozaj obiehajú, alebo len ležia v rovnakom smere.',
-    stellarium: 'V Stellariu napíš „Albireo“. Je to hlava Labute – v lete a na jeseň vysoko na oblohe.',
-    dwarfTip: 'Krátka expozícia stačí. Skús nepreexponovať – inak sa farby zmenia na bielu.',
+    fact: 'Jedna z dvojice je modrá, druhá žlutá. Astronomové si zatím nejsou jistí, jestli se ' +
+          'opravdu obíhají, nebo jen leží ve stejném směru.',
+    stellarium: 'Ve Stellariu napiš „Albireo“. Je to hlava Labutě – v létě a na podzim vysoko na ' +
+                'obloze.',
+    dwarfTip: 'Krátká expozice stačí. Zkus nepřeexponovat – jinak se barvy změní na bílou.',
     source: 'https://science.nasa.gov/solar-system/skywatching/night-sky-network/aug2024-night-sky-notes/'
   },
 
   {
     id: 'm1',
-    name: 'Krabia hmlovina',
+    name: 'Krabí mlhovina',
     designation: 'M1',
     type: 'supernova',
-    subtypeLabel: 'Pozostatok supernovy',
+    ra: 5.5755, dec: 22.0175,          // 05h 34m 31.8s +22° 01' 03" (J2000)
+    sizeArcmin: 7.0,
+    coordsSource: 'https://en.wikipedia.org/wiki/Crab_Nebula',
+    subtypeLabel: 'Pozůstatek supernovy',
     constellation: 'Býk (Taurus)',
-    distanceText: '6 500 svetelných rokov',
-    magnitude: '8,4 – len ďalekohľadom',
+    distanceText: '6 500 světelných let',
+    magnitude: '8,4 – jen dalekohledem',
     image: 'm1',
-    fact: 'Je to zvyšok výbuchu, ktorý ľudia videli v roku 1054. V jej strede zostala neutrónová hviezda, ktorá bliká 30-krát za sekundu.',
-    stellarium: 'V Stellariu napíš „M1“. Nájdeš ju v zime pri hviezde Aldebaran v Býkovi.',
-    dwarfTip: 'Je malá a slabá – potrebuje EQ režim a veľa snímok. Ale je to skutočný pozostatok výbuchu hviezdy.',
+    fact: 'Je to zbytek výbuchu, který lidé viděli v roce 1054. V jejím středu zůstala neutronová ' +
+          'hvězda, která bliká 30krát za sekundu.',
+    stellarium: 'Ve Stellariu napiš „M1“. Najdeš ji v zimě u hvězdy Aldebaran v Býku.',
+    dwarfTip: 'Je malá a slabá – potřebuje EQ režim a mnoho snímků. Ale je to skutečný pozůstatek ' +
+              'výbuchu hvězdy.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/'
   },
 
@@ -266,79 +316,100 @@ const SPACE_OBJECTS = [
     name: 'Sagittarius A*',
     designation: 'Sgr A*',
     type: 'blackHole',
-    subtypeLabel: 'Supermasívna čierna diera v strede našej galaxie',
-    constellation: 'Strelec (Sagittarius)',
-    distanceText: '27 000 svetelných rokov',
-    magnitude: 'nevidno ju – zakrýva ju prach galaxie',
+    ra: 17.7611, dec: -29.0078,          // 17h 45m 40.0409s -29° 00' 28.118" (J2000)
+    coordsSource: 'https://en.wikipedia.org/wiki/Sagittarius_A*',
+    subtypeLabel: 'Supermasivní černá díra ve středu naší galaxie',
+    constellation: 'Střelec (Sagittarius)',
+    distanceText: '27 000 světelných let',
+    magnitude: 'není vidět – zakrývá ji prach galaxie',
     image: 'sgra',
-    fact: 'Váži ako štyri milióny Sĺnk. Prvú fotografiu zverejnili astronómi 12. mája 2022 – spojili osem observatórií do ďalekohľadu veľkého ako Zem.',
-    stellarium: 'V Stellariu napíš „Sgr A*“. Uvidíš, kde v Strelcovi je stred našej galaxie.',
-    dwarfTip: 'Samotnú čiernu dieru Dwarf neuvidí. Ale môžeš odfotiť oblasť v Strelcovi – smer, kde je stred galaxie.',
+    fact: 'Váží jako čtyři miliony Sluncí. První fotografii zveřejnili astronomové 12. května ' +
+          '2022 – spojili osm observatoří do dalekohledu velkého jako Země.',
+    stellarium: 'Ve Stellariu napiš „Sgr A*“. Uvidíš, kde ve Střelci je střed naší galaxie.',
+    dwarfTip: 'Samotnou černou díru Dwarf neuvidí. Ale můžeš vyfotit oblast ve Střelci – směr, kde je ' +
+              'střed galaxie.',
     source: 'https://www.eso.org/public/news/eso2208-eht-mw/'
   },
 
   {
     id: 'm44',
-    name: 'Jasličky',
+    name: 'Jesličky',
     designation: 'M44',
     type: 'openCluster',
-    subtypeLabel: 'Otvorená hviezdokopa',
+    ra: 8.6733, dec: 19.9833,          // 08h 40m 24s +19° 59' 00" (J2000)
+    sizeArcmin: 95,
+    coordsSource: 'https://en.wikipedia.org/wiki/Beehive_Cluster',
+    subtypeLabel: 'Otevřená hvězdokupa',
     constellation: 'Rak (Cancer)',
-    distanceText: '600 svetelných rokov',
-    magnitude: '3,7 – za tmy viditeľná okom',
+    distanceText: '600 světelných let',
+    magnitude: '3,7 – za tmy viditelná okem',
     image: 'm44',
-    fact: 'Má okolo tisíc hviezd držaných pohromade len slabou gravitáciou. Do záberu Dwarfu sa zmestí krásne celá.',
-    stellarium: 'V Stellariu napíš „M44“. Na jarnej oblohe je vysoko, medzi Levom a Blížencami.',
-    dwarfTip: 'Ideálny cieľ na skúšanie nastavení – je jasná, veľká a hviezdy sú ostré, takže hneď vidíš, či si dobre zaostril.',
+    fact: 'Má okolo tisíce hvězd držených pohromadě jen slabou gravitací. Do záběru Dwarfu se ' +
+          'krásně vejde celá.',
+    stellarium: 'Ve Stellariu napiš „M44“. Na jarní obloze je vysoko, mezi Lvem a Blíženci.',
+    dwarfTip: 'Ideální cíl na zkoušení nastavení – je jasná, velká a hvězdy jsou ostré, takže hned ' +
+              'vidíš, jestli jsi dobře zaostřil.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-44/'
   },
 
   {
     id: 'sun',
-    name: 'Slnko',
-    designation: 'naša hviezda',
+    name: 'Slunce',
+    designation: 'naše hvězda',
     type: 'star',
-    subtypeLabel: 'Žltá hviezda – naša vlastná',
-    constellation: 'nie je v súhvezdí – je to naše Slnko',
-    distanceText: '150 miliónov km, čo je 8 svetelných minút',
-    magnitude: 'najjasnejší objekt na nebi – NIKDY bez filtra!',
+    moving: true,                     // Slunce – poloha na obloze se mění, hledej ve Stellariu
+    subtypeLabel: 'Žlutá hvězda – naše vlastní',
+    constellation: 'není v souhvězdí – je to naše Slunce',
+    distanceText: '150 milionů km, což je 8 světelných minut',
+    magnitude: 'nejjasnější objekt na nebi – NIKDY bez filtru!',
     image: 'sun',
-    fact: 'Je asi 100-krát širšie ako Zem a na povrchu má okolo 5 500 °C. Slnečné škvrny sú chladnejšie miesta – najväčšie sú väčšie než celá Zem.',
-    stellarium: 'V Stellariu si zapni Slnko a pozri sa, kedy je najvyššie – vtedy je vzduch najmenej rozvírený.',
-    dwarfTip: 'Iba s priloženým ND filtrom a v režime Solar System. Bez filtra sa zničí senzor aj oči.',
+    fact: 'Je asi 100krát širší než Země a na povrchu má okolo 5 500 °C. Sluneční skvrny jsou ' +
+          'chladnější místa – největší jsou větší než celá Země.',
+    stellarium: 'Ve Stellariu si zapni Slunce a podívej se, kdy je nejvýš – tehdy je vzduch nejméně ' +
+                'rozvířený.',
+    dwarfTip: 'Jen s přiloženým ND filtrem a v režimu Solar System. Bez filtru se zničí senzor i oči.',
     source: 'https://science.nasa.gov/sun/facts/'
   },
 
   {
     id: 'm27',
-    name: 'Hmlovina Činka',
+    name: 'Mlhovina Činka',
     designation: 'M27',
     type: 'nebula',
+    ra: 19.9934, dec: 22.7212,          // 19h 59m 36.3s +22° 43' 16.3" (J2000)
+    sizeArcmin: 8.0,
+    coordsSource: 'https://en.wikipedia.org/wiki/Dumbbell_Nebula',
     kind: 'planetary',
-    subtypeLabel: 'Planetárna hmlovina',
-    constellation: 'Líška (Vulpecula)',
-    distanceText: '1 200 svetelných rokov',
-    magnitude: '7,5 – len ďalekohľadom',
+    subtypeLabel: 'Planetární mlhovina',
+    constellation: 'Lištička (Vulpecula)',
+    distanceText: '1 200 světelných let',
+    magnitude: '7,5 – jen dalekohledem',
     image: 'm27',
-    fact: 'Ďalšia hviezda, ktorá odhodila svoje vonkajšie vrstvy. Je väčšia a jasnejšia než Prstencová hmlovina, takže sa fotí ľahšie.',
-    stellarium: 'V Stellariu napíš „M27“. V lete a na jeseň je vysoko – dobrý tréning hľadania podľa súradníc.',
-    dwarfTip: 'Skús ju najprv nájsť podľa súradníc a až potom podľa mena. Zvládne to aj bez EQ režimu.',
+    fact: 'Další hvězda, která odhodila své vnější vrstvy. Je větší a jasnější než Prstencová ' +
+          'mlhovina, takže se fotí snáz.',
+    stellarium: 'Ve Stellariu napiš „M27“. V létě a na podzim je vysoko – dobrý trénink hledání podle ' +
+                'souřadnic.',
+    dwarfTip: 'Zkus ji nejprve najít podle souřadnic a teprve potom podle jména. Zvládneš to i bez EQ ' +
+              'režimu.',
     source: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-27/'
   },
 
   {
     id: 'iss',
-    name: 'Medzinárodná vesmírna stanica',
+    name: 'Mezinárodní vesmírná stanice',
     designation: 'ISS',
     type: 'station',
-    subtypeLabel: 'Obývaná vesmírna stanica',
-    constellation: 'preletí cez celú oblohu za pár minút',
-    distanceText: 'asi 400 km nad Zemou',
-    magnitude: 'jasnejšia než väčšina hviezd – nebliká a rovnomerne letí',
+    moving: true,                     // družice – poloha na obloze se mění, hledej ve Stellariu
+    subtypeLabel: 'Obydlená vesmírná stanice',
+    constellation: 'přeletí přes celou oblohu za pár minut',
+    distanceText: 'asi 400 km nad Zemí',
+    magnitude: 'jasnější než většina hvězd – nebliká a letí rovnoměrně',
     image: 'iss',
-    fact: 'Obehne Zem raz za 90 minút, letí asi 8 km za sekundu a ľudia na nej žijú nepretržite od novembra 2000. Je dlhá 109 metrov.',
-    stellarium: 'V Stellariu si zapni satelity a napíš „ISS“ – uvidíš, kedy dnes preletí nad vami.',
-    dwarfTip: 'Na fotenie je príliš rýchla. Ale na snímke s dlhšou expozíciou po sebe zanechá pekný svetelný pruh.',
+    fact: 'Oběhne Zemi jednou za 90 minut, letí asi 8 km za sekundu a lidé na ní žijí nepřetržitě ' +
+          'od listopadu 2000. Je dlouhá 109 metrů.',
+    stellarium: 'Ve Stellariu si zapni satelity a napiš „ISS“ – uvidíš, kdy dnes přeletí nad vámi.',
+    dwarfTip: 'Na fotografování je příliš rychlá. Ale na snímku s delší expozicí po sobě zanechá ' +
+              'pěkný světelný pruh.',
     source: 'https://www.nasa.gov/international-space-station/space-station-facts-and-figures/'
   },
 
@@ -347,14 +418,19 @@ const SPACE_OBJECTS = [
     name: 'Sirius',
     designation: 'α CMa',
     type: 'star',
-    subtypeLabel: 'Najjasnejšia hviezda nočnej oblohy',
-    constellation: 'Veľký pes (Canis Major)',
-    distanceText: '8,6 svetelného roka',
-    magnitude: '−1,5 – najjasnejšia hviezda vôbec',
+    ra: 6.7525, dec: -16.7161,          // 06h 45m 08.917s -16° 42' 58.02" (J2000)
+    coordsSource: 'https://en.wikipedia.org/wiki/Sirius',
+    subtypeLabel: 'Nejjasnější hvězda noční oblohy',
+    constellation: 'Velký pes (Canis Major)',
+    distanceText: '8,6 světelného roku',
+    magnitude: '−1,5 – nejjasnější hvězda vůbec',
     image: 'starBlue',
-    fact: 'Je taký jasný hlavne preto, že je blízko. Obieha okolo neho biely karlík Sirius B, ktorý je 10 000-krát slabší.',
-    stellarium: 'V Stellariu napíš „Sirius“. V zime ho nájdeš nízko na juhu, pod Orionom – najjasnejší bod na nebi.',
-    dwarfTip: 'Nízko nad obzorom sa krásne „iskrí“ všetkými farbami. To nie je jeho vlastnosť – to robí náš nepokojný vzduch.',
+    fact: 'Je tak jasný hlavně proto, že je blízko. Obíhá okolo něj bílý trpaslík Sirius B, který ' +
+          'je 10 000krát slabší.',
+    stellarium: 'Ve Stellariu napiš „Sirius“. V zimě ho najdeš nízko na jihu, pod Orionem – nejjasnější ' +
+                'bod na nebi.',
+    dwarfTip: 'Nízko nad obzorem se krásně „jiskří“ všemi barvami. To není jeho vlastnost – to dělá ' +
+              'náš neklidný vzduch.',
     source: 'https://science.nasa.gov/asset/hubble/the-dog-star-sirius-and-its-tiny-companion/'
   },
 
@@ -363,59 +439,67 @@ const SPACE_OBJECTS = [
     name: '51 Pegasi',
     designation: '51 Peg',
     type: 'star',
-    subtypeLabel: 'Hviezda s prvou objavenou exoplanétou',
+    ra: 22.9578, dec: 20.7688,          // 22h 57m 27.9805s +20° 46' 07.797" (J2000)
+    coordsSource: 'https://en.wikipedia.org/wiki/51_Pegasi',
+    subtypeLabel: 'Hvězda s první objevenou exoplanetou',
     constellation: 'Pegas',
-    distanceText: 'približne 50 svetelných rokov',
-    magnitude: '5,5 – za tmy tesne na hranici voľného oka',
+    distanceText: 'přibližně 50 světelných let',
+    magnitude: '5,5 – za tmy těsně na hranici volného oka',
     image: 'transit',
-    fact: 'Pri tejto hviezde našli v roku 1995 prvú planétu obiehajúcu okolo hviezdy podobnej Slnku. Samotnú planétu nevidíme – prezradila sa tým, ako hviezdou pohybuje.',
-    stellarium: 'V Stellariu napíš „51 Pegasi“. Na jesennej oblohe je vysoko, v štvorci Pegasa.',
-    dwarfTip: 'Uvidíš len bod. Ale je to bod, pri ktorom obieha cudzí svet – a ten bod si odfotil ty.',
+    fact: 'U této hvězdy našli v roce 1995 první planetu obíhající okolo hvězdy podobné Slunci. ' +
+          'Samotnou planetu nevidíme – prozradila se tím, jak hvězdou pohybuje.',
+    stellarium: 'Ve Stellariu napiš „51 Pegasi“. Na podzimní obloze je vysoko, ve čtverci Pegasa.',
+    dwarfTip: 'Uvidíš jen bod. Ale je to bod, u kterého obíhá cizí svět – a ten bod jsi vyfotil ty.',
     source: 'https://science.nasa.gov/exoplanets/'
   },
 
   {
     id: 'perseids',
-    name: 'Perzeidy',
+    name: 'Perseidy',
     designation: 'meteorický roj',
     type: 'meteorShower',
-    subtypeLabel: 'Meteorický roj z kométy 109P/Swift-Tuttle',
-    constellation: 'vyletujú zo súhvezdia Perzeus',
-    distanceText: 'zhoria asi 80 km nad našimi hlavami',
-    magnitude: 'za dobrej noci desiatky meteorov za hodinu',
+    ra: 3.2, dec: 58.0,          // 03h 12m 00s +58° 00' 00" (J2000)
+    coordsNote: 'radiant roje v době maxima (12.–13. srpna)',
+    coordsSource: 'https://www.imo.net/files/meteor-shower/cal2022.pdf',
+    subtypeLabel: 'Meteorický roj z komety 109P/Swift-Tuttle',
+    constellation: 'vylétají ze souhvězdí Perseus',
+    distanceText: 'shoří asi 80 km nad našimi hlavami',
+    magnitude: 'za dobré noci desítky meteorů za hodinu',
     image: 'meteors',
-    fact: 'Vrcholia 12. – 13. augusta, keď Zem prechádza cez prachovú stopu kométy 109P/Swift-Tuttle. Zrniečka vletia do atmosféry rýchlosťou 59 km za sekundu.',
-    stellarium: 'V Stellariu nájdi súhvezdie Perzeus – odtiaľ budú meteory zdanlivo vyletovať.',
-    dwarfTip: 'Meteor sa nedá „zamerať“. Nechaj Dwarf fotiť širokouhlo dlhé série a niektorý ti do záberu vletí sám.',
+    fact: 'Vrcholí 12. – 13. srpna, když Země prochází prachovou stopou komety 109P/Swift-Tuttle. ' +
+          'Zrníčka vletí do atmosféry rychlostí 59 km za sekundu.',
+    stellarium: 'Ve Stellariu najdi souhvězdí Perseus – odtud budou meteory zdánlivě vylétat.',
+    dwarfTip: 'Meteor se nedá „zaměřit“. Nech Dwarf fotit širokoúhle dlouhé série a některý ti do ' +
+              'záběru vletí sám.',
     source: 'https://science.nasa.gov/solar-system/meteors-meteorites/perseids/'
   }
 
-  /* Ďalšie objekty (M45, M13, M31, M57…) sa pridávajú sem – rovnaká štruktúra. */
+  /* Další objekty (M45, M13, M31, M57…) se přidávají sem – stejná struktura. */
 ];
 
-/* Pomocník: nájdi objekt podľa id */
+/* Pomocník: najdi objekt podle id */
 function getObject(id) {
   return SPACE_OBJECTS.find(function (o) { return o.id === id; });
 }
 
 /* =============================================================================
-   ČO JE PRÁVE TERAZ NA OBLOHE  (pre kartu „🌠 Dnes v noci“)
+   CO JE PRÁVĚ TEĎ NA OBLOZE  (pro kartu „🌠 Dnes v noci“)
    -----------------------------------------------------------------------------
-   Pre každý mesiac (0 = január) zoznam objektov, ktoré sú zo Slovenska
-   (asi 48° severnej šírky) vo večerných hodinách dobre vysoko nad obzorom.
-   Nie je to výpočet – je to odporúčanie. Presné časy vždy overte v Stellariu.
+   Pro každý měsíc (0 = leden) seznam objektů, které jsou z Prahy
+   (asi 50° severní šířky) ve večerních hodinách dobře vysoko nad obzorem.
+   Není to výpočet – je to doporučení. Přesné časy vždy ověřte ve Stellariu.
    ========================================================================== */
 const SEASON_TIPS = [
-  /* 0 január   */ { objects: ['m42', 'm45', 'm31', 'm1'],   note: 'Zimná obloha je najbohatšia na hmloviny. Orión je večer vysoko.' },
-  /* 1 február  */ { objects: ['m42', 'm45', 'm44', 'm1'],   note: 'Orión ešte drží, na juhu sa objavujú hviezdokopy.' },
-  /* 2 marec    */ { objects: ['m44', 'm45', 'm42', 'm51'],  note: 'Orión zapadá skoro po zotmení – s hmlovinami sa treba poponáhľať.' },
-  /* 3 apríl    */ { objects: ['m51', 'm44', 'm13'],         note: 'Začína galaxiová sezóna: obloha je bez Mliečnej cesty a hlboký vesmír je čistý.' },
-  /* 4 máj      */ { objects: ['m51', 'm13', 'm44'],         note: 'Ideálny čas na galaxie a na guľovú hviezdokopu M13.' },
-  /* 5 jún      */ { objects: ['m13', 'm51'],                note: 'Najkrátke noci v roku – obloha úplne nesčernie. Skús Mesiac a planéty.' },
-  /* 6 júl      */ { objects: ['m13', 'milkyway', 'm27'],    note: 'Mliečna cesta je večer vysoko. Odvezte sa za mesto, stojí to za to.' },
-  /* 7 august   */ { objects: ['perseids', 'milkyway', 'm13', 'm27'], note: '12. – 13. augusta vrcholia Perzeidy. Mliečna cesta je najkrajšia v roku.' },
-  /* 8 september*/ { objects: ['m31', 'milkyway', 'm27'],    note: 'Andromeda vychádza vysoko a noci sú už dosť dlhé.' },
-  /* 9 október  */ { objects: ['m31', 'm45', 'm27'],         note: 'Andromeda a Plejády sú večer nádherné.' },
-  /*10 november */ { objects: ['m31', 'm45', 'm42'],         note: 'Plejády sú vysoko, Orión začína vychádzať pred polnocou.' },
-  /*11 december */ { objects: ['m42', 'm45', 'm31', 'm1'],   note: 'Najdlhšie noci v roku. Orión vychádza hneď po zotmení.' }
+  /* 0 leden    */ { objects: ['m42', 'm45', 'm31', 'm1'],   note: 'Zimní obloha je nejbohatší na mlhoviny. Orion je večer vysoko.' },
+  /* 1 únor     */ { objects: ['m42', 'm45', 'm44', 'm1'],   note: 'Orion ještě drží, na jihu se objevují hvězdokupy.' },
+  /* 2 marec    */ { objects: ['m44', 'm45', 'm42', 'm51'],  note: 'Orion zapadá krátce po setmění – s mlhovinami je třeba si pospíšit.' },
+  /* 3 apríl    */ { objects: ['m51', 'm44', 'm13'],         note: 'Začíná galaxiová sezóna: obloha je bez Mléčné dráhy a hluboký vesmír je čistý.' },
+  /* 4 máj      */ { objects: ['m51', 'm13', 'm44'],         note: 'Ideální čas na galaxie a na kulovou hvězdokupu M13.' },
+  /* 5 červen   */ { objects: ['m13', 'm51'],                note: 'Nejkratší noci v roce – obloha úplně nezčerná. Zkus Měsíc a planety.' },
+  /* 6 červenec */ { objects: ['m13', 'milkyway', 'm27'],    note: 'Mléčná dráha je večer vysoko. Vyjeďte si za město, stojí to za to.' },
+  /* 7 august   */ { objects: ['perseids', 'milkyway', 'm13', 'm27'], note: '12. – 13. srpna vrcholí Perseidy. Mléčná dráha je nejkrásnější v roce.' },
+  /* 8 september*/ { objects: ['m31', 'milkyway', 'm27'],    note: 'Andromeda vychází vysoko a noci jsou už dost dlouhé.' },
+  /* 9 říjen    */ { objects: ['m31', 'm45', 'm27'],         note: 'Andromeda a Plejády jsou večer nádherné.' },
+  /*10 november */ { objects: ['m31', 'm45', 'm42'],         note: 'Plejády jsou vysoko, Orion začíná vycházet před půlnocí.' },
+  /*11 december */ { objects: ['m42', 'm45', 'm31', 'm1'],   note: 'Nejdelší noci v roce. Orion vychází hned po setmění.' }
 ];

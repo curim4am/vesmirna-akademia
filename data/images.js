@@ -1,22 +1,22 @@
 /* =============================================================================
-   REGISTER OBRÁZKOV  (data/images.js)
+   REGISTR OBRÁZKŮ  (data/images.js)
    -----------------------------------------------------------------------------
-   Každý obrázok má na jednom mieste: cestu, popis, autora (credit), licenciu
-   a odkaz na originálny zdroj. Aplikácia obrázok načítava v tomto poradí:
+   Každý obrázek má na jednom místě: cestu, popis, autora (credit), licenci
+   a odkaz na originální zdroj. Aplikace obrázek načítá v tomto pořadí:
 
-      1) local   – lokálny súbor v priečinku images/  (ak je zapnuté preferLocal)
-      2) remote  – oficiálny odkaz na NASA / ESA/Hubble / ESO
-      3) art     – vlastná SVG ilustrácia priamo v kóde (vždy funguje, aj offline)
+      1) local   – lokální soubor ve složce images/  (když je zapnuté preferLocal)
+      2) remote  – oficiální odkaz na NASA / ESA/Hubble / ESO
+      3) art     – vlastní SVG ilustrace přímo v kódu (vždy funguje, i offline)
 
-   AKO PRIDAŤ VLASTNÚ FOTKU Z DWARFU ALEBO STIAHNUTÚ FOTKU:
-      - ulož súbor do priečinka images/  (napr. images/m42.jpg)
-      - nižšie prepni IMAGE_CONFIG.preferLocal na true
-      - v konkrétnej položke skontroluj cestu v "local"
+   JAK PŘIDAT VLASTNÍ FOTKU Z DWARFU NEBO STAŽENOU FOTKU:
+      - ulož soubor do složky images/  (např. images/m42.jpg)
+      - níže přepni IMAGE_CONFIG.preferLocal na true
+      - u konkrétní položky zkontroluj cestu v "local"
    ========================================================================== */
 
 const IMAGE_CONFIG = {
-  // false = ťahá oficiálne obrázky z internetu (NASA/ESA/ESO)
-  // true  = najprv skúsi lokálne súbory v images/, potom internet, potom ilustráciu
+  // false = tahá oficiální obrázky z internetu (NASA/ESA/ESO)
+  // true  = nejprve zkusí lokální soubory v images/, potom internet, potom ilustraci
   preferLocal: false
 };
 
@@ -26,8 +26,8 @@ const IMAGES = {
     local: 'images/carina.jpg',
     remote: 'https://cdn.eso.org/images/screen/eso0905a.jpg',
     art: 'emission',
-    title: 'Hmlovina v Kýle (Carina)',
-    alt: 'Obrovský žiariaci oblak plynu a prachu s tmavými pásmi prachu.',
+    title: 'Mlhovina v Kýlu (Carina)',
+    alt: 'Obrovský svítící oblak plynu a prachu s tmavými pásy prachu.',
     credit: 'ESO / T. Preibisch',
     license: 'CC BY 4.0',
     source: 'https://www.eso.org/public/images/eso0905a/'
@@ -37,8 +37,8 @@ const IMAGES = {
     local: 'images/m42.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic0601a.jpg',
     art: 'emission',
-    title: 'M42 – Hmlovina v Orióne',
-    alt: 'Ružovo-oranžový žiariaci oblak s mladými hviezdami v strede.',
+    title: 'M42 – Mlhovina v Orionu',
+    alt: 'Růžovo-oranžový svítící oblak s mladými hvězdami ve středu.',
     credit: 'NASA, ESA, M. Robberto (STScI/ESA) a tím projektu HST Orion Treasury',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic0601a/'
@@ -48,8 +48,8 @@ const IMAGES = {
     local: 'images/m78.jpg',
     remote: 'https://cdn.eso.org/images/screen/eso1105b.jpg',
     art: 'reflection',
-    title: 'M78 – reflexná hmlovina v Orióne',
-    alt: 'Modrasté oblaky prachu, ktoré odrážajú svetlo blízkych hviezd.',
+    title: 'M78 – reflexní mlhovina v Orionu',
+    alt: 'Modravé oblaky prachu, které odrážejí světlo blízkých hvězd.',
     credit: 'ESO / Igor Chekalin',
     license: 'CC BY 4.0',
     source: 'https://www.eso.org/public/images/eso1105b/'
@@ -59,8 +59,8 @@ const IMAGES = {
     local: 'images/horsehead.jpg',
     remote: 'https://cdn.eso.org/images/screen/eso0202a.jpg',
     art: 'dark',
-    title: 'Konská hlava (Barnard 33) – temná hmlovina',
-    alt: 'Tmavý oblak v tvare konskej hlavy pred žiariacim pozadím.',
+    title: 'Koňská hlava (Barnard 33) – temná mlhovina',
+    alt: 'Tmavý oblak ve tvaru koňské hlavy před svítícím pozadím.',
     credit: 'ESO',
     license: 'CC BY 4.0',
     source: 'https://www.eso.org/public/images/eso0202a/'
@@ -70,20 +70,20 @@ const IMAGES = {
     local: 'images/ring.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic1310a.jpg',
     art: 'planetary',
-    title: 'M57 – Prstencová hmlovina (planetárna)',
-    alt: 'Farebný prstenec plynu s bielym bodom hviezdy v strede.',
+    title: 'M57 – Prstencová mlhovina (planetární)',
+    alt: 'Barevný prstenec plynu s bílým bodem hvězdy ve středu.',
     credit: 'NASA, ESA a Hubble Heritage (STScI/AURA)',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic1310a/'
   },
 
-  /* ------------------- INÉ TYPY OBJEKTOV (na porovnanie) ---------------- */
+  /* -------------------- JINÉ TYPY OBJEKTŮ (na porovnání) ---------------- */
   m51: {
     local: 'images/m51.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic0506a.jpg',
     art: 'galaxy',
-    title: 'M51 – galaxia Vír',
-    alt: 'Špirálová galaxia s ramenami a menšou galaxiou pri sebe.',
+    title: 'M51 – galaxie Vír',
+    alt: 'Spirální galaxie s rameny a menší galaxií u sebe.',
     credit: 'NASA, ESA, S. Beckwith (STScI) a Hubble Heritage (STScI/AURA)',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic0506a/'
@@ -93,8 +93,8 @@ const IMAGES = {
     local: 'images/omegacen.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic0809a.jpg',
     art: 'cluster',
-    title: 'Omega Centauri – guľová hviezdokopa',
-    alt: 'Guľa nabitá stovkami tisíc hviezd.',
+    title: 'Omega Centauri – kulová hvězdokupa',
+    alt: 'Kule nabitá stovkami tisíc hvězd.',
     credit: 'NASA, ESA a Hubble Heritage (STScI/AURA)',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic0809a/'
@@ -104,20 +104,20 @@ const IMAGES = {
     local: 'images/saturn.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic1917a.jpg',
     art: 'planet',
-    title: 'Saturn – planéta',
-    alt: 'Planéta Saturn s výraznými prstencami.',
+    title: 'Saturn – planeta',
+    alt: 'Planeta Saturn s výraznými prstenci.',
     credit: 'NASA, ESA, A. Simon (GSFC), M.H. Wong (UC Berkeley) a tím OPAL',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic1917a/'
   },
 
-  /* ------------------- HVIEZDY, ROTÁCIA OBLOHY, EQ ---------------------- */
+  /* ------------------- HVĚZDY, ROTACE OBLOHY, EQ ------------------------ */
   polaris: {
     local: 'images/polaris.jpg',
-    remote: '',                       // doplň, ak nájdeš fotku s vhodnou licenciou
+    remote: '',                       // doplň, když najdeš fotku s vhodnou licencí
     art: 'polaris',
     title: 'Polárka a kruhy okolo nebeského pólu',
-    alt: 'Hviezda blízko stredu, okolo ktorej sa točia ostatné hviezdy.',
+    alt: 'Hvězda blízko středu, okolo které se točí ostatní hvězdy.',
     credit: '',
     license: '',
     source: ''
@@ -127,8 +127,8 @@ const IMAGES = {
     local: 'images/startrails.jpg',
     remote: '',
     art: 'trails',
-    title: 'Hviezdy sa počas dlhej expozície roztočili do oblúčikov',
-    alt: 'Hviezdy nakreslené ako oblúčiky namiesto bodov.',
+    title: 'Hvězdy se během dlouhé expozice roztočily do obloučků',
+    alt: 'Hvězdy nakreslené jako oblouky místo bodů.',
     credit: '',
     license: '',
     source: ''
@@ -138,8 +138,8 @@ const IMAGES = {
     local: 'images/roundstars.jpg',
     remote: '',
     art: 'roundstars',
-    title: 'Ostré, okrúhle hviezdy – dobre nastavené sledovanie',
-    alt: 'Hviezdy nakreslené ako ostré body.',
+    title: 'Ostré, kulaté hvězdy – dobře nastavené sledování',
+    alt: 'Hvězdy nakreslené jako ostré body.',
     credit: '',
     license: '',
     source: ''
@@ -150,8 +150,8 @@ const IMAGES = {
     local: 'images/m45.jpg',
     remote: 'https://cdn.eso.org/images/screen/b11.jpg',
     art: 'cluster',
-    title: 'M45 – Plejády (otvorená hviezdokopa)',
-    alt: 'Skupina jasných modrých hviezd zahalených v modrastom prachu.',
+    title: 'M45 – Plejády (otevřená hvězdokupa)',
+    alt: 'Skupina jasných modrých hvězd zahalených v modravém prachu.',
     credit: 'ESO',
     license: 'CC BY 4.0',
     source: 'https://www.eso.org/public/images/b11/'
@@ -161,8 +161,8 @@ const IMAGES = {
     local: 'images/m13.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/potw1011a.jpg',
     art: 'cluster',
-    title: 'M13 – guľová hviezdokopa v Herkulovi',
-    alt: 'Obrovská guľa nabitá stovkami tisíc hviezd.',
+    title: 'M13 – kulová hvězdokupa v Herkulovi',
+    alt: 'Obrovská kule nabitá stovkami tisíc hvězd.',
     credit: 'NASA, ESA a Hubble Heritage (STScI/AURA)',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/potw1011a/'
@@ -173,8 +173,8 @@ const IMAGES = {
     local: 'images/milkyway.jpg',
     remote: 'https://cdn.eso.org/images/screen/eso0932a.jpg',
     art: 'milkyway',
-    title: 'Mliečna cesta – panoráma celej oblohy',
-    alt: 'Svetlý pás hviezd a tmavých prachových oblakov cez celú oblohu.',
+    title: 'Mléčná dráha – panoráma celé oblohy',
+    alt: 'Světlý pás hvězd a tmavých prachových oblaků přes celou oblohu.',
     credit: 'ESO / S. Brunier',
     license: 'CC BY 4.0',
     source: 'https://www.eso.org/public/images/eso0932a/'
@@ -184,20 +184,20 @@ const IMAGES = {
     local: 'images/m31.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic1502a.jpg',
     art: 'galaxy',
-    title: 'M31 – galaxia v Andromede',
-    alt: 'Veľká špirálová galaxia s miliardami hviezd.',
+    title: 'M31 – galaxie v Andromedě',
+    alt: 'Velká spirální galaxie s miliardami hvězd.',
     credit: 'NASA, ESA, J. Dalcanton, B. F. Williams, L. C. Johnson (Univ. of Washington), tím PHAT a R. Gendler',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic1502a/'
   },
 
-  /* ---------------------- PLANÉTY A MESIAC ------------------------------ */
+  /* ---------------------- PLANETY A MĚSÍC ------------------------------- */
   jupiter: {
     local: 'images/jupiter.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic2113b.jpg',
     art: 'planet',
     title: 'Jupiter (Hubble, 2021)',
-    alt: 'Planéta Jupiter s pásmi oblakov a Veľkou červenou škvrnou.',
+    alt: 'Planeta Jupiter s pásy oblaků a Velkou červenou skvrnou.',
     credit: 'NASA, ESA, A. Simon (GSFC), M.H. Wong (UC Berkeley) a tím OPAL',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic2113b/'
@@ -207,8 +207,8 @@ const IMAGES = {
     local: 'images/moon.jpg',
     remote: '',
     art: 'moon',
-    title: 'Mesiac a jeho krátery',
-    alt: 'Sivý disk Mesiaca pokrytý krátermi.',
+    title: 'Měsíc a jeho krátery',
+    alt: 'Šedý disk Měsíce pokrytý krátery.',
     credit: '', license: '', source: ''
   },
 
@@ -217,21 +217,21 @@ const IMAGES = {
     local: 'images/albireo.jpg',
     remote: '',
     art: 'doublestar',
-    title: 'Dvojhviezda – jedna modrá, jedna žltá',
-    alt: 'Dve hviezdy blízko seba, jedna modrá a jedna žltooranžová.',
+    title: 'Dvojhvězda – jedna modrá, jedna žlutá',
+    alt: 'Dvě hvězdy blízko sebe, jedna modrá a jedna žlutooranžová.',
     credit: '', license: '', source: ''
   },
-  starBlue:   { local: '', remote: '', art: 'star-blue',   title: 'Horúca modrá hviezda',    alt: 'Modro svietiaca hviezda.',      credit: '', license: '', source: '' },
-  starYellow: { local: '', remote: '', art: 'star-yellow', title: 'Žltá hviezda ako Slnko',  alt: 'Žlto svietiaca hviezda.',       credit: '', license: '', source: '' },
-  starRed:    { local: '', remote: '', art: 'star-red',    title: 'Chladná červená hviezda', alt: 'Červeno svietiaca hviezda.',    credit: '', license: '', source: '' },
+  starBlue:   { local: '', remote: '', art: 'star-blue',   title: 'Horká modrá hvězda',    alt: 'Modře svítící hvězda.',      credit: '', license: '', source: '' },
+  starYellow: { local: '', remote: '', art: 'star-yellow', title: 'Žlutá hvězda jako Slunce',  alt: 'Žlutě svítící hvězda.',       credit: '', license: '', source: '' },
+  starRed:    { local: '', remote: '', art: 'star-red',    title: 'Chladná červená hvězda', alt: 'Červeně svítící hvězda.',    credit: '', license: '', source: '' },
 
-  /* ---------------------- SUPERNOVY, ČIERNE DIERY ----------------------- */
+  /* ---------------------- SUPERNOVY, ČERNÉ DÍRY ------------------------- */
   m1: {
     local: 'images/m1.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic0515a.jpg',
     art: 'supernova',
-    title: 'M1 – Krabia hmlovina (pozostatok supernovy)',
-    alt: 'Farebná trhaná hmlovina s vláknami plynu.',
+    title: 'M1 – Krabí mlhovina (pozůstatek supernovy)',
+    alt: 'Barevná roztrhaná mlhovina s vlákny plynu.',
     credit: 'NASA, ESA a J. Hester (ASU)',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic0515a/'
@@ -239,8 +239,8 @@ const IMAGES = {
 
   neutron: {
     local: '', remote: '', art: 'neutron',
-    title: 'Neutrónová hviezda – pulzar',
-    alt: 'Malý veľmi jasný bod s dvomi lúčmi.',
+    title: 'Neutronová hvězda – pulzar',
+    alt: 'Malý velmi jasný bod se dvěma paprsky.',
     credit: '', license: '', source: ''
   },
 
@@ -248,78 +248,78 @@ const IMAGES = {
     local: 'images/sgra.jpg',
     remote: 'https://cdn.eso.org/images/screen/eso2208-eht-mwa.jpg',
     art: 'blackhole',
-    title: 'Sagittarius A* – prvá fotografia čiernej diery v našej galaxii',
-    alt: 'Oranžový prstenec svetla okolo tmavého stredu.',
+    title: 'Sagittarius A* – první fotografie černé díry v naší galaxii',
+    alt: 'Oranžový prstenec světla okolo tmavého středu.',
     credit: 'EHT Collaboration',
     license: 'CC BY 4.0',
     source: 'https://www.eso.org/public/images/eso2208-eht-mwa/'
   },
 
-  /* ---------- OBJEKTY A JAVY PRE LEKCIE 10 – 22 (vlastné ilustrácie) ---- */
-  /* Tieto majú prázdne "remote" – zobrazí sa vlastná SVG ilustrácia.
-     Keď nájdeš fotku s vhodnou licenciou, doplň remote + credit + source. */
+  /* ------------ OBJEKTY A JEVY PRO LEKCE 10 – 22 (vlastní ilustrace) ---- */
+  /* Tyto mají prázdné "remote" – zobrazí se vlastní SVG ilustrace.
+     Když najdeš fotku s vhodnou licencí, doplň remote + credit + source. */
 
   m44:       { local: 'images/m44.jpg',      remote: '', art: 'cluster',
-               title: 'M44 – Jasličky (otvorená hviezdokopa)',
-               alt: 'Voľne rozsypaná skupina jasných hviezd.', credit: '', license: '', source: '' },
+               title: 'M44 – Jesličky (otevřená hvězdokupa)',
+               alt: 'Volně rozsypaná skupina jasných hvězd.', credit: '', license: '', source: '' },
   m27:       { local: 'images/m27.jpg',      remote: '', art: 'planetary',
-               title: 'M27 – hmlovina Činka (planetárna)',
-               alt: 'Oblak plynu odhodený umierajúcou hviezdou.', credit: '', license: '', source: '' },
+               title: 'M27 – mlhovina Činka (planetární)',
+               alt: 'Oblak plynu odhozený umírající hvězdou.', credit: '', license: '', source: '' },
   sun:       { local: 'images/sun.jpg',      remote: '', art: 'sun',
-               title: 'Slnko so slnečnými škvrnami',
-               alt: 'Žltý disk Slnka s niekoľkými tmavými škvrnami.', credit: '', license: '', source: '' },
+               title: 'Slunce se slunečními skvrnami',
+               alt: 'Žlutý disk Slunce s několika tmavými skvrnami.', credit: '', license: '', source: '' },
   moonphase: { local: 'images/moonphase.jpg', remote: '', art: 'moonphase',
-               title: 'Mesiac v poslednej štvrti',
-               alt: 'Mesiac osvetlený len z jednej strany.', credit: '', license: '', source: '' },
+               title: 'Měsíc v poslední čtvrti',
+               alt: 'Měsíc osvětlený jen z jedné strany.', credit: '', license: '', source: '' },
   spectrum:  { local: '',                    remote: '', art: 'spectrum',
-               title: 'Spektrum – svetlo rozložené na farby s čiarami prvkov',
-               alt: 'Farebný pruh od modrej po červenú s tmavými čiarami.', credit: '', license: '', source: '' },
+               title: 'Spektrum – světlo rozložené na barvy s čárami prvků',
+               alt: 'Barevný pruh od modré po červenou s tmavými čárami.', credit: '', license: '', source: '' },
   iss:       { local: 'images/iss.jpg',      remote: '', art: 'satellite',
-               title: 'Prelet vesmírnej stanice nad oblohou',
-               alt: 'Rovná svetelná čiara medzi hviezdami.', credit: '', license: '', source: '' },
+               title: 'Přelet vesmírné stanice nad oblohou',
+               alt: 'Rovná světelná čára mezi hvězdami.', credit: '', license: '', source: '' },
   transit:   { local: '',                    remote: '', art: 'transit',
-               title: 'Tranzit – planéta prechádza pred svojou hviezdou',
-               alt: 'Hviezda s malou tmavou tečkou na disku.', credit: '', license: '', source: '' },
+               title: 'Tranzit – planeta přechází před svou hvězdou',
+               alt: 'Hvězda s malou tmavou tečkou na disku.', credit: '', license: '', source: '' },
   comet:     { local: 'images/comet.jpg',    remote: '', art: 'comet',
-               title: 'Kométa s dvomi chvostmi',
-               alt: 'Svetlá hlava kométy s dvomi chvostmi.', credit: '', license: '', source: '' },
+               title: 'Kometa se dvěma ohony',
+               alt: 'Světlá hlava komety se dvěma ohony.', credit: '', license: '', source: '' },
   meteors:   { local: 'images/meteors.jpg',  remote: '', art: 'meteors',
-               title: 'Meteorický roj – meteory vyletujú z jedného miesta',
-               alt: 'Niekoľko svetelných čiar rozbiehajúcich sa z jedného bodu.', credit: '', license: '', source: '' },
+               title: 'Meteorický roj – meteory vylétají z jednoho místa',
+               alt: 'Několik světelných čar rozbíhajících se z jednoho bodu.', credit: '', license: '', source: '' },
   citysky:   { local: '',                    remote: '', art: 'citysky',
-               title: 'Obloha nad mestom',
-               alt: 'Oranžová žiara pri obzore a len pár hviezd.', credit: '', license: '', source: '' },
+               title: 'Obloha nad městem',
+               alt: 'Oranžová záře u obzoru a jen pár hvězd.', credit: '', license: '', source: '' },
   dome:      { local: '',                    remote: '', art: 'dome',
-               title: 'Hvezdárenská kupola pod hviezdami',
-               alt: 'Silueta okrúhlej kupoly so štrbinou pod hviezdnou oblohou.', credit: '', license: '', source: '' },
+               title: 'Hvězdářská kopule pod hvězdami',
+               alt: 'Silueta kulaté kopule se štěrbinou pod hvězdnou oblohou.', credit: '', license: '', source: '' },
   deepfield: { local: '',                    remote: '', art: 'deepfield',
-               title: 'Hlboký pohľad – takmer každá škvrna je celá galaxia',
-               alt: 'Množstvo malých galaxií rôznych tvarov na čiernom pozadí.', credit: '', license: '', source: '' },
+               title: 'Hluboký pohled – téměř každá skvrna je celá galaxie',
+               alt: 'Množství malých galaxií různých tvarů na černém pozadí.', credit: '', license: '', source: '' },
 
-  /* ---------- POROVNÁVACIE DVOJICE PRE SLOVNÍČEK (ilustrácie) ---------- */
+  /* ---------- POROVNÁVACÍ DVOJICE PRO SLOVNÍČEK (ilustrace) ------------ */
   faintNebula: { local: '', remote: '', art: 'faintnebula',
-                 title: 'Krátka expozícia – tmavá fotka',
-                 alt: 'Takmer čierna fotka, hmlovina je len tušená.', credit: '', license: '', source: '' },
+                 title: 'Krátká expozice – tmavá fotka',
+                 alt: 'Téměř černá fotka, mlhovina je jen tušená.', credit: '', license: '', source: '' },
   noisyNebula: { local: '', remote: '', art: 'noisynebula',
-                 title: 'Vysoký gain – jasné, ale zašumené',
-                 alt: 'Jasná hmlovina, ale celá fotka „sneží“.', credit: '', license: '', source: '' },
+                 title: 'Vysoký gain – jasné, ale zašuměné',
+                 alt: 'Jasná mlhovina, ale celá fotka „sněží“.', credit: '', license: '', source: '' },
   cleanNebula: { local: '', remote: '', art: 'cleannebula',
-                 title: 'Veľa snímok – jasné a čisté',
-                 alt: 'Jasná hmlovina s hladkým pozadím.', credit: '', license: '', source: '' },
+                 title: 'Mnoho snímků – jasné a čisté',
+                 alt: 'Jasná mlhovina s hladkým pozadím.', credit: '', license: '', source: '' },
   blurStars:   { local: '', remote: '', art: 'blurstars',
-                 title: 'Rozostrené hviezdy',
-                 alt: 'Hviezdy ako rozmazané guľičky namiesto bodov.', credit: '', license: '', source: '' },
+                 title: 'Rozostřené hvězdy',
+                 alt: 'Hvězdy jako rozmazané kuličky místo bodů.', credit: '', license: '', source: '' },
   faintStar:   { local: '', remote: '', art: 'faintstar',
-                 title: 'Slabá hviezda (vysoká magnitúda)',
-                 alt: 'Veľmi slabý svetelný bod.', credit: '', license: '', source: '' },
+                 title: 'Slabá hvězda (vysoká magnituda)',
+                 alt: 'Velmi slabý světelný bod.', credit: '', license: '', source: '' },
 
-  /* ------------------ POROVNANIE OKO vs. FOTOAPARÁT --------------------- */
+  /* ------------------ POROVNÁNÍ OKO vs. FOTOAPARÁT ---------------------- */
   horseheadIr: {
     local: 'images/horsehead-ir.jpg',
     remote: 'https://cdn.esahubble.org/archives/images/screen/heic1307a.jpg',
     art: 'dark',
-    title: 'Konská hlava očami infračervenej kamery',
-    alt: 'Tá istá hmlovina, ale v infračervenom svetle vyzerá úplne inak.',
+    title: 'Koňská hlava očima infračervené kamery',
+    alt: 'Tatáž mlhovina, ale v infračerveném světle vypadá úplně jinak.',
     credit: 'NASA, ESA a Hubble Heritage (STScI/AURA)',
     license: 'Public domain / CC BY 4.0',
     source: 'https://esahubble.org/images/heic1307a/'

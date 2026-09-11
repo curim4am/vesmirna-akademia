@@ -1,0 +1,22 @@
+Sem ukládej obrázky.
+
+1) Stažené fotografie z NASA / ESA/Hubble / ESO
+   Doporučené názvy (aby fungovaly bez dalších úprav):
+     carina.jpg        – https://www.eso.org/public/images/eso0905a/
+     m42.jpg           – https://esahubble.org/images/heic0601a/
+     m78.jpg           – https://www.eso.org/public/images/eso1105b/
+     horsehead.jpg     – https://www.eso.org/public/images/eso0202a/
+     horsehead-ir.jpg  – https://esahubble.org/images/heic1307a/
+     ring.jpg          – https://esahubble.org/images/heic1310a/
+     m51.jpg           – https://esahubble.org/images/heic0506a/
+     omegacen.jpg      – https://esahubble.org/images/heic0809a/
+     saturn.jpg        – https://esahubble.org/images/heic1917a/
+
+   Potom v data/images.js přepni:  preferLocal: true
+
+2) Vlastní fotografie z Dwarfu
+   Například do podsložky images/moje/ a cestu doplň
+   do data/objects.js jako pole "myPhoto".
+
+Licence: NASA = public domain, ESA/Hubble a ESO = CC BY 4.0
+(uveď autora – v aplikaci se credit zobrazuje pod fotografií).

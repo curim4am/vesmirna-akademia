@@ -1,97 +1,144 @@
-# 🌍 Ako dať Vesmírnu akadémiu na internet
+# Jak dát Vesmírnou akademii na internet
 
-Appka je **čistý statický web** – žiadny server, PHP ani databáza. Stačí nahrať
-tieto súbory na akýkoľvek „static hosting“ a funguje to.
+Aplikace je **čistý statický web** – žádný server, PHP ani databáze. Stačí nahrát
+tyhle soubory na jakýkoli „static hosting“ a funguje to.
 
-Dôležité: **v tomto priečinku je `index.html` priamo v koreni** – presne to
-hostingy potrebujú. Nahrávaj obsah tohto priečinka, nie priečinok zabalený v ďalšom.
+Důležité: **`index.html` leží přímo tady, ne v žádné podsložce** – přesně to
+hostingy potřebují. Nahrávej obsah téhle složky, ne složku zabalenou v další.
+
+### Co přesně se nahrává
+
+```text
+index.html          ← musí skončit v kořenové složce
+style.css
+icons.js
+sky-map.js
+sim-engine.js
+app.js
+data/               ← celá složka: images.js, objects.js, facts.js, terms.js,
+                      sims.js, sky.js, lessons.js
+images/             ← nepovinné (jen když máš lokální fotky)
+```
+
+Soubor `vesmirna-akademia-jeden-soubor.html` na hosting nahrávat nemusíš –
+je to jen alternativa k celé složce (viz předposlední sekce). Soubor
+`artifact-vesmirna-akademia.html`, který vzniká o složku výš, na web nepatří
+vůbec – je to jen tělo stránky pro publikování v Claude.
+
+Pořadí `<script>` v `index.html` je závazné: nejdřív data (`data/images.js`,
+`data/objects.js`, `data/facts.js`, `data/terms.js`, `data/sims.js`,
+`data/sky.js`, `data/lessons.js`), potom logika (`icons.js`, `sky-map.js`,
+`sim-engine.js`, `app.js`). Když se přidá nový soubor, musí se přidat i tam –
+jinak na hostingu bude, ale nikdo ho nenačte.
 
 ---
 
-## Netlify Drop – keď nechceš nič riešiť (2 minúty, bez GitHubu)
+## Netlify Drop – když nechceš nic řešit (2 minuty, bez GitHubu)
 
-1. Otvor **https://app.netlify.com/drop**
-2. Zaregistruj sa / prihlás sa (zdarma) – **bez prihlásenia** dostane stránka
-   dočasné heslo, takže by sa k nej syn nedostal.
-3. Pretiahni **celý tento priečinok** do plochy „Drop“.
-4. Do niekoľkých sekúnd dostaneš adresu typu `nazov-nieco.netlify.app`.
-   Tú pošli synovi – otvorí ju v mobile aj na počítači.
+1. Otevři **https://app.netlify.com/drop**
+2. Zaregistruj se / přihlas se (zdarma) – **bez přihlášení** dostane stránka
+   dočasné heslo, takže by se k ní syn nedostal.
+3. Přetáhni **celou tuhle složku** do plochy „Drop“.
+4. Do několika sekund dostaneš adresu typu `nazev-neco.netlify.app`.
+   Tu pošli synovi – otevře ji v mobilu i na počítači.
 
-Zmena appky neskôr: v Netlify v projekte pod **Production deploys** pretiahni
-nový priečinok. Adresa zostane rovnaká, takže synovi netreba posielať nový odkaz.
+Změna aplikace později: v Netlify v projektu pod **Production deploys** přetáhni
+novou složku. Adresa zůstane stejná, takže synovi není potřeba posílat nový odkaz.
 
-Voliteľne: v *Site configuration → Change site name* si zmeň adresu na niečo
-zapamätateľné, napríklad `vesmirna-akademia-matus.netlify.app`.
+Volitelně: v *Site configuration → Change site name* si změň adresu na něco
+zapamatovatelného, například `vesmirna-akademia-matus.netlify.app`.
 
 ---
 
-## GitHub Pages – ak už GitHub máš (bez terminálu, celé v prehliadači)
+## GitHub Pages – když už GitHub máš (bez terminálu, celé v prohlížeči)
 
-1. Na GitHube **New repository**. Meno napr. `vesmirna-akademia`,
-   viditeľnosť **Public** (na bezplatnom účte Pages inak nefunguje),
-   README netreba zaškrtávať.
-2. V prázdnom repozitári klikni **uploading an existing file**
-   (alebo *Add file → Upload files*).
-3. Pretiahni **obsah** tohto priečinka – teda `index.html`, `style.css`,
-   `app.js`, `sim-engine.js` a priečinok `data/`. Nie priečinok zabalený
-   v ďalšom priečinku: **`index.html` musí skončiť v koreni repozitára.**
-   (Prehliadač si pri pretiahnutí priečinka `data/` zachová štruktúru.)
+1. Na GitHubu **New repository**. Jméno např. `vesmirna-akademia`,
+   viditelnost **Public** (na bezplatném účtu Pages jinak nefungují),
+   README není potřeba zaškrtávat.
+2. V prázdném repozitáři klikni **uploading an existing file**
+   (nebo *Add file → Upload files*).
+3. Přetáhni **obsah** téhle složky – tedy `index.html`, `style.css`,
+   `icons.js`, `sky-map.js`, `sim-engine.js`, `app.js` a složku `data/`.
+   Ne složku zabalenou v další složce: **`index.html` musí skončit
+   v kořeni repozitáře.**
+   (Prohlížeč si při přetažení složky `data/` zachová strukturu.)
 4. Dole **Commit changes**.
 5. **Settings → Pages** → *Source:* **Deploy from a branch**,
    *Branch:* `main`, *Folder:* `/ (root)` → **Save**.
-6. Počkaj ~1 minútu a obnov stránku Settings → Pages. Zobrazí sa odkaz
-   `https://tvoje-meno.github.io/vesmirna-akademia/`. To pošli synovi.
+6. Počkej ~1 minutu a obnov stránku Settings → Pages. Zobrazí se odkaz
+   `https://tvoje-jmeno.github.io/vesmirna-akademia/`. Ten pošli synovi.
 
-### Alebo z terminálu (ak máš git)
+### Nebo z terminálu (když máš git)
 ```bash
-cd vesmirna-akademia-NA-WEB          # priečinok, kde je index.html
+cd vesmirna-akademia                 # složka, kde je index.html
 git init -b main
 git add .
 git commit -m "Vesmirna akademia"
-git remote add origin https://github.com/TVOJE-MENO/vesmirna-akademia.git
+git remote add origin https://github.com/TVOJE-JMENO/vesmirna-akademia.git
 git push -u origin main
 ```
-Potom už len *Settings → Pages* podľa kroku 5 vyššie.
-S `gh` CLI to ide na jeden riadok:
+Potom už jen *Settings → Pages* podle kroku 5 výše.
+S `gh` CLI to jde na jeden řádek:
 `gh repo create vesmirna-akademia --public --source=. --push`
 
-### Aktualizácia neskôr
-*Add file → Upload files* → pretiahni zmenené súbory → *Commit changes*
-(alebo `git add . && git commit -m "update" && git push`).
-**Adresa zostane rovnaká**, takže synovi netreba posielať nový odkaz.
-GitHub Pages si stránku chvíľu kešuje – ak zmenu nevidíš, daj tvrdé obnovenie
+### Aktualizace později
+*Add file → Upload files* → přetáhni změněné soubory → *Commit changes*
+(nebo `git add . && git commit -m "update" && git push`).
+**Adresa zůstane stejná**, takže synovi není potřeba posílat nový odkaz.
+GitHub Pages si stránku chvíli kešuje – když změnu nevidíš, dej tvrdé obnovení
 (Ctrl+Shift+R, na Macu Cmd+Shift+R).
 
-### Prečo to funguje aj v podpriečinku
-Adresa Pages je `…github.io/nazov-repa/`, teda podpriečinok. V `index.html`
-sú **všetky cesty relatívne** (`style.css`, `data/lessons.js`…), takže sa
-nič nemusí prepisovať. Keby si appku niekedy dal na vlastnú domému do koreňa,
-funguje to tiež bez zmeny.
+### Proč to funguje i v podsložce
+Adresa Pages je `…github.io/nazev-repa/`, tedy podsložka. V `index.html`
+jsou **všechny cesty relativní** (`style.css`, `icons.js`, `sky-map.js`,
+`data/lessons.js`…), takže se nic nemusí přepisovat. Kdybys aplikaci někdy
+dal na vlastní doménu do kořene, funguje to taky bez změny.
 
-## Ešte jednoduchšie, ak nemusí byť „na webe“
+Adresy obrazovek jsou v hashi (`#/`, `#/vypravy`, `#/objekt/m42`), a to je
+pro hosting důležité: hash se na server neposílá, takže žádná přesměrování
+ani soubor `_redirects` nejsou potřeba. Obnovení stránky i tlačítko Zpět
+fungují všude – na Pages i na Netlify.
 
-V priečinku je aj **`vesmirna-akademia-jeden-subor.html`** – celá akadémia
-v jedinom súbore. Ten sa dá poslať mailom, dať na USB alebo do cloudu a
-otvoriť dvojklikom. Funguje aj bez internetu (namiesto fotiek NASA/ESA/ESO
-sa vtedy zobrazia vlastné ilustrácie).
+## Ještě jednodušeji, když to nemusí být „na webu“
+
+Ve složce je i **`vesmirna-akademia-jeden-soubor.html`** – celá akademie
+v jediném souboru. Ten se dá poslat mailem, dát na USB nebo do cloudu a
+otevřít dvojklikem. Funguje i bez internetu (místo fotek NASA/ESA/ESO
+se tehdy zobrazí vlastní ilustrace).
+
+Když se v aplikaci něco změní, jednosouborová verze se znovu složí příkazem:
+
+```bash
+node tools/build-jeden-soubor.mjs
+```
+
+Skript bere pořadí skriptů přímo z `index.html`, takže se na nový soubor
+nezapomene.
 
 ---
 
-## Čo je dobré vedieť
+## Co je dobré vědět
 
-- **Fotky NASA/ESA/ESO sa na vlastnom hostingu načítajú** (na rozdiel od
-  verzie publikovanej v Claude, ktorá externé obrázky blokuje). Ak by ich
-  raz chcel mať lokálne, ulož ich do `images/` a v `data/images.js` prepni
+- **Fotky NASA/ESA/ESO se na vlastním hostingu načtou** (na rozdíl od
+  verze publikované v Claude, která externí obrázky blokuje). Kdybys je
+  chtěl mít někdy lokálně, ulož je do `images/` a v `data/images.js` přepni
   `preferLocal: true`.
-- **Pokrok (XP, odznaky, fotky) je v prehliadači, nie na serveri.** Uloží sa
-  do `localStorage` tej konkrétnej adresy v tom konkrétnom prehliadači. Takže:
-  - v mobile a na počítači bude mať **dve samostatné zbierky**,
-  - po zmazaní dát prehliadača sa pokrok stratí,
-  - pri zmene adresy webu sa začína odznova.
-  Pre jedno dieťa na jednom zariadení je to úplne v poriadku – práve preto
-  appka nepotrebuje žiadne prihlasovanie.
-- **Vlastné fotky z Dwarfu** sa ukladajú do prehliadača (zmenšené na 900 px).
-  Ak chce mať istotu, že sa nestratia, nech si originály nechá aj v telefóne.
-- Adresa je verejná – kto ju pozná, otvorí ju. Nič osobné sa nikam neposiela,
-  ale ak to nechceš mať verejné, GitHub Pages aj Netlify vedia stránku
-  zaheslovať (na Netlify je to platená funkcia, na GitHube treba privátny repo + Pro).
+- **Postup (XP, kvalifikace, deník, fotky) je v prohlížeči, ne na serveru.**
+  Uloží se do `localStorage` té konkrétní adresy v tom konkrétním prohlížeči.
+  Takže:
+  - v mobilu a na počítači bude mít **dvě samostatné sbírky**,
+  - po smazání dat prohlížeče se postup ztratí,
+  - při změně adresy webu se začíná znovu.
+  Pro jedno dítě na jednom zařízení je to úplně v pořádku – právě proto
+  aplikace nepotřebuje žádné přihlašování.
+- **Starý postup se neztratí ani po aktualizaci.** Uložený stav má číslo verze
+  (`state.v`) a při otevření projde migrací, která jen doplní, co ve starší
+  verzi chybělo. Nic nemaže. Klíč v `localStorage` zůstává
+  `vesmirna-akademia-v1`, takže nahrání nové verze na stejnou adresu
+  nechá dítě přesně tam, kde skončilo.
+- **Vlastní fotky z Dwarfu** se ukládají do prohlížeče (zmenšené na 900 px).
+  Když chce mít jistotu, že se neztratí, ať si originály nechá i v telefonu.
+- Adresa je veřejná – kdo ji zná, otevře ji. Nic osobního se nikam neposílá,
+  ale když to nechceš mít veřejné, GitHub Pages i Netlify umí stránku
+  zaheslovat (na Netlify je to placená funkce, na GitHubu je potřeba privátní
+  repozitář + Pro).

@@ -1,30 +1,30 @@
 /* =============================================================================
-   LEKCIE  (data/lessons.js)
+   LEKCE  (data/lessons.js)
    -----------------------------------------------------------------------------
-   TU SA UPRAVUJE VŠETOK TEXT LEKCIE. V app.js nie je žiadny obsah lekcie.
+   TADY SE UPRAVUJE VEŠKERÝ TEXT LEKCE. V app.js není žádný obsah lekce.
 
-   Lekcia = pole krokov (steps). Každý krok má "type" a aplikácia preň pozná
-   svoju obrazovku. Dostupné typy krokov:
+   Lekce = pole kroků (steps). Každý krok má "type" a aplikace pro něj zná
+   svou obrazovku. Dostupné typy kroků:
 
-     guess    – hádanka: obrázok + 4 možnosti
-     info     – jedna hlavná myšlienka: obrázok + 1–3 krátke vety
-     cards    – karty, ktoré sa dajú otvoriť (napr. 4 typy hmlovín)
-     pick     – vyber správny obrázok zo štyroch
-     wow      – veľký "WOW" moment
-     compare  – porovnanie dvoch obrázkov (oko vs. fotoaparát)
-     mission  – reálna misia (Stellarium + Dwarf) + objavenie objektu
+     guess    – hádanka: obrázek + 4 možnosti
+     info     – jedna hlavní myšlenka: obrázek + 1–3 krátké věty
+     cards    – karty, které se dají otevřít (např. 4 typy mlhovin)
+     pick     – vyber správný obrázek ze čtyř
+     wow      – velký "WOW" moment
+     compare  – porovnání dvou obrázků (oko vs. fotoaparát)
+     mission  – reálná misie (Stellarium + Dwarf) + objevení objektu
      quiz     – mini test na konci
 
-   Typy otázok v kvíze: 'choice' | 'image' | 'truefalse' | 'order' | 'decide'
+   Typy otázek v kvízu: 'choice' | 'image' | 'truefalse' | 'order' | 'decide'
    ========================================================================== */
 
 const LESSONS = [
   {
     id: 'nebulae',
     icon: '☁️',
-    title: 'HMLOVINY',
-    teaser: 'Dokážeš zistiť, čo sa skrýva za týmto tajomným oblakom?',
-    minutes: '6 minút',
+    title: 'MLHOVINY',
+    teaser: 'Dokážeš zjistit, co se skrývá za tímto tajemným oblakem?',
+    minutes: '6 minut',
     badge: 'nebula-hunter',
     basics: [ 'hmlovina', 'typy-hmlovin', 'plyn-a-prach', 'svetelny-rok',
               'magnituda', 'suhvezdie', 'expozicia' ],
@@ -35,123 +35,131 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'carina',
-        question: '🔎 ČO MYSLÍŠ, ŽE TO JE?',
+        question: '🔎 CO MYSLÍŠ, ŽE TO JE?',
         options: [
-          { id: 'galaxy',  icon: '🌌', label: 'galaxia' },
-          { id: 'nebula',  icon: '☁️', label: 'hmlovina' },
-          { id: 'cluster', icon: '✨', label: 'hviezdokopa' },
-          { id: 'planet',  icon: '🪐', label: 'planéta' }
+          { id: 'galaxy',  icon: '🌌', label: 'galaxie' },
+          { id: 'nebula',  icon: '☁️', label: 'mlhovina' },
+          { id: 'cluster', icon: '✨', label: 'hvězdokupa' },
+          { id: 'planet',  icon: '🪐', label: 'planeta' }
         ],
         correct: 'nebula',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Hmlovina je obrovský oblak plynu a prachu vo vesmíre.',
-        retryText: 'Skús ešte raz. Pozri sa na tie oblaky – nie sú to hviezdy ani planéta.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Mlhovina je obrovský oblak plynu a prachu ve vesmíru.',
+        retryText: 'Zkus to ještě jednou. Podívej se na ty oblaky – nejsou to hvězdy ani planeta.',
         xp: 10
       },
 
-      /* ------------------------ 2. ČO JE HMLOVINA ----------------------- */
+      /* ------------------------ 2. CO JE MLHOVINA ----------------------- */
       {
         type: 'info',
-        title: '☁️ ČO JE HMLOVINA?',
+        title: '☁️ CO JE MLHOVINA?',
         image: 'carina',
         lines: [
-          'Hmlovina je obrovský oblak plynu a prachu vo vesmíre.',
-          'Niektoré hmloviny sú miestom, kde sa rodia nové hviezdy.',
-          'Iné vzniknú, keď stará hviezda zomiera.'
+          'Mlhovina je obrovský oblak plynu a prachu ve vesmíru.',
+          'Některé mlhoviny jsou místem, kde se rodí nové hvězdy.',
+          'Jiné vzniknou, když stará hvězda umírá.'
         ],
         more: [
-          'V jednom kubickom centimetri hmloviny je často len niekoľko stoviek atómov. V rovnako veľkej kocke vzduchu okolo teba ich je asi 25 triliónov. Hmlovina vyzerá hustá len preto, že je obrovská – svetlo musí prejsť cez tisíce miliárd kilometrov plynu a to sa nakoniec nasčíta.',
-          'Väčšinu hmloviny tvorí vodík, teda ten istý plyn, z ktorého je aj Slnko. Keď ho blízka horúca hviezda osvieti svojím ultrafialovým svetlom, vodík začne sám žiariť do červena. Preto sú emisné hmloviny na fotkách často ružové a červené.',
-          'Vodík z hmlovín sa mení na hviezdy a hviezdy ho na konci života znova rozfúkajú do vesmíru – už obohatený o nové látky. Vesmír si tak ten istý materiál používa dokola.'
+          'V jednom kubickém centimetru mlhoviny je často jen několik set atomů. Ve stejně velké ' +
+          'kostce vzduchu okolo tebe jich je asi 25 trilionů. Mlhovina vypadá hustá jen proto, že ' +
+          'je obrovská – světlo musí projít tisíci miliard kilometrů plynu a to se nakonec sečte.',
+          'Většinu mlhoviny tvoří vodík, tedy tentýž plyn, z jakého je i Slunce. Když ho blízká ' +
+          'žhavá hvězda osvítí svým ultrafialovým světlem, vodík začne sám svítit do červena. ' +
+          'Proto jsou emisní mlhoviny na fotkách často růžové a červené.',
+          'Vodík z mlhovin se mění na hvězdy a hvězdy ho na konci života znovu rozfoukají do ' +
+          'vesmíru – už obohacený o nové látky. Vesmír tak tentýž materiál používá dokola.'
         ],
-        diagram: 'nebula-cycle',   // jednoduchá animovaná ilustrácia (v app.js)
-        cta: 'A teraz pozor…'
+        diagram: 'nebula-cycle',   // jednoduchá animovaná ilustrace (v app.js)
+        cta: 'A teď pozor…'
       },
 
-      /* --------------------- 3. ŠTYRI TYPY HMLOVÍN ---------------------- */
+      /* --------------------- 3. ČTYŘI TYPY MLHOVIN ---------------------- */
       {
         type: 'cards',
-        title: 'HMLOVINA NIE JE VŽDY ROVNAKÁ',
-        subtitle: 'Klikni na každú kartu a otoč ju.',
+        title: 'MLHOVINA NENÍ VŽDY STEJNÁ',
+        subtitle: 'Klikni na každou kartu a otoč ji.',
         kinds: ['emission', 'reflection', 'dark', 'planetary'],
-        cta: 'Rozumiem, ideme na to!',
+        cta: 'Rozumím, jdeme na to!',
         xp: 15
       },
 
-      /* ---------------------- 4. INTERAKTÍVNA ÚLOHA --------------------- */
+      /* ---------------------- 4. INTERAKTIVNÍ ÚLOHA --------------------- */
       {
         type: 'pick',
-        title: '🔎 UHÁDNI HMLOVINU',
-        prompt: 'Ktorá z nich je planetárna hmlovina?',
+        title: '🔎 UHÁDNI MLHOVINU',
+        prompt: 'Která z nich je planetární mlhovina?',
         options: [
-          { image: 'm42',       correct: false, explain: 'Toto je emisná hmlovina – celý oblak žiari vlastným svetlom.' },
-          { image: 'ring',      correct: true,  explain: 'Presne tak! Vidíš ten prstenec? To sú vrstvy, ktoré odhodila umierajúca hviezda. V strede zostal malý biely bod – jej jadro.' },
-          { image: 'horsehead', correct: false, explain: 'Toto je temná hmlovina – tmavý prach, ktorý zakrýva svetlo za sebou.' },
-          { image: 'm78',       correct: false, explain: 'Toto je reflexná hmlovina – modrastý prach, ktorý iba odráža svetlo hviezdy.' }
+          { image: 'm42',       correct: false, explain: 'Tohle je emisní mlhovina – celý oblak svítí vlastním světlem.' },
+          { image: 'ring',      correct: true,  explain: 'Přesně tak! Vidíš ten prstenec? To jsou vrstvy, které odhodila umírající hvězda. Ve ' +
+                                                         'středu zůstal malý bílý bod – její jádro.' },
+          { image: 'horsehead', correct: false, explain: 'Tohle je temná mlhovina – tmavý prach, který zakrývá světlo za sebou.' },
+          { image: 'm78',       correct: false, explain: 'Tohle je reflexní mlhovina – modravý prach, který jen odráží světlo hvězdy.' }
         ],
         xp: 20
       },
 
-      /* ------------------------ 4b. VIEŠ ŽE? ---------------------------- */
+      /* ------------------------ 4b. VÍŠ, ŽE? ---------------------------- */
       { type: 'fact', factId: 'hmloviny-recyklacia' },
 
       /* --------------------------- 5. WOW MOMENT ------------------------ */
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Keď sa pozeráš na niektoré hmloviny, pozeráš sa na svetlo, ktoré cestovalo stovky alebo tisíce rokov, kým dorazilo až k nám.',
-          'Takže vlastne pozeráme do minulosti!'
+          'Když se díváš na některé mlhoviny, díváš se na světlo, které cestovalo stovky nebo ' +
+          'tisíce let, než dorazilo až k nám.',
+          'Takže vlastně koukáme do minulosti!'
         ],
-        footnote: 'Svetlo z Orionovej hmloviny vyrazilo na cestu ešte v stredoveku.',
-        cta: 'To je šialené 🤯'
+        footnote: 'Světlo z Orionovy mlhoviny vyrazilo na cestu ještě ve středověku.',
+        cta: 'To je šílené 🤯'
       },
 
       { type: 'fact', factId: 'svetlo-z-minulosti' },
 
-      /* ------------------------- 6. ČO UVIDÍ DWARF ---------------------- */
+      /* ------------------------- 6. CO UVIDÍ DWARF ---------------------- */
       {
         type: 'compare',
-        title: '🔭 A ČO UVIDÍME V DWARFE?',
-        lead: 'Dwarf dokáže zachytiť objekty, ktoré sú pre naše oči príliš slabé.',
+        title: '🔭 A CO UVIDÍME V DWARFU?',
+        lead: 'Dwarf dokáže zachytit objekty, které jsou pro naše oči příliš slabé.',
         eye: {
           icon: '👁️',
-          label: 'ĽUDSKÉ OKO',
-          text: 'Oko vidí len to, čo naň dopadne práve teraz. Slabé svetlo si nedokáže odložiť.'
+          label: 'LIDSKÉ OKO',
+          text: 'Oko vidí jen to, co na něj dopadne právě teď. Slabé světlo si nedokáže uložit.'
         },
         camera: {
           icon: '📸',
-          label: 'ASTRONOMICKÁ FOTOGRAFIA',
-          text: 'Dwarf zbiera svetlo dlho a spojí veľa snímok do jednej. Preto sa objavia farby a tvary, ktoré oko nikdy neuvidí.',
+          label: 'ASTRONOMICKÁ FOTOGRAFIE',
+          text: 'Dwarf sbírá světlo dlouho a spojí mnoho snímků do jednoho. Proto se objeví barvy a ' +
+                'tvary, které oko nikdy neuvidí.',
           image: 'm42'
         },
         check: {
-          question: 'Prečo teda Dwarf vidí viac ako naše oko?',
+          question: 'Proč tedy Dwarf vidí víc než naše oko?',
           options: [
-            { label: 'Lebo dlho zbiera svetlo a skladá veľa snímok', correct: true,
-              explain: 'Áno! Nazýva sa to dlhá expozícia a skladanie snímok.' },
-            { label: 'Lebo lieta bližšie k hmlovine', correct: false,
-              explain: 'To nie – Dwarf stojí na Zemi rovnako ako my. Jeho tajomstvo je čas a skladanie snímok.' }
+            { label: 'Protože dlouho sbírá světlo a skládá mnoho snímků', correct: true,
+              explain: 'Ano! Říká se tomu dlouhá expozice a skládání snímků.' },
+            { label: 'Protože letí blíž k mlhovině', correct: false,
+              explain: 'To ne – Dwarf stojí na Zemi stejně jako my. Jeho tajemství je čas a skládání snímků.' }
           ]
         },
-        cta: 'Ideme fotiť!'
+        cta: 'Jdeme fotit!'
       },
 
       { type: 'fact', factId: 'dwarf-30mm' },
 
-      /* -------------------------- 7. NAŠA MISIA ------------------------- */
+      /* -------------------------- 7. NAŠE MISE -------------------------- */
       {
         type: 'mission',
-        title: '📸 NAŠA PRVÁ MISIA',
+        title: '📸 NAŠE PRVNÍ MISE',
         objectId: 'm42',
         tasks: [
-          { icon: '🔭', text: 'Nájdi M42 v Stellariu.' },
-          { icon: '📸', text: 'Skús ju odfotografovať Dwarfom.' }
+          { icon: '🔭', text: 'Najdi M42 ve Stellariu.' },
+          { icon: '📸', text: 'Zkus ji vyfotografovat Dwarfem.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Objekt sa uložil do tvojej vesmírnej zbierky.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Objekt se uložil do tvé vesmírné sbírky.',
+        cta: 'Poslední výzva: mini test'
       },
 
       /* --------------------------- 8. MINI KVÍZ ------------------------- */
@@ -162,74 +170,77 @@ const LESSONS = [
 
           {
             kind: 'choice',
-            question: 'Čo je hmlovina?',
+            question: 'Co je mlhovina?',
             options: [
               { label: 'Obrovský oblak plynu a prachu', correct: true },
-              { label: 'Veľmi veľká planéta' },
-              { label: 'Skupina miliárd hviezd' },
-              { label: 'Kus ľadu, ktorý letí okolo Slnka' }
+              { label: 'Velmi velká planeta' },
+              { label: 'Skupina miliard hvězd' },
+              { label: 'Kus ledu, který letí okolo Slunce' }
             ],
-            explain: 'Hmlovina je oblak plynu a prachu. Skupina miliárd hviezd je galaxia.'
+            explain: 'Mlhovina je oblak plynu a prachu. Skupina miliard hvězd je galaxie.'
           },
 
           {
             kind: 'image',
-            question: 'Ktorá hmlovina súvisí so zrodom nových hviezd?',
+            question: 'Která mlhovina souvisí se zrodem nových hvězd?',
             options: [
               { image: 'm42',  label: 'A', correct: true },
               { image: 'ring', label: 'B' },
               { image: 'horsehead', label: 'C' },
               { image: 'saturn', label: 'D' }
             ],
-            explain: 'Toto je M42 – emisná hmlovina a najbližšia veľká pôrodnica hviezd. (D nie je ani hmlovina, to je planéta Saturn!)'
+            explain: 'Tohle je M42 – emisní mlhovina a nejbližší velká porodnice hvězd. (D není ani ' +
+                     'mlhovina, to je planeta Saturn!)'
           },
 
           {
             kind: 'truefalse',
-            question: 'Planetárna hmlovina je oblak, ktorý obklopuje planétu.',
+            question: 'Planetární mlhovina je oblak, který obklopuje planetu.',
             answer: false,
-            explain: 'Nepravda! Planetárna hmlovina je pozostatok umierajúcej hviezdy. Meno dostala len preto, že v starých ďalekohľadoch vyzerala ako malá planéta.'
+            explain: 'Nepravda! Planetární mlhovina je pozůstatek umírající hvězdy. Jméno dostala jen proto, ' +
+                     'že ve starých dalekohledech vypadala jako malá planeta.'
           },
 
           {
             kind: 'order',
-            question: 'Zoraď životný príbeh hviezdy podobnej Slnku – od začiatku po konec.',
-            hint: 'Klikaj na kroky v správnom poradí.',
+            question: 'Seřaď životní příběh hvězdy podobné Slunci – od začátku do konce.',
+            hint: 'Klikej na kroky ve správném pořadí.',
             items: [
-              { label: 'Oblak plynu a prachu (hmlovina)', order: 1, icon: '☁️' },
-              { label: 'Zrodí sa nová hviezda',           order: 2, icon: '⭐' },
-              { label: 'Hviezda zostarne a nafúkne sa',   order: 3, icon: '🔴' },
-              { label: 'Odhodí vrstvy → planetárna hmlovina', order: 4, icon: '💀' }
+              { label: 'Oblak plynu a prachu (mlhovina)', order: 1, icon: '☁️' },
+              { label: 'Zrodí se nová hvězda',           order: 2, icon: '⭐' },
+              { label: 'Hvězda zestárne a nafoukne se',   order: 3, icon: '🔴' },
+              { label: 'Odhodí vrstvy → planetární mlhovina', order: 4, icon: '💀' }
             ],
-            explain: 'Presne tak – z hmloviny hviezda vznikne a v hmlovine aj skončí. Vesmír recykluje!'
+            explain: 'Přesně tak – z mlhoviny hvězda vznikne a v mlhovině i skončí. Vesmír recykluje!'
           },
 
           {
             kind: 'decide',
-            question: 'Objekt je vzdialený 1 000 svetelných rokov. Čo to znamená?',
+            question: 'Objekt je vzdálený 1 000 světelných let. Co to znamená?',
             options: [
-              { icon: '⏳', label: 'Jeho svetlo letelo k nám 1 000 rokov', correct: true },
-              { icon: '📏', label: 'Je 1 000-krát väčší ako Slnko' }
+              { icon: '⏳', label: 'Jeho světlo k nám letělo 1 000 let', correct: true },
+              { icon: '📏', label: 'Je 1 000-krát větší než Slunce' }
             ],
-            explain: 'Svetelný rok je vzdialenosť, ktorú svetlo preletí za jeden rok. Takže vidíme, ako objekt vyzeral pred 1 000 rokmi.'
+            explain: 'Světelný rok je vzdálenost, kterou světlo proletí za jeden rok. Takže vidíme, jak ' +
+                     'objekt vypadal před 1 000 lety.'
           }
 
         ],
-        resultGood: '🌟 Výborne!',
-        resultOk: '🔭 Ešte jedenkrát a budeš majster hmlovín!'
+        resultGood: '🌟 Výborně!',
+        resultOk: '🔭 Ještě jednou a budeš mistr mlhovin!'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 2 – AKO FUNGUJE DWARF A ČO JE EQ MODE
+     LEKCE 2 – JAK FUNGUJE DWARF A CO JE EQ MODE
      ========================================================================== */
   {
     id: 'eq-mode',
     icon: '🔭',
-    title: 'DWARF A EQ MODE',
-    teaser: 'Prečo sa hviezdy na dlhých fotkách točia – a ako ich zastaviť?',
-    minutes: '8 minút',
+    title: 'DWARF A EQ REŽIM',
+    teaser: 'Proč se hvězdy na dlouhých fotkách točí – a jak je zastavit?',
+    minutes: '8 minut',
     badge: 'sky-navigator',
     basics: [ 'rotacia-oblohy', 'hviezdny-den', 'nebesky-pol', 'az-rezim',
               'eq-rezim', 'expozicia', 'zorne-pole' ],
@@ -240,37 +251,44 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'startrails',
-        question: '🔎 PREČO SÚ HVIEZDY AKO ČIARKY?',
+        question: '🔎 PROČ JSOU HVĚZDY JAKO ČÁRKY?',
         options: [
-          { id: 'earth',  icon: '🌍', label: 'Zem sa otáča' },
-          { id: 'camera', icon: '📷', label: 'Pokazil sa fotoaparát' },
-          { id: 'wind',   icon: '🌬️', label: 'Fúkal vietor' },
-          { id: 'fly',    icon: '🚀', label: 'Hviezdy naozaj lietajú' }
+          { id: 'earth',  icon: '🌍', label: 'Země se otáčí' },
+          { id: 'camera', icon: '📷', label: 'Porouchal se fotoaparát' },
+          { id: 'wind',   icon: '🌬️', label: 'Foukal vítr' },
+          { id: 'fly',    icon: '🚀', label: 'Hvězdy opravdu letí' }
         ],
         correct: 'earth',
-        successTitle: '🎉 PRESNE TAK!',
-        successText: 'Zem sa otáča – a s ňou aj fotoaparát. Preto sa hviezdy na dlhej snímke rozmažú do oblúčikov.',
-        retryText: 'Skús ešte raz. Zamysli sa nad tým, čo sa hýbe – hviezdy, alebo my?',
+        successTitle: '🎉 PŘESNĚ TAK!',
+        successText: 'Země se otáčí – a s ní i fotoaparát. Proto se hvězdy na dlouhém snímku rozmažou do ' +
+                     'oblouků.',
+        retryText: 'Zkus to ještě jednou. Zamysli se nad tím, co se hýbe – hvězdy, nebo my?',
         xp: 10
       },
 
-      /* ------------------------ ZEM SA OTÁČA ---------------------------- */
+      /* ------------------------ ZEMĚ SE OTÁČÍ --------------------------- */
       {
         type: 'info',
-        title: '🌍 MY SA HÝBEME, NIE HVIEZDY',
+        title: '🌍 MY SE HÝBEME, NE HVĚZDY',
         image: 'polaris',
         lines: [
-          'Zem sa otáča – raz dokola za necelý deň.',
-          'Nám sa to zdá, že sa točí obloha: hviezdy sa každú hodinu posunú o 15 stupňov.',
-          'Ďalekohľad ich preto musí presne sledovať, inak sa nám na fotke rozmažú.'
+          'Země se otáčí – jednou dokola za necelý den.',
+          'Nám se zdá, že se točí obloha: hvězdy se každou hodinu posunou o 15 stupňů.',
+          'Dalekohled je proto musí přesně sledovat, jinak se nám na fotce rozmažou.'
         ],
         more: [
-          'Zem sa otočí raz dokola za 23 hodín a 56 minút – nie presne za 24. Tie štyri minúty rozdielu sú dôvod, prečo hviezdy vychádzajú každý deň o niečo skôr a prečo v lete a v zime vidíme na oblohe iné súhvezdia.',
-          'Nebeský pól je jediné miesto na oblohe, ktoré sa nehýbe – všetko ostatné sa okolo neho točí. Na severnej pologuli je tam takmer presne Polárka, a práve preto ju používame na nastavenie EQ režimu.',
-          'AZ režim otáča Dwarf hore-dole a doľava-doprava, čo hviezdu na strede záberu udrží, ale celý obrázok sa pritom pomaly pretáča. EQ režim otáča Dwarf okolo tej istej osi, okolo akej sa točí Zem – a preto obrázok stojí.'
+          'Země se otočí jednou dokola za 23 hodin a 56 minut – ne přesně za 24. Ty čtyři minuty ' +
+          'rozdílu jsou důvod, proč hvězdy vycházejí každý den o něco dřív a proč v létě a v zimě ' +
+          'vidíme na obloze jiná souhvězdí.',
+          'Nebeský pól je jediné místo na obloze, které se nehýbe – všechno ostatní se okolo něj ' +
+          'točí. Na severní polokouli je tam téměř přesně Polárka, a právě proto ji používáme k ' +
+          'nastavení EQ režimu.',
+          'AZ režim otáčí Dwarf nahoru-dolů a doleva-doprava, což hvězdu ve středu záběru udrží, ' +
+          'ale celý obrázek se přitom pomalu přetáčí. EQ režim otáčí Dwarf okolo téže osy, okolo ' +
+          'jaké se točí Země – a proto obrázek stojí.'
         ],
         diagram: 'sky-rotation',
-        cta: 'Ako to Dwarf robí?'
+        cta: 'Jak to Dwarf dělá?'
       },
 
       { type: 'fact', factId: 'zem-23-56' },
@@ -278,57 +296,62 @@ const LESSONS = [
       /* ----------------------- DVA REŽIMY ------------------------------- */
       {
         type: 'cards',
-        title: 'DWARF TO ZVLÁDNE DVOMA SPÔSOBMI',
-        subtitle: 'Klikni na obe karty a otoč ich.',
+        title: 'DWARF TO ZVLÁDNE DVĚMA ZPŮSOBY',
+        subtitle: 'Klikni na obě karty a otoč je.',
         cards: [
           {
             icon: '🧭',
             name: 'AZ režim',
-            short: 'Hýbe sa doľava-doprava a nahor-nadol.',
-            text: 'Najjednoduchšie nastavenie: postavíš Dwarf na zem a ide. Objekt sleduje, ale obraz sa mu popritom pomaly otáča. Preto sú dobré len krátke snímky.',
+            short: 'Hýbe se doleva-doprava a nahoru-dolů.',
+            text: 'Nejjednodušší nastavení: postavíš Dwarf na zem a jde to. Objekt sleduje, ale obraz se ' +
+                  'mu přitom pomalu otáčí. Proto jsou dobré jen krátké snímky.',
             image: 'startrails',
-            exampleLabel: 'Krátke snímky, žiadne nastavovanie'
+            exampleLabel: 'Krátké snímky, žádné nastavování'
           },
           {
             icon: '⚙️',
             name: 'EQ režim',
-            short: 'Otáča sa rovnako ako obloha.',
-            text: 'Dwarf nakloníš tak, aby jedna jeho os smerovala k Polárke. Potom stačí jediný pohyb, ktorý presne kopíruje otáčanie Zeme – a hviezdy zostanú okrúhle.',
+            short: 'Otáčí se stejně jako obloha.',
+            text: 'Dwarf nakloníš tak, aby jedna jeho osa směřovala k Polárce. Potom stačí jediný pohyb, ' +
+                  'který přesně kopíruje otáčení Země – a hvězdy zůstanou kulaté.',
             image: 'roundstars',
-            exampleLabel: 'Dlhé snímky, treba nastaviť'
+            exampleLabel: 'Dlouhé snímky, je třeba nastavit'
           }
         ],
-        cta: 'Chcem to vidieť!',
+        cta: 'Chci to vidět!',
         xp: 15
       },
 
       /* --------------------- POROVNANIE AZ vs EQ ------------------------ */
       {
         type: 'compare',
-        title: '⏱️ ČO SA STANE PRI DLHEJ SNÍMKE?',
-        lead: 'Čím dlhšie Dwarf zbiera svetlo, tým slabšie objekty uvidí. Ale bez EQ režimu sa mu hviezdy začnú točiť.',
+        title: '⏱️ CO SE STANE PŘI DLOUHÉM SNÍMKU?',
+        lead: 'Čím delší dobu Dwarf sbírá světlo, tím slabší objekty uvidí. Ale bez EQ režimu se mu ' +
+              'hvězdy začnou točit.',
         eye: {
           icon: '🧭',
-          label: 'AZ REŽIM · 90 sekúnd',
+          label: 'AZ REŽIM · 90 sekund',
           art: 'startrails',
-          text: 'Do 15 – 20 sekúnd je všetko v poriadku. Po 30 – 60 sekundách sa hviezdy začnú točiť do oblúčikov a okraje fotky treba odstrihnúť.'
+          text: 'Do 15 – 20 sekund je všechno v pořádku. Po 30 – 60 sekundách se hvězdy začnou točit do ' +
+                'oblouků a okraje fotky je třeba odstřihnout.'
         },
         camera: {
           icon: '⚙️',
-          label: 'EQ REŽIM · 90 sekúnd',
+          label: 'EQ REŽIM · 90 sekund',
           image: 'roundstars',
-          text: 'Hviezdy zostanú okrúhle aj po 90 sekundách. Dwarf mini toľko v EQ režime naozaj zvládne.'
+          text: 'Hvězdy zůstanou kulaté i po 90 sekundách. Dwarf mini tolik v EQ režimu opravdu ' +
+                'zvládne.'
         },
         check: {
-          question: 'Kedy sa teda EQ režim vyplatí najviac?',
+          question: 'Kdy se tedy EQ režim vyplatí nejvíc?',
           options: [
-            { label: 'Keď chcem dlhé snímky slabých hmlovín a galaxií', correct: true,
-              explain: 'Áno! Na slabé objekty potrebuješ dlho zbierať svetlo – a to bez EQ nejde.' },
-            { label: 'Keď fotím Mesiac, ktorý je veľmi jasný', correct: false,
-              explain: 'Mesiac je taký jasný, že mu stačia zlomky sekundy. Tam EQ režim netreba.' }
+            { label: 'Když chci dlouhé snímky slabých mlhovin a galaxií', correct: true,
+              explain: 'Ano! Na slabé objekty potřebuješ dlouho sbírat světlo – a to bez EQ nejde.' },
+            { label: 'Když fotím Měsíc, který je velmi jasný', correct: false,
+              explain: 'Měsíc je tak jasný, že mu stačí zlomky sekundy. Tam EQ režim není potřeba.' }
           ]
         },
-        cta: 'Ideme to nastaviť'
+        cta: 'Jdeme to nastavit'
       },
 
       { type: 'fact', factId: 'eq-90-sekund' },
@@ -336,32 +359,36 @@ const LESSONS = [
       /* ------------------- PRAKTICKÝ POSTUP (HOWTO) --------------------- */
       {
         type: 'howto',
-        title: '🧭 AKO NASTAVIŤ EQ REŽIM',
-        lead: 'Štyri kroky. Nič sa nedá pokaziť – keď to nevyjde, len to skúsiš znova.',
+        title: '🧭 JAK NASTAVIT EQ REŽIM',
+        lead: 'Čtyři kroky. Nic se nedá zkazit – když to nevyjde, prostě to zkusíš znovu.',
         steps: [
-          { icon: '📐', title: 'Statív do vodorovna',
-            text: 'Postav statív na pevné miesto a vyrovnaj ho, aby nebol nakrivo.' },
-          { icon: '📏', title: 'Nakloň Dwarf na 48°',
-            text: 'To je uhol našej zemepisnej šírky (Slovensko ≈ 48 – 49°). Vďaka nemu bude os Dwarfu rovnobežná s osou Zeme.' },
-          { icon: '⭐', title: 'Otoč ho na Polárku (na severe)',
-            text: 'Nemusí to byť úplne presné. Pár stupňov nabok appka dorovná pri kalibrácii.' },
-          { icon: '📱', title: 'Kalibruj v aplikácii',
-            text: 'V appke Dwarf zapni EQ režim a nechaj ho urobiť kalibráciu. Potom už môžeš fotiť dlhé snímky.' }
+          { icon: '📐', title: 'Stativ do vodorovné polohy',
+            text: 'Postav stativ na pevné místo a vyrovnej ho, aby nebyl nakřivo.' },
+          { icon: '📏', title: 'Nakloň Dwarf na 50°',
+            text: 'To je úhel naší zeměpisné šířky (Praha ≈ 50°). Díky němu bude osa Dwarfu rovnoběžná s ' +
+                  'osou Země.' },
+          { icon: '⭐', title: 'Otoč ho na Polárku (na severu)',
+            text: 'Nemusí to být úplně přesné. Pár stupňů vedle aplikace dorovná při kalibraci.' },
+          { icon: '📱', title: 'Kalibruj v aplikaci',
+            text: 'V aplikaci Dwarf zapni EQ režim a nech ho provést kalibraci. Potom už můžeš fotit ' +
+                  'dlouhé snímky.' }
         ],
-        note: 'Presný postup pre Dwarf mini je aj vo oficiálnom návode DwarfLab (odkaz je na obrazovke 🔗 Zdroje).',
-        cta: 'Rozumiem, ideme ďalej',
+        note: 'Přesný postup pro Dwarf mini je i v oficiálním návodu DwarfLab (odkaz je na obrazovce ' +
+              '🔗 Zdroje).',
+        cta: 'Rozumím, jdeme dál',
         xp: 20
       },
 
       /* ---------------------------- WOW --------------------------------- */
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Celá obloha sa točí okolo jedného jediného bodu – a hneď pri ňom stojí Polárka.',
-          'Zemská os totiž ukazuje presne tam. Preto Polárka nikdy nezapadá a vždy ukazuje na severe.'
+          'Celá obloha se točí okolo jednoho jediného bodu – a hned u něj stojí Polárka.',
+          'Zemská osa totiž ukazuje přesně tam. Proto Polárka nikdy nezapadá a vždy ukazuje k ' +
+          'severu.'
         ],
-        footnote: 'Keby si nechal fotoaparát otvorený celú noc, hviezdy by okolo Polárky nakreslili kruhy.',
+        footnote: 'Kdybys nechal fotoaparát otevřený celou noc, hvězdy by okolo Polárky nakreslily kruhy.',
         cta: 'To je super 🤯'
       },
 
@@ -370,21 +397,21 @@ const LESSONS = [
 
       /* --------------------------- MISIA -------------------------------- */
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'eq-nastavenie', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '🧭 MISIA: POLÁRKA',
+        title: '🧭 MISE: POLÁRKA',
         objectId: 'polaris',
         tasks: [
-          { icon: '🔭', text: 'Nájdi Polárku v Stellariu (napíš „Polaris“).' },
-          { icon: '🌙', text: 'Vonku ju nájdi podľa Veľkého voza.' },
-          { icon: '⚙️', text: 'Nastav s tatom Dwarf do EQ režimu a skús 60-sekundovú snímku.' }
+          { icon: '🔭', text: 'Najdi Polárku ve Stellariu (napiš „Polaris“).' },
+          { icon: '🌙', text: 'Venku ji najdi podle Velkého vozu.' },
+          { icon: '⚙️', text: 'Nastav s tátou Dwarf do EQ režimu a zkus 60sekundový snímek.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Polárka je tvoja! Uložila sa do zbierky – a teraz už vieš aj nastaviť EQ režim.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Polárka je tvoje! Uložila se do sbírky – a teď už umíš i nastavit EQ režim.',
+        cta: 'Poslední výzva: mini test'
       },
 
       /* --------------------------- KVÍZ --------------------------------- */
@@ -395,59 +422,61 @@ const LESSONS = [
 
           {
             kind: 'choice',
-            question: 'Prečo sa hviezdy na dlhej fotke rozmažú do oblúčikov?',
+            question: 'Proč se hvězdy na dlouhé fotce rozmažou do oblouků?',
             options: [
-              { label: 'Lebo sa Zem otáča a obloha sa nám posúva', correct: true },
-              { label: 'Lebo hviezdy blikajú' },
-              { label: 'Lebo je vonku zima' },
-              { label: 'Lebo je fotoaparát pokazený' }
+              { label: 'Protože se Země otáčí a obloha se nám posouvá', correct: true },
+              { label: 'Protože hvězdy blikají' },
+              { label: 'Protože je venku zima' },
+              { label: 'Protože je fotoaparát rozbitý' }
             ],
-            explain: 'Obloha sa nám posunie o 15 stupňov každú hodinu. Ďalekohľad ju musí presne sledovať.'
+            explain: 'Obloha se nám posune o 15 stupňů každou hodinu. Dalekohled ji musí přesně sledovat.'
           },
 
           {
             kind: 'image',
-            question: 'Na ktorej snímke bol dobre nastavený EQ režim?',
+            question: 'Na kterém snímku byl dobře nastavený EQ režim?',
             options: [
               { image: 'roundstars', label: 'A', correct: true },
               { image: 'startrails', label: 'B' }
             ],
-            explain: 'Okrúhle a ostré hviezdy znamenajú, že sledovanie bolo presné.'
+            explain: 'Kulaté a ostré hvězdy znamenají, že sledování bylo přesné.'
           },
 
           {
             kind: 'truefalse',
-            question: 'V EQ režime nakloníme Dwarf tak, aby jedna jeho os smerovala k Polárke.',
+            question: 'V EQ režimu nakloníme Dwarf tak, aby jedna jeho osa mířila k Polárce.',
             answer: true,
-            explain: 'Presne tak. Vtedy je os Dwarfu rovnobežná s osou Zeme a stačí jediný pohyb, ktorý kopíruje otáčanie oblohy.'
+            explain: 'Přesně tak. Tehdy je osa Dwarfu rovnoběžná s osou Země a stačí jediný pohyb, který ' +
+                     'kopíruje otáčení oblohy.'
           },
 
           {
             kind: 'order',
-            question: 'Zoraď nastavenie EQ režimu do správneho poradia.',
-            hint: 'Klikaj na kroky v správnom poradí.',
+            question: 'Seřaď nastavení EQ režimu do správného pořadí.',
+            hint: 'Klikej na kroky ve správném pořadí.',
             items: [
-              { label: 'Vyrovnať statív do vodorovna', order: 1, icon: '📐' },
-              { label: 'Nakloniť Dwarf na 48°',        order: 2, icon: '📏' },
-              { label: 'Otočiť ho na Polárku',          order: 3, icon: '⭐' },
-              { label: 'Kalibrovať v aplikácii',        order: 4, icon: '📱' }
+              { label: 'Vyrovnat stativ do vodorovné polohy', order: 1, icon: '📐' },
+              { label: 'Naklonit Dwarf na 50°',        order: 2, icon: '📏' },
+              { label: 'Otočit ho na Polárku',          order: 3, icon: '⭐' },
+              { label: 'Kalibrovat v aplikaci',        order: 4, icon: '📱' }
             ],
-            explain: 'Najprv vodorovný statív, potom uhol, potom sever – a nakoniec kalibrácia.'
+            explain: 'Nejprve vodorovný stativ, potom úhel, potom sever – a nakonec kalibrace.'
           },
 
           {
             kind: 'decide',
-            question: 'Prečo je pri hmlovinách lepšia jedna 90-sekundová snímka ako 15-sekundová?',
+            question: 'Proč je u mlhovin lepší jeden 90sekundový snímek než 15sekundový?',
             options: [
-              { icon: '🪣', label: 'Za 90 sekúnd nazbiera oveľa viac svetla', correct: true },
-              { icon: '🔍', label: 'Lebo je väčšia a viac priblížená' }
+              { icon: '🪣', label: 'Za 90 sekund nasbírá mnohem více světla', correct: true },
+              { icon: '🔍', label: 'Protože je větší a více přiblížená' }
             ],
-            explain: 'Je to ako zbieranie dažďa do vedra – čím dlhšie zbieraš, tým viac máš. Preto sa slabé hmloviny fotia dlho.'
+            explain: 'Je to jako sbírání dešťové vody do kbelíku – čím déle sbíráš, tím víc máš. Proto se ' +
+                     'slabé mlhoviny fotí dlouho.'
           }
 
         ],
-        resultGood: '🌟 Paráda, si navigátor oblohy!',
-        resultOk: '🔭 Ešte raz a budeš to mať v malíčku!'
+        resultGood: '🌟 Paráda, jsi navigátor oblohy!',
+        resultOk: '🔭 Ještě jednou a budeš to mít v malíčku!'
       }
     ]
   },
@@ -458,9 +487,9 @@ const LESSONS = [
   {
     id: 'clusters',
     icon: '✨',
-    title: 'HVIEZDOKOPY',
-    teaser: 'Hviezdy sa nerodia po jednej. Čo je Sedem sestier?',
-    minutes: '7 minút',
+    title: 'HVĚZDOKUPY',
+    teaser: 'Hvězdy se nerodí po jedné. Co je Sedm sester?',
+    minutes: '7 minut',
     badge: 'cluster-collector',
     basics: [ 'hviezdokopa', 'gravitacia', 'svetelny-rok', 'magnituda',
               'ostrenie', 'suhvezdie' ],
@@ -469,87 +498,98 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'm13',
-        question: '🔎 ČO JE NA TEJTO FOTKE?',
+        question: '🔎 CO JE NA TÉHLE FOTCE?',
         options: [
-          { id: 'nebula',  icon: '☁️', label: 'hmlovina' },
-          { id: 'cluster', icon: '✨', label: 'hviezdokopa' },
-          { id: 'galaxy',  icon: '🌌', label: 'galaxia' },
-          { id: 'planet',  icon: '🪐', label: 'planéta' }
+          { id: 'nebula',  icon: '☁️', label: 'mlhovina' },
+          { id: 'cluster', icon: '✨', label: 'hvězdokupa' },
+          { id: 'galaxy',  icon: '🌌', label: 'galaxie' },
+          { id: 'planet',  icon: '🪐', label: 'planeta' }
         ],
         correct: 'cluster',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Hviezdokopa je skupina hviezd, ktoré sa narodili spolu z jedného oblaku.',
-        retryText: 'Skús ešte raz. Pozri sa poriadne – nie je to oblak plynu ani špirála. Sú to samé hviezdy.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Hvězdokupa je skupina hvězd, které se narodily spolu z jednoho oblaku.',
+        retryText: 'Zkus to ještě jednou. Podívej se pořádně – není to oblak plynu ani spirála. Jsou to ' +
+                   'samé hvězdy.',
         xp: 10
       },
       {
         type: 'info',
-        title: '✨ HVIEZDY SA RODIA V PARTIÁCH',
+        title: '✨ HVĚZDY SE RODÍ V PARTÁCH',
         image: 'm45',
         lines: [
-          'V hmlovine sa nikdy nerodí len jedna hviezda.',
-          'Naraz ich vznikne desiatky, stovky, niekedy aj stotisíc.',
-          'Takej skupine hviezdnych súrodencov sa hovorí hviezdokopa.'
+          'V mlhovině se nikdy nerodí jen jedna hvězda.',
+          'Najednou jich vznikne desítky, stovky, někdy i sto tisíc.',
+          'Takové skupině hvězdných sourozenců se říká hvězdokupa.'
         ],
         more: [
-          'Hviezdy v jednej hviezdokope sa zrodili v tom istom oblaku a približne v tom istom čase. Sú teda naozaj súrodenci – a astronómom to ohromne pomáha: keď vedia vek jednej, poznajú vek všetkých.',
-          'Otvorené hviezdokopy sú mladé a držia spolu len voľne. Gravitácia galaxie ich po niekoľkých stovkách miliónov rokov rozpustí, takže dnes už nevieme, kde sú súrodenci nášho Slnka.',
-          'Guľové hviezdokopy sú úplne iný prípad: sú staré takmer ako samotný vesmír, majú stovky tisíc hviezd a držia spolu tak pevne, že prežili celú histórii galaxie.'
+          'Hvězdy v jedné hvězdokupě se zrodily ve stejném oblaku a přibližně ve stejnou dobu. ' +
+          'Jsou to tedy opravdu sourozenci – a astronomům to ohromně pomáhá: když znají věk ' +
+          'jedné, znají věk všech.',
+          'Otevřené hvězdokupy jsou mladé a drží spolu jen volně. Gravitace galaxie je po ' +
+          'několika stovkách milionů let rozpustí, takže dnes už nevíme, kde jsou sourozenci ' +
+          'našeho Slunce.',
+          'Kulové hvězdokupy jsou úplně jiný případ: jsou staré téměř jako samotný vesmír, mají ' +
+          'stovky tisíc hvězd a drží spolu tak pevně, že přežily celou historii galaxie.'
         ],
-        cta: 'A nie sú všetky rovnaké…'
+        cta: 'A nejsou všechny stejné…'
       },
       { type: 'fact', factId: 'plejady-sestry' },
       {
         type: 'cards',
-        title: 'DVA DRUHY HVIEZDOKÔP',
-        subtitle: 'Klikni na obe karty a otoč ich.',
+        title: 'DVA DRUHY HVĚZDOKUP',
+        subtitle: 'Klikni na obě karty a otoč je.',
         cards: [
-          { icon: '🌟', name: 'Otvorená', short: 'Mladá a voľná.',
-            text: 'Desiatky až tisíce mladých hviezd, ktoré sú od seba dosť daleko. Sú to súrodenci z jednej hmloviny – napríklad Plejády.',
-            image: 'm45', exampleLabel: 'Príklad: M45 Plejády' },
-          { icon: '🔵', name: 'Guľová', short: 'Stará a nabitá.',
-            text: 'Guľa nacapkaná stovkami tisíc starých hviezd. Obieha okolo našej galaxie a je takmer taká stará ako vesmír.',
-            image: 'm13', exampleLabel: 'Príklad: M13 v Herkulovi' }
+          { icon: '🌟', name: 'Otevřená', short: 'Mladá a volná.',
+            text: 'Desítky až tisíce mladých hvězd, které jsou od sebe dost daleko. Jsou to sourozenci z ' +
+                  'jedné mlhoviny – například Plejády.',
+            image: 'm45', exampleLabel: 'Příklad: M45 Plejády' },
+          { icon: '🔵', name: 'Kulová', short: 'Stará a nabitá.',
+            text: 'Koule napěchovaná stovkami tisíc starých hvězd. Obíhá okolo naší galaxie a je téměř ' +
+                  'tak stará jako vesmír.',
+            image: 'm13', exampleLabel: 'Příklad: M13 v Herkulovi' }
         ],
-        cta: 'Ideme si to vyskúšať',
+        cta: 'Jdeme si to vyzkoušet',
         xp: 15
       },
       {
         type: 'pick',
-        title: '🔎 UHÁDNI HVIEZDOKOPU',
-        prompt: 'Ktorá z nich je guľová hviezdokopa?',
+        title: '🔎 UHÁDNI HVĚZDOKUPU',
+        prompt: 'Která z nich je kulová hvězdokupa?',
         options: [
-          { image: 'm45', correct: false, explain: 'Toto sú Plejády – otvorená hviezdokopa. Hviezdy sú od seba daleko a je ich „len“ tisíc.' },
-          { image: 'm13', correct: true,  explain: 'Presne! Guľa z viac než 100 000 hviezd. Čím bližšie k stredu, tým sú hviezdy natlačenejšie.' },
-          { image: 'm42', correct: false, explain: 'Toto je hmlovina – oblak plynu a prachu, nie skupina hviezd.' },
-          { image: 'm31', correct: false, explain: 'Toto je celá galaxia! Tá má miliardy hviezd, nie stotisíc.' }
+          { image: 'm45', correct: false, explain: 'To jsou Plejády – otevřená hvězdokupa. Hvězdy jsou od sebe daleko a je jich „jen“ ' +
+                                                   'tisíc.' },
+          { image: 'm13', correct: true,  explain: 'Přesně! Koule z více než 100 000 hvězd. Čím blíž ke středu, tím jsou hvězdy ' +
+                                                   'natlačenější.' },
+          { image: 'm42', correct: false, explain: 'To je mlhovina – oblak plynu a prachu, ne skupina hvězd.' },
+          { image: 'm31', correct: false, explain: 'To je celá galaxie! Ta má miliardy hvězd, ne sto tisíc.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Otvorené hviezdokopy sa po čase rozpadnú – hviezdy sa pomaly rozutekajú po galaxii.',
-          'Astronómi si myslia, že aj naše Slnko sa narodilo v takej partii. Jeho súrodenci sú dnes rozsypaní po celej Mliečnej ceste.'
+          'Otevřené hvězdokupy se po čase rozpadnou – hvězdy se pomalu rozprchnou po galaxii.',
+          'Astronomové si myslí, že i naše Slunce se narodilo v takové partě. Jeho sourozenci ' +
+          'jsou dnes rozsypaní po celé Mléčné dráze.'
         ],
-        footnote: 'Niekde tam vonku teda máme „sesterské“ hviezdy Slnka – len presne nevieme ktoré.',
-        cta: 'Toto je šialené 🤯'
+        footnote: 'Někde tam venku tedy máme „sesterské“ hvězdy Slunce – jen přesně nevíme které.',
+        cta: 'To je šílené 🤯'
       },
       { type: 'fact', factId: 'gulova-100tisic' },
       {
         type: 'mission',
-        title: '📸 MISIA: PLEJÁDY',
+        title: '📸 MISE: PLEJÁDY',
         objectId: 'm45',
         tasks: [
-          { icon: '🔭', text: 'Nájdi M45 v Stellariu.' },
-          { icon: '👁️', text: 'Vonku ich skús spočítať voľným okom – koľko ich vidíš?' },
-          { icon: '📸', text: 'Odfotografuj ich Dwarfom a spočítaj znova.' }
+          { icon: '🔭', text: 'Najdi M45 ve Stellariu.' },
+          { icon: '👁️', text: 'Venku je zkus spočítat volným okem – kolik jich vidíš?' },
+          { icon: '📸', text: 'Vyfotografuj je Dwarfem a spočítej znovu.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Plejády máš v zbierke. Rozdiel medzi okom a Dwarfom si videl na vlastné oči.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Plejády máš ve sbírce. Rozdíl mezi okem a Dwarfem jsi viděl na vlastní oči.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -557,67 +597,68 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Čo je hviezdokopa?',
+            question: 'Co je hvězdokupa?',
             options: [
-              { label: 'Skupina hviezd, ktoré sa narodili spolu', correct: true },
+              { label: 'Skupina hvězd, které se narodily spolu', correct: true },
               { label: 'Oblak plynu a prachu' },
-              { label: 'Galaxia s miliardami hviezd' },
-              { label: 'Planéta s mnohými mesiacmi' }
+              { label: 'Galaxie s miliardami hvězd' },
+              { label: 'Planeta s mnoha měsíci' }
             ],
-            explain: 'Hviezdokopa = hviezdni súrodenci z jednej hmloviny.'
+            explain: 'Hvězdokupa = hvězdní sourozenci z jedné mlhoviny.'
           },
           {
             kind: 'image',
-            question: 'Ktorá z nich je otvorená hviezdokopa?',
+            question: 'Která z nich je otevřená hvězdokupa?',
             options: [
               { image: 'm45', label: 'A', correct: true },
               { image: 'm13', label: 'B' }
             ],
-            explain: 'Plejády – mladé hviezdy voľne rozsypané. Guľová hviezdokopa je natlačená do gule.'
+            explain: 'Plejády – mladé hvězdy volně rozsypané. Kulová hvězdokupa je natlačená do koule.'
           },
           {
             kind: 'truefalse',
-            question: 'Guľové hviezdokopy sú mladšie ako otvorené.',
+            question: 'Kulové hvězdokupy jsou mladší než otevřené.',
             answer: false,
-            explain: 'Naopak! Guľové sú veľmi staré – takmer také staré ako vesmír. Otvorené sú mladé a časom sa rozpadnú.'
+            explain: 'Naopak! Kulové jsou velmi staré – téměř tak staré jako vesmír. Otevřené jsou mladé a ' +
+                     'časem se rozpadnou.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od najmenšieho počtu hviezd po najväčší.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od nejmenšího počtu hvězd po největší.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Dvojhviezda (2 hviezdy)', order: 1, icon: '👯' },
-              { label: 'Otvorená hviezdokopa (tisíce)', order: 2, icon: '🌟' },
-              { label: 'Guľová hviezdokopa (stotisíce)', order: 3, icon: '🔵' },
-              { label: 'Galaxia (miliardy)', order: 4, icon: '🌌' }
+              { label: 'Dvojhvězda (2 hvězdy)', order: 1, icon: '👯' },
+              { label: 'Otevřená hvězdokupa (tisíce)', order: 2, icon: '🌟' },
+              { label: 'Kulová hvězdokupa (stovky tisíc)', order: 3, icon: '🔵' },
+              { label: 'Galaxie (miliardy)', order: 4, icon: '🌌' }
             ],
-            explain: 'Od dvojice až po celú galaxiu – takto sa hviezdy vo vesmíre zhromažďujú.'
+            explain: 'Od dvojice až po celou galaxii – takto se hvězdy ve vesmíru shromažďují.'
           },
           {
             kind: 'decide',
-            question: 'Prečo vidíme v Plejádach voľným okom len šesť či sedem hviezd?',
+            question: 'Proč vidíme v Plejádách volným okem jen šest či sedm hvězd?',
             options: [
-              { icon: '👁️', label: 'Lebo ostatné sú príliš slabé pre naše oko', correct: true },
-              { icon: '🌫️', label: 'Lebo ostatné sú schované za Mesiacom' }
+              { icon: '👁️', label: 'Protože ostatní jsou příliš slabé pro naše oko', correct: true },
+              { icon: '🌫️', label: 'Protože ostatní jsou schované za Měsícem' }
             ],
-            explain: 'Jasné hviezdy vidíme, slabšie nie. Dwarf ich nazbiera stovky.'
+            explain: 'Jasné hvězdy vidíme, slabší ne. Dwarf jich nasbírá stovky.'
           }
         ],
-        resultGood: '🌟 Skvelé, hviezdokopy máš v malíčku!',
-        resultOk: '🔭 Ešte raz a bude to sedieť!'
+        resultGood: '🌟 Skvělé, hvězdokupy máš v malíčku!',
+        resultOk: '🔭 Ještě jednou a bude to sedět!'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 4 – NAŠA GALAXIA
+     LEKCE 4 – NAŠE GALAXIE
      ========================================================================== */
   {
     id: 'milkyway',
     icon: '🌌',
-    title: 'NAŠA GALAXIA',
-    teaser: 'Kde vo vesmíre vlastne sme? A čo je ten svetlý pás na nebi?',
-    minutes: '7 minút',
+    title: 'NAŠE GALAXIE',
+    teaser: 'Kde ve vesmíru vlastně jsme? A co je ten světlý pás na nebi?',
+    minutes: '7 minut',
     badge: 'milkyway-citizen',
     basics: [ 'mliecna-cesta', 'galakticky-disk', 'halo', 'svetelne-znecistenie',
               'svetelny-rok', 'suhvezdie' ],
@@ -626,105 +667,116 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'milkyway',
-        question: '🔎 ČO JE TEN SVETLÝ PÁS NA NEBI?',
+        question: '🔎 CO JE TEN SVĚTLÝ PÁS NA NEBI?',
         options: [
-          { id: 'cloud',  icon: '☁️', label: 'obyčajný mrak' },
-          { id: 'city',   icon: '🏙️', label: 'svetlo z mesta' },
-          { id: 'galaxy', icon: '🌌', label: 'naša galaxia zvnútra' },
-          { id: 'smoke',  icon: '💨', label: 'dym' }
+          { id: 'cloud',  icon: '☁️', label: 'obyčejný mrak' },
+          { id: 'city',   icon: '🏙️', label: 'světlo z města' },
+          { id: 'galaxy', icon: '🌌', label: 'naše galaxie zvnitřku' },
+          { id: 'smoke',  icon: '💨', label: 'kouř' }
         ],
         correct: 'galaxy',
-        successTitle: '🎉 PRESNE TAK!',
-        successText: 'Je to disk našej galaxie. Sedíme v ňom – a preto ho vidíme ako pás cez celé nebo.',
-        retryText: 'Skús ešte raz. Ten pás je na nebi každý rok v tom istom mieste – takže to nie je mrak ani dym.',
+        successTitle: '🎉 PŘESNĚ TAK!',
+        successText: 'Je to disk naší galaxie. Sedíme v něm – a proto ho vidíme jako pás přes celé nebe.',
+        retryText: 'Zkus to ještě jednou. Ten pás je na nebi každý rok na stejném místě – takže to není ' +
+                   'mrak ani dým.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🌌 ŽIJEME V ŠPIRÁLE',
+        title: '🌌 ŽIJEME VE SPIRÁLE',
         image: 'milkyway',
         lines: [
-          'Naša galaxia sa volá Mliečna cesta.',
-          'Je to špirála s priečkou a má v priemere asi 100 000 svetelných rokov.',
-          'Slnko je asi 26 000 svetelných rokov od jej stredu – teda niekde na predmestí.'
+          'Naše galaxie se jmenuje Mléčná dráha.',
+          'Je to spirála s příčkou a má v průměru asi 100 000 světelných let.',
+          'Slunce je asi 26 000 světelných let od jejího středu – tedy někde na předměstí.'
         ],
         more: [
-          'Keď sa v lete pozeráš na Mliečnu cestu, pozeráš sa na disk našej galaxie zvnútra a z boku. Preto to nie je špirála, ale pás – sme priamo v ňom, a tak ho vidíme naplocho.',
-          'Tá tmavá čiara, ktorá pás miestami rozdeľuje, nie je diera. Je to prach v rovine galaxie, ktorý svetlo hviezd za sebou pohltí. Práve preto nevidíme stred galaxie v obyčajnom svetle – musíme sa naň pozerať v infračervenom alebo rádiovom.',
-          'Slnko obehne stred galaxie raz za približne 230 miliónov rokov. Keď bolo naposledy tam, kde je dnes, po Zemi ešte len začínali chodiť prví dinosaury.'
+          'Když se v létě díváš na Mléčnou dráhu, díváš se na disk naší galaxie zvnitřku a z ' +
+          'boku. Proto to není spirála, ale pás – jsme přímo v něm, a tak ho vidíme naplocho.',
+          'Ta tmavá linie, která pás místy rozděluje, není díra. Je to prach v rovině galaxie, ' +
+          'který pohltí světlo hvězd za sebou. Právě proto nevidíme střed galaxie v obyčejném ' +
+          'světle – musíme se na něj dívat v infračerveném nebo rádiovém.',
+          'Slunce oběhne střed galaxie jednou za přibližně 230 milionů let. Když bylo naposledy ' +
+          'tam, kde je dnes, po Zemi ještě jen začínali chodit první dinosauři.'
         ],
-        cta: 'Ako by vyzerala zvonku?'
+        cta: 'Jak by vypadala zvenčí?'
       },
       { type: 'fact', factId: 'nasa-galaxia' },
       {
         type: 'compare',
-        title: '🔄 ZVNÚTRA vs. ZVONKU',
-        lead: 'To isté miesto, dva úplne odlišné pohľady.',
+        title: '🔄 ZVNITŘKU vs. ZVENČÍ',
+        lead: 'Totéž místo, dva úplně odlišné pohledy.',
         eye: {
           icon: '👁️',
-          label: 'AKO TO VIDÍME MY',
+          label: 'JAK TO VIDÍME MY',
           art: 'milkyway',
-          text: 'Sme vnútri disku, takže vidíme len pás hviezd okolo nás. Je to ako stáť v lese a snažiť sa vidieť celý les.'
+          text: 'Jsme uvnitř disku, takže vidíme jen pás hvězd okolo nás. Je to jako stát v lese a ' +
+                'snažit se vidět celý les.'
         },
         camera: {
           icon: '🛰️',
-          label: 'AKO BY VYZERALA ZVONKU',
+          label: 'JAK BY VYPADALA ZVENČÍ',
           image: 'm31',
-          text: 'Takto vyzerá naša susedka Andromeda. Naša galaxia je jej veľmi podobná – asi takto by sme videli aj seba.'
+          text: 'Takto vypadá naše sousedka Andromeda. Naše galaxie je jí velmi podobná – asi takto ' +
+                'bychom viděli i sami sebe.'
         },
         check: {
-          question: 'Prečo nemáme skutočnú fotku celej Mliečnej cesty zvonku?',
+          question: 'Proč nemáme skutečnou fotku celé Mléčné dráhy zvenčí?',
           options: [
-            { label: 'Lebo sme vnútri a nedokážeme z nej vyletieť', correct: true,
-              explain: 'Áno. Aj najrýchlejšia sonda by letela k okraju galaxie milióny rokov.' },
-            { label: 'Lebo je príliš tmavá na fotografovanie', correct: false,
-              explain: 'Tmavá nie je – práve naopak. Problém je, že sme vnútri.' }
+            { label: 'Protože jsme uvnitř a nedokážeme z ní vyletět', correct: true,
+              explain: 'Ano. I nejrychlejší sonda by letěla k okraji galaxie miliony let.' },
+            { label: 'Protože je příliš tmavá na fotografování', correct: false,
+              explain: 'Tmavá není – právě naopak. Problém je, že jsme uvnitř.' }
           ]
         },
-        cta: 'Poď sa pozrieť dovnútra'
+        cta: 'Pojď se podívat dovnitř'
       },
       {
         type: 'cards',
-        title: 'ČO VŠETKO NAŠA GALAXIA MÁ',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'CO VŠECHNO NAŠE GALAXIE MÁ',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🌀', name: 'Špirálové ramená', short: 'Tu sa rodia hviezdy.',
-            text: 'V ramenách je najviac plynu a prachu – a teda aj najviac hmlovín a mladých hviezd. Slnko je na okraji jedného z nich.',
-            image: 'm51', exampleLabel: 'Tu žijeme' },
-          { icon: '🎯', name: 'Stred galaxie', short: 'Najhustejšie miesto.',
-            text: 'V strede je obrovská hustá zhluk hviezd a v ňom čierna diera. Na nebi je smerom do súhvezdia Strelec.',
-            image: 'sgra', exampleLabel: 'Súhvezdie Strelec' },
-          { icon: '🔵', name: 'Halo', short: 'Guľa okolo celej galaxie.',
-            text: 'Okolo disku je obrovská guľa, v ktorej obiehajú staré guľové hviezdokopy – napríklad M13.',
-            image: 'm13', exampleLabel: 'Domov guľových hviezdokôp' }
+          { icon: '🌀', name: 'Spirální ramena', short: 'Tady se rodí hvězdy.',
+            text: 'V ramenech je nejvíc plynu a prachu – a tedy i nejvíc mlhovin a mladých hvězd. Slunce ' +
+                  'je na okraji jednoho z nich.',
+            image: 'm51', exampleLabel: 'Tady žijeme' },
+          { icon: '🎯', name: 'Střed galaxie', short: 'Nejhustší místo.',
+            text: 'Ve středu je obrovský hustý shluk hvězd a v něm černá díra. Na nebi je směrem do ' +
+                  'souhvězdí Střelec.',
+            image: 'sgra', exampleLabel: 'Souhvězdí Střelec' },
+          { icon: '🔵', name: 'Halo', short: 'Koule okolo celé galaxie.',
+            text: 'Okolo disku je obrovská koule, v níž obíhají staré kulové hvězdokupy – například M13.',
+            image: 'm13', exampleLabel: 'Domov kulových hvězdokup' }
         ],
-        cta: 'Rozumiem!',
+        cta: 'Rozumím!',
         xp: 15
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Keď sa pozeráš na pás Mliečnej cesty, pozeráš sa na miliardy hviezd naraz – tak daleko, že sa ich svetlo zlialo do mliečnej šmuhy.',
-          'A tie tmavé miesta v páse nie sú diery. To sú oblaky prachu, ktoré nám hviezdy za sebou zakrývajú.'
+          'Když se díváš na pás Mléčné dráhy, díváš se na miliardy hvězd najednou – tak daleko, ' +
+          'že se jejich světlo slilo do mléčné šmouhy.',
+          'A ta tmavá místa v pásu nejsou díry. To jsou oblaky prachu, které nám zakrývají hvězdy ' +
+          'za sebou.'
         ],
-        footnote: 'Presne z takých oblakov sa rodia nové hviezdy – ako v prvej lekcii.',
-        cta: 'Chcem to vidieť naživo'
+        footnote: 'Přesně z takových oblaků se rodí nové hvězdy – jako v první lekci.',
+        cta: 'Chci to vidět naživo'
       },
       { type: 'fact', factId: 'mliecna-cesta-pas' },
       {
         type: 'mission',
-        title: '📸 MISIA: MLIEČNA CESTA',
+        title: '📸 MISE: MLÉČNÁ DRÁHA',
         objectId: 'milkyway',
         tasks: [
-          { icon: '🔭', text: 'V Stellariu si nájdi, kadiaľ dnes večer vedie pás Mliečnej cesty.' },
-          { icon: '🌑', text: 'Choďte na tmavé miesto bez pouličných lámp.' },
-          { icon: '📸', text: 'Skús ju odfotografovať – a nájdi na fotke tmavé prachové oblaky.' }
+          { icon: '🔭', text: 'Ve Stellariu si najdi, kudy dnes večer vede pás Mléčné dráhy.' },
+          { icon: '🌑', text: 'Jděte na tmavé místo bez pouličních lamp.' },
+          { icon: '📸', text: 'Zkus ji vyfotit – a najdi na fotce tmavé prachové oblaky.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Vyfotil si vlastnú galaxiu zvnútra. To dokáže málokto.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Vyfotil jsi vlastní galaxii zvnitřku. To dokáže málokdo.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -732,54 +784,54 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Ako sa volá naša galaxia?',
+            question: 'Jak se jmenuje naše galaxie?',
             options: [
-              { label: 'Mliečna cesta', correct: true },
+              { label: 'Mléčná dráha', correct: true },
               { label: 'Andromeda' },
-              { label: 'Slnečná soustava' },
+              { label: 'Sluneční soustava' },
               { label: 'Vír' }
             ],
-            explain: 'Mliečna cesta. Andromeda je naša susedná galaxia.'
+            explain: 'Mléčná dráha. Andromeda je naše sousední galaxie.'
           },
           {
             kind: 'decide',
-            question: 'Kde je v galaxii Slnko?',
+            question: 'Kde je v galaxii Slunce?',
             options: [
-              { icon: '🏘️', label: 'Asi 26 000 svetelných rokov od stredu – na predmestí', correct: true },
-              { icon: '🎯', label: 'Presne v strede galaxie' }
+              { icon: '🏘️', label: 'Asi 26 000 světelných let od středu – na předměstí', correct: true },
+              { icon: '🎯', label: 'Přesně ve středu galaxie' }
             ],
-            explain: 'V strede je oveľa hustejšie a je tam čierna diera. My sme pekne v bezpečnej vzdialenosti.'
+            explain: 'Ve středu je mnohem hustěji a je tam černá díra. My jsme pěkně v bezpečné vzdálenosti.'
           },
           {
             kind: 'truefalse',
-            question: 'Tmavé miesta v páse Mliečnej cesty sú miesta, kde nie sú žiadne hviezdy.',
+            question: 'Tmavá místa v pásu Mléčné dráhy jsou místa, kde nejsou žádné hvězdy.',
             answer: false,
-            explain: 'Nie sú to diery. Sú to oblaky prachu, ktoré zakrývajú svetlo hviezd za sebou.'
+            explain: 'Nejsou to díry. Jsou to oblaky prachu, které zakrývají světlo hvězd za sebou.'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok ukazuje, ako naša galaxia vyzerá zvnútra – teda ako ju vidíme my?',
+            question: 'Který obrázek ukazuje, jak naše galaxie vypadá zvnitřku – tedy jak ji vidíme my?',
             options: [
               { image: 'milkyway', label: 'A', correct: true },
               { image: 'm31', label: 'B' }
             ],
-            explain: 'A je náš pohľad zvnútra. B je Andromeda – tak by naša galaxia vyzerala zvonku.'
+            explain: 'A je náš pohled zvnitřku. B je Andromeda – tak by naše galaxie vypadala zvenčí.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od najmenšieho po najväčšie.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od nejmenšího po největší.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Zem', order: 1, icon: '🌍' },
-              { label: 'Slnko', order: 2, icon: '☀️' },
-              { label: 'Slnečná soustava', order: 3, icon: '🪐' },
-              { label: 'Mliečna cesta', order: 4, icon: '🌌' }
+              { label: 'Země', order: 1, icon: '🌍' },
+              { label: 'Slunce', order: 2, icon: '☀️' },
+              { label: 'Sluneční soustava', order: 3, icon: '🪐' },
+              { label: 'Mléčná dráha', order: 4, icon: '🌌' }
             ],
-            explain: 'Zem obieha Slnko, Slnko je súčasťou Slnečnej soustavy a tá je maličká časť galaxie.'
+            explain: 'Země obíhá Slunce, Slunce je součástí Sluneční soustavy a ta je maličká část galaxie.'
           }
         ],
-        resultGood: '🌟 Vieš, kde žiješ. A to je veľká vec!',
-        resultOk: '🔭 Ešte raz – galaxia nikam neuteká.'
+        resultGood: '🌟 Víš, kde žiješ. A to je velká věc!',
+        resultOk: '🔭 Ještě jednou – galaxie nikam neuteče.'
       }
     ]
   },
@@ -791,8 +843,8 @@ const LESSONS = [
     id: 'galaxies',
     icon: '🌀',
     title: 'GALAXIE',
-    teaser: 'Ostrovy hviezd. A jedna z nich k nám práve teraz letí.',
-    minutes: '7 minút',
+    teaser: 'Ostrovy hvězd. A jedna z nich k nám právě teď letí.',
+    minutes: '7 minut',
     badge: 'galaxy-explorer',
     basics: [ 'galaxia', 'typy-galaxii', 'miestna-grupa', 'svetelny-rok',
               'magnituda', 'eq-rezim' ],
@@ -801,93 +853,106 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'm51',
-        question: '🔎 ČO MYSLÍŠ, ŽE TO JE?',
+        question: '🔎 CO MYSLÍŠ, ŽE TO JE?',
         options: [
-          { id: 'nebula',  icon: '☁️', label: 'hmlovina' },
-          { id: 'galaxy',  icon: '🌀', label: 'galaxia' },
-          { id: 'cluster', icon: '✨', label: 'hviezdokopa' },
-          { id: 'planet',  icon: '🪐', label: 'planéta' }
+          { id: 'nebula',  icon: '☁️', label: 'mlhovina' },
+          { id: 'galaxy',  icon: '🌀', label: 'galaxie' },
+          { id: 'cluster', icon: '✨', label: 'hvězdokupa' },
+          { id: 'planet',  icon: '🪐', label: 'planeta' }
         ],
         correct: 'galaxy',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Galaxia je obrovský ostrov hviezd – miliardy hviezd, plyn a prach držané pohromade gravitáciou.',
-        retryText: 'Skús ešte raz. Vidíš tie ramená, ktoré sa točia okolo stredu? To je vodítko.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Galaxie je obrovský ostrov hvězd – miliardy hvězd, plyn a prach držené pohromadě ' +
+                     'gravitací.',
+        retryText: 'Zkus to ještě jednou. Vidíš ta ramena, která se točí okolo středu? To je vodítko.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🌀 OSTROVY HVIEZD',
+        title: '🌀 OSTROVY HVĚZD',
         image: 'm31',
         lines: [
-          'Galaxia nie je jedna hviezda ani jeden oblak. Je to celý ostrov hviezd.',
-          'Naša Mliečna cesta ich má stovky miliárd – a takých galaxií je vo vesmíre viac než ľudí na Zemi.',
-          'Najbližšia veľká galaxia sa volá Andromeda.'
+          'Galaxie není jedna hvězda ani jeden oblak. Je to celý ostrov hvězd.',
+          'Naše Mléčná dráha jich má stovky miliard – a takových galaxií je ve vesmíru více než ' +
+          'lidí na Zemi.',
+          'Nejbližší velká galaxie se jmenuje Andromeda.'
         ],
         more: [
-          'Galaxie nie sú vo vesmíre rozsypané náhodne. Držia sa v skupinách a kopách, tie sa spájajú do nadkôp a tie tvoria vlákna, medzi ktorými sú obrovské prázdne bubliny. Vo veľkom meradle vesmír vyzerá skoro ako pena alebo pavučina.',
-          'Tvar galaxie prezradí jej minulosť: špirály majú ešte dosť plynu a stále v nich vznikajú nové hviezdy, kým eliptické galaxie plyn už spotrebovali a sú plné starých červených hviezd.',
-          'Väčšina veľkých galaxií vrátane našej má v samom strede obrovskú čiernu dieru. Nie je to náhoda – galaxia a jej čierna diera rástli spolu.'
+          'Galaxie nejsou ve vesmíru rozsypané náhodně. Drží se ve skupinách a kupách, ty se ' +
+          'spojují do nadkup a ty tvoří vlákna, mezi nimiž jsou obrovské prázdné bubliny. Ve ' +
+          'velkém měřítku vesmír vypadá skoro jako pěna nebo pavučina.',
+          'Tvar galaxie prozradí její minulost: spirály mají ještě dost plynu a stále v nich ' +
+          'vznikají nové hvězdy, kdežto eliptické galaxie plyn už spotřebovaly a jsou plné ' +
+          'starých červených hvězd.',
+          'Většina velkých galaxií včetně naší má v samém středu obrovskou černou díru. Není to ' +
+          'náhoda – galaxie a její černá díra rostly společně.'
         ],
-        cta: 'Ako sa dá zistiť, ktorá je ktorá?'
+        cta: 'Jak se dá zjistit, která je která?'
       },
       { type: 'fact', factId: 'andromeda-25' },
       {
         type: 'cards',
-        title: 'TRI TVARY GALAXIÍ',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'TŘI TVARY GALAXIÍ',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🌀', name: 'Špirálová', short: 'Ramená a disk.',
-            text: 'Má disk so špirálovými ramenami, v ktorých sa stále rodia nové hviezdy. Taká je naša galaxia aj Andromeda.',
-            image: 'm51', exampleLabel: 'Príklad: M51, M31' },
-          { icon: '🥚', name: 'Eliptická', short: 'Guľa starých hviezd.',
-            text: 'Nemá ramená ani disk – len obrovská guľa či ovál starých hviezd. Nové hviezdy sa v nej takmer nerodia.',
-            image: 'omegacen', exampleLabel: 'Vyzerá ako veľká hviezdna guľa' },
+          { icon: '🌀', name: 'Spirální', short: 'Ramena a disk.',
+            text: 'Má disk se spirálními rameny, ve kterých se stále rodí nové hvězdy. Taková je naše ' +
+                  'galaxie i Andromeda.',
+            image: 'm51', exampleLabel: 'Příklad: M51, M31' },
+          { icon: '🥚', name: 'Eliptická', short: 'Koule starých hvězd.',
+            text: 'Nemá ramena ani disk – jen obrovská koule či ovál starých hvězd. Nové hvězdy se v ní ' +
+                  'téměř nerodí.',
+            image: 'omegacen', exampleLabel: 'Vypadá jako velká hvězdná koule' },
           { icon: '💫', name: 'Nepravidelná', short: 'Bez tvaru.',
-            text: 'Rozhádzaná galaxia bez pravidelného tvaru. Často preto, že do nej narazila iná galaxia.',
-            image: 'carina', exampleLabel: 'Často po zrážke galaxií' }
+            text: 'Rozházená galaxie bez pravidelného tvaru. Často proto, že do ní narazila jiná galaxie.',
+            image: 'carina', exampleLabel: 'Často po srážce galaxií' }
         ],
-        cta: 'Ideme na úlohu',
+        cta: 'Jdeme na úkol',
         xp: 15
       },
       {
         type: 'pick',
-        title: '🔎 NAJDI GALAXIU',
-        prompt: 'Ktorý z týchto objektov je galaxia?',
+        title: '🔎 NAJDI GALAXII',
+        prompt: 'Který z těchto objektů je galaxie?',
         options: [
-          { image: 'm13', correct: false, explain: 'Toto je guľová hviezdokopa – stotisíc hviezd. Galaxia ich má miliardy.' },
-          { image: 'm42', correct: false, explain: 'Toto je hmlovina v našej galaxii – oblak plynu, kde sa rodia hviezdy.' },
-          { image: 'm31', correct: true,  explain: 'Presne! Andromeda – celá galaxia s miliardami hviezd, 2,5 milióna svetelných rokov daleko.' },
-          { image: 'saturn', correct: false, explain: 'Toto je planéta Saturn. Tá je „za rohom“ – v našej Slnečnej soustave.' }
+          { image: 'm13', correct: false, explain: 'To je kulová hvězdokupa – sto tisíc hvězd. Galaxie jich má miliardy.' },
+          { image: 'm42', correct: false, explain: 'To je mlhovina v naší galaxii – oblak plynu, kde se rodí hvězdy.' },
+          { image: 'm31', correct: true,  explain: 'Přesně! Andromeda – celá galaxie s miliardami hvězd, 2,5 milionu světelných let ' +
+                                                   'daleko.' },
+          { image: 'saturn', correct: false, explain: 'To je planeta Saturn. Ta je „za rohem“ – v naší Sluneční soustavě.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Andromeda sa k nám približuje. Dlho sa hovorilo, že o štyri miliardy rokov sa naše galaxie zrazia.',
-          'V roku 2025 ale nové výpočty ukázali, že to nie je isté – je to asi 50 na 50. Takto veda funguje: keď prídu lepšie merania, odpoveď sa opraví.'
+          'Andromeda se k nám přibližuje. Dlouho se říkalo, že za čtyři miliardy let se naše ' +
+          'galaxie srazí.',
+          'V roce 2025 ale nové výpočty ukázaly, že to není jisté – je to asi 50 na 50. Takhle ' +
+          'věda funguje: když přijdou lepší měření, odpověď se opraví.'
         ],
-        footnote: 'Ak by sa aj zrazili, hviezdy do seba nenarazia. Vesmír je taký prázdny, že galaxie prejdú jedna cez druhú.',
-        cta: 'To je fakt zaujímavé'
+        footnote: 'I kdyby se srazily, hvězdy do sebe nenarazí. Vesmír je tak prázdný, že galaxie projdou ' +
+                  'jedna skrz druhou.',
+        cta: 'To je fakt zajímavé'
       },
       { type: 'fact', factId: 'zrazka-neisto' },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'zorne-pole', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📸 MISIA: ANDROMEDA',
+        title: '📸 MISE: ANDROMEDA',
         objectId: 'm31',
         tasks: [
-          { icon: '🔭', text: 'Nájdi M31 v Stellariu (pomôže ti súhvezdie Kasiopeja – písmeno W).' },
-          { icon: '👁️', text: 'Za tmy ju skús nájsť aj voľným okom ako slabú šmuhu.' },
-          { icon: '📸', text: 'Odfotografuj ju Dwarfom v EQ režime – potrebuje dlho zbierať svetlo.' }
+          { icon: '🔭', text: 'Najdi M31 ve Stellariu (pomůže ti souhvězdí Kasiopeja – písmeno W).' },
+          { icon: '👁️', text: 'Za tmy ji zkus najít i volným okem jako slabou šmouhu.' },
+          { icon: '📸', text: 'Vyfotografuj ji Dwarfem v EQ režimu – potřebuje dlouho sbírat světlo.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Vyfotil si svetlo, ktoré letelo 2,5 milióna rokov. Gratulujem!',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Vyfotil jsi světlo, které letělo 2,5 milionu let. Gratuluji!',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -895,67 +960,69 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Čo je galaxia?',
+            question: 'Co je galaxie?',
             options: [
-              { label: 'Obrovský ostrov miliárd hviezd', correct: true },
-              { label: 'Oblak plynu, kde sa rodia hviezdy' },
-              { label: 'Skupina asi tisíc hviezd' },
-              { label: 'Veľmi veľká hviezda' }
+              { label: 'Obrovský ostrov miliard hvězd', correct: true },
+              { label: 'Oblak plynu, kde se rodí hvězdy' },
+              { label: 'Skupina asi tisíce hvězd' },
+              { label: 'Velmi velká hvězda' }
             ],
-            explain: 'Hmlovina = oblak. Hviezdokopa = tisíce hviezd. Galaxia = miliardy hviezd.'
+            explain: 'Mlhovina = oblak. Hvězdokupa = tisíce hvězd. Galaxie = miliardy hvězd.'
           },
           {
             kind: 'truefalse',
-            question: 'Galaxia v Andromede je taká daleko, že ju voľným okom vôbec nevidno.',
+            question: 'Galaxie v Andromedě je tak daleko, že ji volným okem vůbec není vidět.',
             answer: false,
-            explain: 'Je 2,5 milióna svetelných rokov daleko – a napriek tomu ju za tmy voľným okom vidno ako slabú šmuhu.'
+            explain: 'Je 2,5 milionu světelných let daleko – a přesto ji za tmy volným okem vidíš jako ' +
+                     'slabou šmouhu.'
           },
           {
             kind: 'image',
-            question: 'Ktorá z nich je špirálová galaxia?',
+            question: 'Která z nich je spirální galaxie?',
             options: [
               { image: 'm51', label: 'A', correct: true },
               { image: 'm13', label: 'B' }
             ],
-            explain: 'A má ramená, ktoré sa točia okolo stredu. B je guľová hviezdokopa.'
+            explain: 'A má ramena, která se točí okolo středu. B je kulová hvězdokupa.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od najbližšieho k najvzdialenejšiemu.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od nejbližšího k nejvzdálenějšímu.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Mesiac', order: 1, icon: '🌙' },
-              { label: 'M42 – Orionova hmlovina', order: 2, icon: '☁️' },
+              { label: 'Měsíc', order: 1, icon: '🌙' },
+              { label: 'M42 – Orionova mlhovina', order: 2, icon: '☁️' },
               { label: 'M31 – Andromeda', order: 3, icon: '🌀' },
-              { label: 'M51 – galaxia Vír', order: 4, icon: '💫' }
+              { label: 'M51 – galaxie Vír', order: 4, icon: '💫' }
             ],
-            explain: 'Mesiac 384 400 km · M42 asi 1 300 sv. rokov · M31 2,5 milióna · M51 31 miliónov sv. rokov.'
+            explain: 'Měsíc 384 400 km · M42 asi 1 300 sv. let · M31 2,5 milionu · M51 31 milionů sv. let.'
           },
           {
             kind: 'decide',
-            question: 'Čo sa stane s hviezdami, ak sa dve galaxie zrazia?',
+            question: 'Co se stane s hvězdami, když se dvě galaxie srazí?',
             options: [
-              { icon: '🌌', label: 'Väčšinou prejdú okolo seba – vesmír je veľmi prázdny', correct: true },
-              { icon: '💥', label: 'Všetky hviezdy do seba narazia a vybuchnú' }
+              { icon: '🌌', label: 'Většinou projdou okolo sebe – vesmír je velmi prázdný', correct: true },
+              { icon: '💥', label: 'Všechny hvězdy do sebe narazí a vybuchnou' }
             ],
-            explain: 'Hviezdy sú od seba tak daleko, že zrážka galaxií je skôr tanec než havária. Menia sa však tvary galaxií.'
+            explain: 'Hvězdy jsou od sebe tak daleko, že srážka galaxií je spíš tanec než havárie. Tvary ' +
+                     'galaxií se ale mění.'
           }
         ],
         resultGood: '🌟 Galaxie zvládnuté!',
-        resultOk: '🔭 Ešte raz – a budeš objaviteľ galaxií.'
+        resultOk: '🔭 Ještě jednou – a budeš objevitel galaxií.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 6 – PLANÉTY A MESIAC
+     LEKCE 6 – PLANETY A MĚSÍC
      ========================================================================== */
   {
     id: 'planets',
     icon: '🪐',
-    title: 'PLANÉTY A MESIAC',
-    teaser: 'Objekty, ktoré uvidíš hneď a jasne. Prečo putujú po nebi?',
-    minutes: '7 minút',
+    title: 'PLANETY A MĚSÍC',
+    teaser: 'Objekty, které uvidíš hned a jasně. Proč putují po nebi?',
+    minutes: '7 minut',
     badge: 'planet-hunter',
     basics: [ 'planeta', 'plynny-obor', 'mesiac', 'terminator',
               'expozicia', 'seeing', 'astronomicka-jednotka' ],
@@ -964,96 +1031,109 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'saturn',
-        question: '🔎 ČO JE TOTO?',
+        question: '🔎 CO JE TOHLE?',
         options: [
-          { id: 'star',   icon: '⭐', label: 'hviezda' },
-          { id: 'planet', icon: '🪐', label: 'planéta' },
-          { id: 'nebula', icon: '☁️', label: 'hmlovina' },
-          { id: 'galaxy', icon: '🌀', label: 'galaxia' }
+          { id: 'star',   icon: '⭐', label: 'hvězda' },
+          { id: 'planet', icon: '🪐', label: 'planeta' },
+          { id: 'nebula', icon: '☁️', label: 'mlhovina' },
+          { id: 'galaxy', icon: '🌀', label: 'galaxie' }
         ],
         correct: 'planet',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Saturn – planéta s prstencami. Nesvieti sama, len odráža svetlo Slnka.',
-        retryText: 'Skús ešte raz. Vidíš tie prstence? Tie má vo Slnečnej soustave jedna veľmi známa planéta.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Saturn – planeta s prstenci. Nesvítí sama, jen odráží světlo Slunce.',
+        retryText: 'Zkus to ještě jednou. Vidíš ty prstence? Ty má ve Sluneční soustavě jedna velmi známá ' +
+                   'planeta.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🪐 PLANÉTY PUTUJÚ',
+        title: '🪐 PLANETY PUTUJÍ',
         image: 'jupiter',
         lines: [
-          'Hviezdy sú na nebi vždy v rovnakých obrazcoch. Planéty nie – tie sa medzi nimi pomaly presúvajú.',
-          'Práve preto dostali svoje meno: „planétes“ znamená po grécky pútnik.',
-          'A ešte niečo: hviezdy blikajú, planéty svietia pokojne.'
+          'Hvězdy jsou na nebi vždy ve stejných obrazcích. Planety ne – ty se mezi nimi pomalu ' +
+          'přesouvají.',
+          'Právě proto dostaly své jméno: „planétes“ znamená v řečtině poutník.',
+          'A ještě něco: hvězdy blikají, planety svítí pokojně.'
         ],
         more: [
-          'Hviezdy blikajú preto, že sú tak daleko, že ich vidíme ako jediný bod. Vzduch nad nami sa vlní a ten jeden bod svetla poskakuje. Planéta je na nebi malý kotúčik, takže poskakovanie jeho okrajov sa navzájom vyruší a svetlo zostane pokojné.',
-          'Planéty nájdeš vždy len v úzkom pásiku oblohy, ktorému sa hovorí ekliptika. Je to preto, že celá Slnečná soustava je plochá ako tanier – planéty obiehajú takmer v jednej rovine.',
-          'Občas sa planéta na nebi zdanlivo zastaví a chvíľu ide dozadu. Nespomalila – len ju Zem na svojej vnútornej obežnej dráhe práve predbieha, podobne ako auto v susednom pruhu.'
+          'Hvězdy blikají proto, že jsou tak daleko, že je vidíme jako jediný bod. Vzduch nad ' +
+          'námi se vlní a ten jeden bod světla poskakuje. Planeta je na nebi malý kotouček, takže ' +
+          'poskakování jejích okrajů se navzájem vyruší a světlo zůstane klidné.',
+          'Planety najdeš vždy jen v úzkém pásku oblohy, kterému se říká ekliptika. Je to proto, ' +
+          'že celá Sluneční soustava je plochá jako talíř – planety obíhají téměř v jedné rovině.',
+          'Občas se planeta na nebi zdánlivě zastaví a chvíli jde dozadu. Nezpomalila – jen ji ' +
+          'Země na své vnitřní oběžné dráze právě předjíždí, podobně jako auto v sousedním pruhu.'
         ],
-        cta: 'Čo sa dá vidieť?'
+        cta: 'Co se dá vidět?'
       },
       { type: 'fact', factId: 'saturn-prstence-tenke' },
       {
         type: 'cards',
-        title: 'TRI CIELE PRE PRVÝ VEČER',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'TŘI CÍLE PRO PRVNÍ VEČER',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🌙', name: 'Mesiac', short: 'Najľahší cieľ.',
-            text: 'Uvidíš krátery aj hory. Najkrajšie sú na hranici svetla a tmy, kde vrhajú dlhé tiene. Je 384 400 km daleko.',
-            image: 'moon', exampleLabel: 'Najlepšie mimo splnu' },
-          { icon: '🪐', name: 'Saturn', short: 'Planéta s prstencami.',
-            text: 'Malý, ale nezameniteľný. Prstence sú z miliárd kúskov ľadu – a sú tenké ako list papiera.',
-            image: 'saturn', exampleLabel: 'Prstence uvidíš aj v Dwarfe' },
-          { icon: '🟠', name: 'Jupiter', short: 'Najväčšia planéta.',
-            text: 'Vedľa neho uvidíš štyri bodky – jeho veľké mesiace. Každý večer sú inde, lebo ho obiehajú.',
-            image: 'jupiter', exampleLabel: 'Sleduj mesiace dva večery' }
+          { icon: '🌙', name: 'Měsíc', short: 'Nejlehčí cíl.',
+            text: 'Uvidíš krátery i hory. Nejkrásnější jsou na hranici světla a tmy, kde vrhají dlouhé ' +
+                  'stíny. Je 384 400 km daleko.',
+            image: 'moon', exampleLabel: 'Nejlépe mimo úplněk' },
+          { icon: '🪐', name: 'Saturn', short: 'Planeta s prstenci.',
+            text: 'Malý, ale nezaměnitelný. Prstence jsou z miliard kousků ledu – a jsou tenké jako list ' +
+                  'papíru.',
+            image: 'saturn', exampleLabel: 'Prstence uvidíš i v Dwarfu' },
+          { icon: '🟠', name: 'Jupiter', short: 'Největší planeta.',
+            text: 'Vedle něj uvidíš čtyři tečky – jeho velké měsíce. Každý večer jsou jinde, protože ho ' +
+                  'obíhají.',
+            image: 'jupiter', exampleLabel: 'Sleduj měsíce dva večery' }
         ],
-        cta: 'Ako ich odfotiť?',
+        cta: 'Jak je vyfotografovat?',
         xp: 15
       },
       {
         type: 'howto',
-        title: '📸 AKO FOTIŤ JASNÉ OBJEKTY',
-        lead: 'Planéty a Mesiac sú úplne iná disciplína ako hmloviny. Tu je svetla dosť – problém je nepokojný vzduch.',
+        title: '📸 JAK FOTIT JASNÉ OBJEKTY',
+        lead: 'Planety a Měsíc jsou úplně jiná disciplína než mlhoviny. Tady je světla dost – problém ' +
+              'je nepokojný vzduch.',
         steps: [
-          { icon: '⚡', title: 'Krátke expozície',
-            text: 'Mesiac a planéty sú jasné. Dlhá expozícia ich len prepáli do bielej škvrny.' },
-          { icon: '🧩', title: 'Veľa krátkych snímok',
-            text: 'Zober ich stovky a nechaj Dwarf poskladať tie najostrejšie. Tak sa „prebije“ chvenie vzduchu.' },
-          { icon: '📐', title: 'Nefoť nízko nad obzorom',
-            text: 'Pri zemi je vzduch najviac rozvírený. Čakaj, kým bude objekt vyššie na oblohe.' },
-          { icon: '🧭', title: 'EQ režim tu netreba',
-            text: 'Expozície sú také krátke, že sa hviezdy nestihnú pootočiť. Ušetríš si nastavovanie.' }
+          { icon: '⚡', title: 'Krátké expozice',
+            text: 'Měsíc a planety jsou jasné. Dlouhá expozice je jen přepálí do bílé skvrny.' },
+          { icon: '🧩', title: 'Hodně krátkých snímků',
+            text: 'Pořiď jich stovky a nechej Dwarf složit ty nejostřejší. Tak se „přebije“ chvění ' +
+                  'vzduchu.' },
+          { icon: '📐', title: 'Nefotografuj nízko nad obzorem',
+            text: 'U země je vzduch nejvíc rozvířený. Čekej, dokud nebude objekt výš na obloze.' },
+          { icon: '🧭', title: 'EQ režim tu není potřeba',
+            text: 'Expozice jsou tak krátké, že se hvězdy nestihnou pootočit. Ušetříš si nastavování.' }
         ],
-        note: 'Preto sa planéty fotia úplne inak než hmloviny – a preto sú výborné na začiatok večera.',
-        cta: 'Rozumiem, ideme ďalej',
+        note: 'Proto se planety fotí úplně jinak než mlhoviny – a proto jsou výborné na začátek ' +
+              'večera.',
+        cta: 'Rozumím, jdeme dál',
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Krátery na Mesiaci sú diery po zásahoch, ktoré tam zostanú aj miliardy rokov.',
-          'Nie je tam totiž skoro žiadny vzduch – žiadny dážď, vietor ani rieky, ktoré by ich zahladili.'
+          'Krátery na Měsíci jsou díry po zásazích, které tam zůstanou i miliardy let.',
+          'Není tam totiž skoro žádný vzduch – neprší tam, nefouká vítr ani netečou řeky, které ' +
+          'by je zahladily.'
         ],
-        footnote: 'Stopy astronautov z misií Apollo sú tam preto stále.',
-        cta: 'Ideme fotiť!'
+        footnote: 'Stopy astronautů z misí Apollo jsou tam proto stále.',
+        cta: 'Jdeme fotit!'
       },
       { type: 'fact', factId: 'jupiter-galileo' },
       {
         type: 'mission',
-        title: '📸 MISIA: MESIAC',
+        title: '📸 MISE: MĚSÍC',
         objectId: 'moon',
         tasks: [
-          { icon: '🔭', text: 'V Stellariu zisti, v akej fáze je dnes Mesiac.' },
-          { icon: '📸', text: 'Odfotografuj ho Dwarfom s krátkou expozíciou.' },
-          { icon: '🔍', text: 'Nájdi na fotke hranicu svetla a tmy – tam sú krátery najkrajšie.' }
+          { icon: '🔭', text: 'Ve Stellariu zjisti, v jaké fázi je dnes Měsíc.' },
+          { icon: '📸', text: 'Vyfotografuj ho Dwarfem s krátkou expozicí.' },
+          { icon: '🔍', text: 'Najdi na fotce hranici světla a tmy – tam jsou krátery nejkrásnější.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Mesiac je v zbierke. Ak je práve na nebi Saturn alebo Jupiter, skús aj tie.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Měsíc je ve sbírce. Pokud je právě na nebi Saturn nebo Jupiter, zkus i je.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -1061,54 +1141,57 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo sa planéty na nebi presúvajú medzi hviezdami?',
+            question: 'Proč se planety na nebi přesouvají mezi hvězdami?',
             options: [
-              { label: 'Lebo obiehajú okolo Slnka blízko nás', correct: true },
-              { label: 'Lebo sú väčšie ako hviezdy' },
-              { label: 'Lebo svietia vlastným svetlom' },
-              { label: 'Lebo ich tlačí slnečný vietor' }
+              { label: 'Protože obíhají okolo Slunce blízko nás', correct: true },
+              { label: 'Protože jsou větší než hvězdy' },
+              { label: 'Protože svítí vlastním světlem' },
+              { label: 'Protože je tlačí sluneční vítr' }
             ],
-            explain: 'Sú blízko a obiehajú Slnko, preto ich vidíme z rôznych smerov. Hviezdy sú tak daleko, že sa nám zdajú stále na tom istom mieste.'
+            explain: 'Jsou blízko a obíhají Slunce, proto je vidíme z různých směrů. Hvězdy jsou tak daleko, ' +
+                     'že se nám zdají stále na tomtéž místě.'
           },
           {
             kind: 'truefalse',
-            question: 'Pri fotení Mesiaca potrebuješ dlhé expozície a EQ režim.',
+            question: 'Při fotografování Měsíce potřebuješ dlouhé expozice a EQ režim.',
             answer: false,
-            explain: 'Presne naopak. Mesiac je veľmi jasný – potrebuje krátke expozície a EQ režim mu netreba.'
+            explain: 'Přesně naopak. Měsíc je velmi jasný – potřebuje krátké expozice a EQ režim není ' +
+                     'potřeba.'
           },
           {
             kind: 'image',
-            question: 'Ktorý z nich je Jupiter?',
+            question: 'Který z nich je Jupiter?',
             options: [
               { image: 'jupiter', label: 'A', correct: true },
               { image: 'saturn', label: 'B' }
             ],
-            explain: 'A má pásy oblakov a Veľkú červenú škvrnu. B je Saturn s prstencami.'
+            explain: 'A má pásy oblaků a Velkou červenou skvrnu. B je Saturn s prstenci.'
           },
           {
             kind: 'decide',
-            question: 'Prečo na Mesiaci zostávajú krátery miliardy rokov?',
+            question: 'Proč na Měsíci zůstávají krátery miliardy let?',
             options: [
-              { icon: '🌬️', label: 'Nie je tam takmer žiadny vzduch, dážď ani vietor', correct: true },
-              { icon: '🪨', label: 'Lebo je z veľmi tvrdého kameňa' }
+              { icon: '🌬️', label: 'Není tam téměř žádný vzduch, neprší tam ani nefouká vítr', correct: true },
+              { icon: '🪨', label: 'Protože je z velmi tvrdého kamene' }
             ],
-            explain: 'Na Zemi krátery zahladí voda, vietor a rastliny. Na Mesiaci nemá čo.'
+            explain: 'Na Zemi krátery zahladí voda, vítr a rostliny. Na Měsíci nemá co.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od najbližšieho k Zemi po najvzdialenejšie.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od nejbližšího k Zemi po nejvzdálenější.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Mesiac', order: 1, icon: '🌙' },
+              { label: 'Měsíc', order: 1, icon: '🌙' },
               { label: 'Jupiter', order: 2, icon: '🟠' },
               { label: 'Saturn', order: 3, icon: '🪐' },
-              { label: 'Orionova hmlovina', order: 4, icon: '☁️' }
+              { label: 'Orionova mlhovina', order: 4, icon: '☁️' }
             ],
-            explain: 'Mesiac je „za dverami“, planéty v našej soustave a hmlovina až tisíce svetelných rokov daleko.'
+            explain: 'Měsíc je „za dveřmi“, planety v naší soustavě a mlhovina až tisíce světelných let ' +
+                     'daleko.'
           }
         ],
-        resultGood: '🌟 Lovec planét je na svete!',
-        resultOk: '🔭 Ešte raz – planéty nikam neutečú.'
+        resultGood: '🌟 Lovec planet je na světě!',
+        resultOk: '🔭 Ještě jednou – planety nikam neutečou.'
       }
     ]
   },
@@ -1119,9 +1202,9 @@ const LESSONS = [
   {
     id: 'stars',
     icon: '⭐',
-    title: 'HVIEZDY',
-    teaser: 'Prečo sú niektoré modré a iné červené? A čo sú dvojhviezdy?',
-    minutes: '7 minút',
+    title: 'HVĚZDY',
+    teaser: 'Proč jsou některé modré a jiné červené? A co jsou dvojhvězdy?',
+    minutes: '7 minut',
     badge: 'star-expert',
     basics: [ 'hviezda', 'farba-teplota', 'magnituda', 'dvojhviezda',
               'opticka-dvojica', 'biely-karlik' ],
@@ -1130,109 +1213,122 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'albireo',
-        question: '🔎 PREČO MAJÚ TIETO DVE HVIEZDY INÚ FARBU?',
+        question: '🔎 PROČ MAJÍ TYTO DVĚ HVĚZDY JINOU BARVU?',
         options: [
-          { id: 'temp',   icon: '🌡️', label: 'majú inú teplotu' },
-          { id: 'dist',   icon: '📏', label: 'jedna je bližšie' },
+          { id: 'temp',   icon: '🌡️', label: 'mají jinou teplotu' },
+          { id: 'dist',   icon: '📏', label: 'jedna je blíž' },
           { id: 'camera', icon: '📷', label: 'je to chyba fotoaparátu' },
-          { id: 'age',    icon: '🎂', label: 'jedna má meniny' }
+          { id: 'age',    icon: '🎂', label: 'jedna má jmeniny' }
         ],
         correct: 'temp',
-        successTitle: '🎉 PRESNE TAK!',
-        successText: 'Farba hviezdy prezradí, ako je horúca. Modrá je najhorúcejšia, červená najchladnejšia.',
-        retryText: 'Skús ešte raz. Pomôcka: aj rozžeravené železo mení farbu podľa toho, ako je horúce.',
+        successTitle: '🎉 PŘESNĚ TAK!',
+        successText: 'Barva hvězdy prozradí, jak je žhavá. Modrá je nejžhavější, červená nejchladnější.',
+        retryText: 'Zkus to ještě jednou. Nápověda: i rozžhavené železo mění barvu podle toho, jak je ' +
+                   'horké.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🌈 FARBA = TEPLOTA',
+        title: '🌈 BARVA = TEPLOTA',
         image: 'starBlue',
         lines: [
-          'Hviezdy nie sú všetky biele. Majú farbu podľa toho, ako sú horúce.',
-          'Modré sú najhorúcejšie, žlté ako naše Slnko sú stredné, červené najchladnejšie.',
-          'Je to naopak, ako to máme na kohútikoch s vodou.'
+          'Hvězdy nejsou všechny bílé. Mají barvu podle toho, jak jsou žhavé.',
+          'Modré jsou nejžhavější, žluté jako naše Slunce jsou střední, červené nejchladnější.',
+          'Je to naopak, než jak to máme na kohoutcích s vodou.'
         ],
         more: [
-          'Farba hviezdy hovorí o teplote, nie o veľkosti ani o vzdialenosti. Všetko horúce svieti – čím horúcejšie, tým modrejšie. Rozžeravený drôt v starej žiarovke je oranžový, plameň sporáka je modrý a s hviezdami je to presne tak isto.',
-          'Modré hviezdy sú najhorúcejšie, ale žijú najkratšie – palivo spálila len za pár miliónov rokov. Malé červené hviezdy sú úsporné a vydržia svietiť aj bilión rokov, teda mnohonásobne dlhšie, než je dnes starý celý vesmír.',
-          'Pozor na jednu pascu: červená hviezda môže byť malá a chladná, ale aj obrovský starý obor, ktorý sa na konci života nafúkol a preto vychladol. Astronómi ich rozlíšia podľa toho, ako veľmi žiaria.'
+          'Barva hvězdy mluví o teplotě, ne o velikosti ani o vzdálenosti. Všechno žhavé svítí – ' +
+          'čím žhavější, tím modřejší. Rozžhavený drát ve staré žárovce je oranžový, plamen ' +
+          'sporáku je modrý a s hvězdami je to přesně stejně.',
+          'Modré hvězdy jsou nejžhavější, ale žijí nejkratší dobu – palivo spálí za pár milionů ' +
+          'let. Malé červené hvězdy jsou úsporné a vydrží svítit i bilion let, tedy mnohonásobně ' +
+          'delší dobu, než je dnes starý celý vesmír.',
+          'Pozor na jednu past: červená hvězda může být malá a chladná, ale i obrovský starý obr, ' +
+          'který se na konci života nafoukl a proto vychladl. Astronomové je rozliší podle toho, ' +
+          'jak moc září.'
         ],
-        cta: 'Ukáž mi ich'
+        cta: 'Ukaž mi je'
       },
       { type: 'fact', factId: 'farba-teplota' },
       {
         type: 'cards',
-        title: 'TRI FARBY, TRI TEPLOTY',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'TŘI BARVY, TŘI TEPLOTY',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🔵', name: 'Modrá', short: 'Najhorúcejšia.',
-            text: 'Na povrchu má aj desaťtisíce stupňov. Také hviezdy sú obrovské, svietia zbesilo – a žijú krátko.',
-            image: 'starBlue', exampleLabel: 'Napríklad Rigel v Orióne' },
-          { icon: '🟡', name: 'Žltá', short: 'Ako naše Slnko.',
-            text: 'Stredná teplota, asi 5 500 °C na povrchu. Takéto hviezdy žijú dlho a pokojne – aj miliardy rokov.',
-            image: 'starYellow', exampleLabel: 'Napríklad Slnko' },
-          { icon: '🔴', name: 'Červená', short: 'Najchladnejšia.',
-            text: 'Najchladnejšie z hviezd. Sú to buď malé úsporné hviezdičky, alebo staré nafúknuté obry.',
-            image: 'starRed', exampleLabel: 'Napríklad Betelgeuse' }
+          { icon: '🔵', name: 'Modrá', short: 'Nejžhavější.',
+            text: 'Na povrchu má i desetitisíce stupňů. Takové hvězdy jsou obrovské, svítí zběsile – a ' +
+                  'žijí krátce.',
+            image: 'starBlue', exampleLabel: 'Například Rigel v Orionu' },
+          { icon: '🟡', name: 'Žlutá', short: 'Jako naše Slunce.',
+            text: 'Střední teplota, asi 5 500 °C na povrchu. Takové hvězdy žijí dlouho a pokojně – i ' +
+                  'miliardy let.',
+            image: 'starYellow', exampleLabel: 'Například Slunce' },
+          { icon: '🔴', name: 'Červená', short: 'Nejchladnější.',
+            text: 'Nejchladnější z hvězd. Jsou to buď malé úsporné hvězdičky, nebo staří nafouklí obři.',
+            image: 'starRed', exampleLabel: 'Například Betelgeuse' }
         ],
-        cta: 'A čo dvojhviezdy?',
+        cta: 'A co dvojhvězdy?',
         xp: 15
       },
       {
         type: 'compare',
-        title: '👯 JEDNA HVIEZDA, ALEBO DVE?',
-        lead: 'Niektoré hviezdy sa pri priblížení rozdelia na dve. Volajú sa dvojhviezdy.',
+        title: '👯 JEDNA HVĚZDA, NEBO DVĚ?',
+        lead: 'Některé hvězdy se při přiblížení rozdělí na dvě. Říká se jim dvojhvězdy.',
         eye: {
           icon: '👁️',
-          label: 'VOĽNÝM OKOM',
+          label: 'VOLNÝM OKEM',
           art: 'polaris',
-          text: 'Vidíš jednu hviezdu. Aj Polárka vyzerá ako jedna – a pritom sú to tri hviezdy.'
+          text: 'Vidíš jednu hvězdu. I Polárka vypadá jako jedna – a přitom jsou to tři hvězdy.'
         },
         camera: {
           icon: '🔭',
-          label: 'V ĎALEKOHĽADE',
+          label: 'V DALEKOHLEDU',
           image: 'albireo',
-          text: 'Albireo v Labuti sa rozdelí na dve hviezdy – jednu modrú a jednu žltú. Je to jeden z najkrajších pohľadov na oblohe.'
+          text: 'Albireo v Labuti se rozdělí na dvě hvězdy – jednu modrou a jednu žlutou. Je to jeden z ' +
+                'nejkrásnějších pohledů na obloze.'
         },
         check: {
-          question: 'Sú všetky dvojice hviezd naozaj spolu?',
+          question: 'Jsou všechny dvojice hvězd opravdu spolu?',
           options: [
-            { label: 'Nie – niektoré len ležia v rovnakom smere', correct: true,
-              explain: 'Áno. Skutočné dvojhviezdy sa obiehajú, ale „optické dvojice“ sú len náhodne v rovnakom smere a v skutočnosti sú od seba veľmi daleko.' },
-            { label: 'Áno, každá dvojica sa vždy obieha', correct: false,
-              explain: 'To nie. Astronómi rozlišujú skutočné dvojhviezdy a optické dvojice, ktoré len tak vyzerajú.' }
+            { label: 'Ne – některé jen leží ve stejném směru', correct: true,
+              explain: 'Ano. Skutečné dvojhvězdy se obíhají, ale „optické dvojice“ jsou jen náhodně ve stejném ' +
+                       'směru a ve skutečnosti jsou od sebe velmi daleko.' },
+            { label: 'Ano, každá dvojice se vždy obíhá', correct: false,
+              explain: 'To ne. Astronomové rozlišují skutečné dvojhvězdy a optické dvojice, které tak jen ' +
+                       'vypadají.' }
           ]
         },
-        cta: 'Chcem vedieť viac'
+        cta: 'Chci vědět víc'
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Naše Slnko je úplne obyčajná hviezda. Nič výnimočné – len strašne blízko.',
-          'Keby si sa naň pozeral z inej hviezdy, bola by to len ďalšia malá žltá tečka medzi tisíckami.'
+          'Naše Slunce je úplně obyčejná hvězda. Nic výjimečného – jen strašně blízko.',
+          'Kdybys se na ně podíval z jiné hvězdy, byla by to jen další malá žlutá tečka mezi ' +
+          'tisíci.'
         ],
-        footnote: 'A väčšina hviezd na nebi nie je sama – majú spoločníka, presne ako Albireo.',
-        cta: 'Ideme si vybrať cieľ'
+        footnote: 'A většina hvězd na nebi není sama – mají společníka, přesně jako Albireo.',
+        cta: 'Jdeme si vybrat cíl'
       },
       { type: 'fact', factId: 'albireo-modra-zlta' },
       { type: 'fact', factId: 'polarka-nebude-vzdy' },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'farba-teplota', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📸 MISIA: ALBIREO',
+        title: '📸 MISE: ALBIREO',
         objectId: 'albireo',
         tasks: [
-          { icon: '🔭', text: 'Nájdi Albireo v Stellariu – je to hlava Labute.' },
-          { icon: '📸', text: 'Odfotografuj ju Dwarfom krátkou expozíciou.' },
-          { icon: '🌈', text: 'Nájdi na fotke tú modrú a tú žltú hviezdu.' }
+          { icon: '🔭', text: 'Najdi Albireo ve Stellariu – je to hlava Labutě.' },
+          { icon: '📸', text: 'Vyfotografuj ji Dwarfem krátkou expozicí.' },
+          { icon: '🌈', text: 'Najdi na fotce tu modrou a tu žlutou hvězdu.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Máš dvojhviezdu v zbierke – a s ňou aj dve farby, teda dve teploty.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Máš dvojhvězdu ve sbírce – a s ní i dvě barvy, tedy dvě teploty.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -1240,55 +1336,56 @@ const LESSONS = [
         questions: [
           {
             kind: 'image',
-            question: 'Ktorá z týchto hviezd je najhorúcejšia?',
+            question: 'Která z těchto hvězd je nejžhavější?',
             options: [
               { image: 'starBlue', label: 'A', correct: true },
               { image: 'starYellow', label: 'B' },
               { image: 'starRed', label: 'C' }
             ],
-            explain: 'Modrá je najhorúcejšia, žltá stredná, červená najchladnejšia.'
+            explain: 'Modrá je nejžhavější, žlutá střední, červená nejchladnější.'
           },
           {
             kind: 'choice',
-            question: 'Akú farbu má naše Slnko medzi hviezdami?',
+            question: 'Jakou barvu má naše Slunce mezi hvězdami?',
             options: [
-              { label: 'Žltú – je to stredne horúca hviezda', correct: true },
-              { label: 'Modrú – je najhorúcejšie zo všetkých' },
-              { label: 'Červenú – je už staré' },
-              { label: 'Nemá farbu, je priehľadné' }
+              { label: 'Žlutou – je to středně žhavá hvězda', correct: true },
+              { label: 'Modrou – je nejžhavější ze všech' },
+              { label: 'Červenou – je už staré' },
+              { label: 'Nemá barvu, je průhledné' }
             ],
-            explain: 'Slnko je stredne horúca žltá hviezda. Nič výnimočné – len blízko.'
+            explain: 'Slunce je středně žhavá žlutá hvězda. Nic výjimečného – jen blízko.'
           },
           {
             kind: 'truefalse',
-            question: 'Každá dvojica hviezd, ktorú vidíme blízko seba, sa naozaj navzájom obieha.',
+            question: 'Každá dvojice hvězd, kterou vidíme blízko sebe, se opravdu navzájem obíhá.',
             answer: false,
-            explain: 'Nie. Skutočné dvojhviezdy sa obiehajú, ale optické dvojice len ležia v rovnakom smere.'
+            explain: 'Ne. Skutečné dvojhvězdy se obíhají, ale optické dvojice jen leží ve stejném směru.'
           },
           {
             kind: 'order',
-            question: 'Zoraď hviezdy od najchladnejšej po najhorúcejšiu.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď hvězdy od nejchladnější po nejžhavější.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
               { label: 'Červená', order: 1, icon: '🔴' },
-              { label: 'Žltá (ako Slnko)', order: 2, icon: '🟡' },
-              { label: 'Biela', order: 3, icon: '⚪' },
+              { label: 'Žlutá (jako Slunce)', order: 2, icon: '🟡' },
+              { label: 'Bílá', order: 3, icon: '⚪' },
               { label: 'Modrá', order: 4, icon: '🔵' }
             ],
-            explain: 'Červená → žltá → biela → modrá. Modrá je najhorúcejšia.'
+            explain: 'Červená → žlutá → bílá → modrá. Modrá je nejžhavější.'
           },
           {
             kind: 'decide',
-            question: 'Prečo hviezdy blikajú, ale planéty skoro nie?',
+            question: 'Proč hvězdy blikají, ale planety skoro ne?',
             options: [
-              { icon: '🌬️', label: 'Hviezdy sú len bod svetla, ktorý vzduch ľahko rozhýbe', correct: true },
-              { icon: '🔋', label: 'Hviezdy majú vypínač a striedavo zhasínajú' }
+              { icon: '🌬️', label: 'Hvězdy jsou jen bod světla, který vzduch snadno rozhýbe', correct: true },
+              { icon: '🔋', label: 'Hvězdy mají vypínač a střídavě zhasínají' }
             ],
-            explain: 'Blikanie robí náš nepokojný vzduch. Planéta je na nebi malý disk, nie bod – preto sa jej blikanie „vyrovná“.'
+            explain: 'Blikání dělá náš nepokojný vzduch. Planeta je na nebi malý disk, ne bod – proto se ' +
+                     'její blikání „vyrovná“.'
           }
         ],
-        resultGood: '🌟 Znalec hviezd!',
-        resultOk: '🔭 Ešte raz – farby sa naučíš hneď.'
+        resultGood: '🌟 Znalec hvězd!',
+        resultOk: '🔭 Ještě jednou – barvy se naučíš hned.'
       }
     ]
   },
@@ -1300,8 +1397,8 @@ const LESSONS = [
     id: 'supernovae',
     icon: '💥',
     title: 'SUPERNOVY',
-    teaser: 'Keď veľkej hviezde skončí palivo, stane sa niečo obrovské.',
-    minutes: '7 minút',
+    teaser: 'Když velké hvězdě skončí palivo, stane se něco obrovského.',
+    minutes: '7 minut',
     badge: 'supernova-witness',
     basics: [ 'supernova', 'neutronova-hviezda', 'pulzar', 'typy-hmlovin',
               'gravitacia', 'svetelny-rok' ],
@@ -1310,87 +1407,99 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'm1',
-        question: '🔎 ČO MYSLÍŠ, ČO TO JE?',
+        question: '🔎 CO MYSLÍŠ, CO TO JE?',
         options: [
-          { id: 'boom',    icon: '💥', label: 'zvyšok po výbuchu hviezdy' },
-          { id: 'birth',   icon: '👶', label: 'miesto, kde sa práve rodí hviezda' },
-          { id: 'galaxy',  icon: '🌀', label: 'galaxia' },
-          { id: 'cluster', icon: '✨', label: 'hviezdokopa' }
+          { id: 'boom',    icon: '💥', label: 'zbytek po výbuchu hvězdy' },
+          { id: 'birth',   icon: '👶', label: 'místo, kde se právě rodí hvězda' },
+          { id: 'galaxy',  icon: '🌀', label: 'galaxie' },
+          { id: 'cluster', icon: '✨', label: 'hvězdokupa' }
         ],
         correct: 'boom',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Krabia hmlovina je zvyšok hviezdy, ktorá vybuchla. Ten výbuch sa volá supernova.',
-        retryText: 'Skús ešte raz. Všimni si tie vlákna, ktoré letia od stredu do všetkých strán – ako po explózii.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Krabí mlhovina je zbytek hvězdy, která vybuchla. Ten výbuch se jmenuje supernova.',
+        retryText: 'Zkus to ještě jednou. Všimni si těch vláken, která letí od středu do všech stran – ' +
+                   'jako po explozi.',
         xp: 10
       },
       {
         type: 'info',
-        title: '💥 KEĎ HVIEZDE SKONČÍ PALIVO',
+        title: '💥 KDYŽ HVĚZDĚ SKONČÍ PALIVO',
         image: 'm1',
         lines: [
-          'Veľká hviezda svieti tak, že v sebe spaľuje palivo. Raz sa jej ale skončí.',
-          'Vtedy sa jej stred zrúti a hviezda vybuchne – na niekoľko týždňov svieti ako miliardy Sĺnk.',
-          'Do vesmíru pritom rozfúka všetko, čo v sebe vyrobila.'
+          'Velká hvězda svítí tak, že v sobě spaluje palivo. Jednou jí ale skončí.',
+          'Tehdy se její střed zřítí a hvězda vybuchne – na několik týdnů svítí jako miliardy ' +
+          'Sluncí.',
+          'Do vesmíru přitom rozfouká všechno, co v sobě vyrobila.'
         ],
         more: [
-          'Hviezda svieti, pretože v jej strede sa vodík mení na hélium a pritom sa uvoľňuje energia. Tá tlačí zvnútra von a drží hviezdu nafúknutú proti jej vlastnej gravitácii. Keď palivo skončí, tlak zmizne a stred sa v priebehu sekúnd zrúti.',
-          'Pri výbuchu vzniknú a rozletia sa do vesmíru látky, ktoré by inak nikdy nevznikli – napríklad veľká časť železa. Zmiešajú sa s hmlovinami a stanú sa časťou nových hviezd a planét. Železo v tvojej krvi je z takéhoto výbuchu. Tie najťažšie kovy ako zlato vznikajú ešte extrémnejšie – hlavne pri zrážkach neutrónových hviezd.',
-          'Zo stredu hviezdy zostane buď neutrónová hviezda – guľa veľká ako mesto, ale takej hustoty, že by jedna lyžička vážila milióny ton – alebo čierna diera.'
+          'Hvězda svítí, protože v jejím středu se vodík mění na helium a přitom se uvolňuje ' +
+          'energie. Ta tlačí zvnitřku ven a drží hvězdu nafouklou proti její vlastní gravitaci. ' +
+          'Když palivo skončí, tlak zmizí a střed se během sekund zřítí.',
+          'Při výbuchu vzniknou a rozletí se do vesmíru látky, které by jinak nikdy nevznikly – ' +
+          'například velká část železa. Smíchají se s mlhovinami a stanou se součástí nových ' +
+          'hvězd a planet. Železo v tvé krvi je z takového výbuchu. Ty nejtěžší kovy jako zlato ' +
+          'vznikají ještě extrémněji – hlavně při srážkách neutronových hvězd.',
+          'Ze středu hvězdy zůstane buď neutronová hvězda – kule velká jako město, ale takové ' +
+          'hustoty, že by jedna lžička vážila miliony tun – nebo černá díra.'
         ],
-        cta: 'A čo zostane potom?'
+        cta: 'A co zůstane potom?'
       },
       { type: 'fact', factId: 'krab-1054' },
       {
         type: 'cards',
-        title: 'ČO ZOSTANE PO VÝBUCHU',
-        subtitle: 'Otoč obe karty.',
+        title: 'CO ZŮSTANE PO VÝBUCHU',
+        subtitle: 'Otoč obě karty.',
         cards: [
-          { icon: '💥', name: 'Hmlovina z vlákien', short: 'Rozfúkané zbytky hviezdy.',
-            text: 'Plyn letí od stredu von rýchlosťou tisícok kilometrov za sekundu a svieti. Presne to vidíme ako Krabiu hmlovinu.',
-            image: 'm1', exampleLabel: 'Príklad: M1 Krabia hmlovina' },
-          { icon: '💫', name: 'Neutrónová hviezda', short: 'Stred, ktorý sa zrútil.',
-            text: 'Zo stredu zostane malá guľa veľká ako mesto, ale ťažká ako celé Slnko. Točí sa tak rýchlo, že bliká ako maják.',
-            image: 'neutron', exampleLabel: 'Bliká 30-krát za sekundu' }
+          { icon: '💥', name: 'Mlhovina z vláken', short: 'Rozfoukané zbytky hvězdy.',
+            text: 'Plyn letí od středu ven rychlostí tisíců kilometrů za sekundu a svítí. Přesně to ' +
+                  'vidíme jako Krabí mlhovinu.',
+            image: 'm1', exampleLabel: 'Příklad: M1 Krabí mlhovina' },
+          { icon: '💫', name: 'Neutronová hvězda', short: 'Střed, který se zřítil.',
+            text: 'Ze středu zůstane malá kule velká jako město, ale těžká jako celé Slunce. Otáčí se tak ' +
+                  'rychle, že bliká jako maják.',
+            image: 'neutron', exampleLabel: 'Bliká 30krát za sekundu' }
         ],
-        cta: 'Ideme na úlohu',
+        cta: 'Jdeme na úkol',
         xp: 15
       },
       {
         type: 'pick',
-        title: '🔎 UHÁDNI SPRÁVNU HMLOVINU',
-        prompt: 'Ktorá z nich vznikla výbuchom hviezdy?',
+        title: '🔎 UHÁDNI SPRÁVNOU MLHOVINU',
+        prompt: 'Která z nich vznikla výbuchem hvězdy?',
         options: [
-          { image: 'm42', correct: false, explain: 'Toto je Orionova hmlovina – tam sa hviezdy práve rodia. Presne naopak.' },
-          { image: 'm1',  correct: true,  explain: 'Áno! Krabia hmlovina – zvyšok supernovy z roku 1054. Vlákna stále letia od stredu.' },
-          { image: 'ring', correct: false, explain: 'Chyták! Prstencová hmlovina je tiež od umierajúcej hviezdy, ale tá nevybuchla – iba pokojne odhodila svoje vrstvy.' },
-          { image: 'm78', correct: false, explain: 'Toto je reflexná hmlovina – prach, ktorý odráža svetlo hviezdy.' }
+          { image: 'm42', correct: false, explain: 'Tohle je Orionova mlhovina – tam se hvězdy právě rodí. Přesně naopak.' },
+          { image: 'm1',  correct: true,  explain: 'Ano! Krabí mlhovina – zbytek supernovy z roku 1054. Vlákna stále letí od středu.' },
+          { image: 'ring', correct: false, explain: 'Chyták! Prstencová mlhovina je také od umírající hvězdy, ale ta nevybuchla – jen ' +
+                                                    'pokojně odhodila své vrstvy.' },
+          { image: 'm78', correct: false, explain: 'Tohle je reflexní mlhovina – prach, který odráží světlo hvězdy.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Železo v tvojej krvi, kyslík, ktorý dýchaš, aj zlato v prsteňoch – to všetko vzniklo pri smrti hviezd.',
-          'Sme doslova zvyšky dávnych hviezd, ktoré vybuchli ešte pred vznikom Slnka.'
+          'Železo v tvé krvi, kyslík, který dýcháš, i zlato v prstenech – to všechno vzniklo při ' +
+          'smrti hvězd.',
+          'Jsme doslova zbytky dávných hvězd, které vybuchly ještě před vznikem Slunce.'
         ],
-        footnote: 'Preto sa hovorí, že sme z hviezdneho prachu. Nie je to poézia – je to chémia.',
-        cta: 'Ideme si to odfotiť'
+        footnote: 'Proto se říká, že jsme z hvězdného prachu. Není to poezie – je to chemie.',
+        cta: 'Jdeme si to vyfotografovat'
       },
       { type: 'fact', factId: 'pulzar-30x' },
       {
         type: 'mission',
-        title: '📸 MISIA: KRABIA HMLOVINA',
+        title: '📸 MISE: KRABÍ MLHOVINA',
         objectId: 'm1',
         tasks: [
-          { icon: '🔭', text: 'Nájdi M1 v Stellariu – je v Býkovi, blízko hviezdy Aldebaran.' },
-          { icon: '⚙️', text: 'Zapni EQ režim. M1 je slabá, treba dlho zbierať svetlo.' },
-          { icon: '📸', text: 'Odfotografuj ju a skús nájsť vlákna.' }
+          { icon: '🔭', text: 'Najdi M1 ve Stellariu – je v Býku, blízko hvězdy Aldebaran.' },
+          { icon: '⚙️', text: 'Zapni EQ režim. M1 je slabá, je potřeba dlouho sbírat světlo.' },
+          { icon: '📸', text: 'Vyfotografuj ji a zkus najít vlákna.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Máš v zbierke pozostatok výbuchu, ktorý ľudia videli v roku 1054.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Máš ve sbírce pozůstatek výbuchu, který lidé viděli v roce 1054.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -1398,68 +1507,69 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Čo je supernova?',
+            question: 'Co je supernova?',
             options: [
-              { label: 'Výbuch veľkej hviezdy na konci jej života', correct: true },
-              { label: 'Veľmi nová hviezda, ktorá sa práve zrodila' },
-              { label: 'Iný názov pre galaxiu' },
-              { label: 'Planéta, ktorá sa rozpadla' }
+              { label: 'Výbuch velké hvězdy na konci jejího života', correct: true },
+              { label: 'Velmi nová hvězda, která se právě zrodila' },
+              { label: 'Jiný název pro galaxii' },
+              { label: 'Planeta, která se rozpadla' }
             ],
-            explain: 'Napriek menu nie je „nová“. Je to výbuch na konci života veľkej hviezdy.'
+            explain: 'Navzdory jménu není „nová“. Je to výbuch na konci života velké hvězdy.'
           },
           {
             kind: 'truefalse',
-            question: 'Supernovu z roku 1054 videli ľudia na vlastné oči.',
+            question: 'Supernovu z roku 1054 viděli lidé na vlastní oči.',
             answer: true,
-            explain: 'Čínski astronómi si zapísali „hosťujúcu hviezdu“, ktorú bolo takmer mesiac vidno aj cez deň.'
+            explain: 'Čínští astronomové si zapsali „hostující hvězdu“, kterou bylo téměř měsíc vidět i přes ' +
+                     'den.'
           },
           {
             kind: 'image',
-            question: 'Ktorá hmlovina je pozostatkom supernovy?',
+            question: 'Která mlhovina je pozůstatkem supernovy?',
             options: [
               { image: 'm1', label: 'A', correct: true },
               { image: 'm42', label: 'B' }
             ],
-            explain: 'A je Krabia hmlovina – zvyšok výbuchu. B je Orionova hmlovina, kde sa hviezdy rodia.'
+            explain: 'A je Krabí mlhovina – zbytek výbuchu. B je Orionova mlhovina, kde se hvězdy rodí.'
           },
           {
             kind: 'order',
-            question: 'Zoraď život veľkej hviezdy od začiatku do konca.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď život velké hvězdy od začátku do konce.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
               { label: 'Oblak plynu a prachu', order: 1, icon: '☁️' },
-              { label: 'Veľká horúca hviezda', order: 2, icon: '🔵' },
-              { label: 'Skončí sa jej palivo', order: 3, icon: '⏳' },
-              { label: 'Vybuchne ako supernova', order: 4, icon: '💥' },
-              { label: 'Zostane neutrónová hviezda', order: 5, icon: '💫' }
+              { label: 'Velká žhavá hvězda', order: 2, icon: '🔵' },
+              { label: 'Skončí jí palivo', order: 3, icon: '⏳' },
+              { label: 'Vybuchne jako supernova', order: 4, icon: '💥' },
+              { label: 'Zůstane neutronová hvězda', order: 5, icon: '💫' }
             ],
-            explain: 'A z rozfúkaného plynu sa neskôr môžu narodiť nové hviezdy. Kolobeh pokračuje.'
+            explain: 'A z rozfoukaného plynu se později mohou narodit nové hvězdy. Koloběh pokračuje.'
           },
           {
             kind: 'decide',
-            question: 'Odkiaľ je železo v tvojej krvi?',
+            question: 'Odkud je železo v tvé krvi?',
             options: [
-              { icon: '💥', label: 'Vzniklo pri smrti dávnych hviezd', correct: true },
-              { icon: '🏭', label: 'Vzniklo na Zemi v jej jadre' }
+              { icon: '💥', label: 'Vzniklo při smrti dávných hvězd', correct: true },
+              { icon: '🏭', label: 'Vzniklo na Zemi v jejím jádru' }
             ],
-            explain: 'Ťažké prvky sa vyrobili vo hviezdach a pri ich výbuchoch. Zem ich už len podedila.'
+            explain: 'Těžké prvky se vyrobily ve hvězdách a při jejich výbuchech. Země je už jen podědila.'
           }
         ],
-        resultGood: '🌟 Svedok supernovy!',
-        resultOk: '🔭 Ešte raz – tá 1054 sa pamätá ľahko.'
+        resultGood: '🌟 Svědek supernovy!',
+        resultOk: '🔭 Ještě jednou – ta 1054 se pamatuje snadno.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 9 – ČIERNE DIERY
+     LEKCE 9 – ČERNÉ DÍRY
      ========================================================================== */
   {
     id: 'blackholes',
     icon: '⚫',
-    title: 'ČIERNE DIERY',
-    teaser: 'Miesto, odkiaľ neujde ani svetlo. A jedna je aj u nás doma.',
-    minutes: '8 minút',
+    title: 'ČERNÉ DÍRY',
+    teaser: 'Místo, odkud neuteče ani světlo. A jedna je i u nás doma.',
+    minutes: '8 minut',
     badge: 'darkness-scout',
     basics: [ 'cierna-diera', 'horizont-udalosti', 'supermasivna', 'gravitacia',
               'svetelny-rok', 'suhvezdie' ],
@@ -1468,93 +1578,107 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'sgra',
-        question: '🔎 ČO JE NA TEJTO SLÁVNEJ FOTKE?',
+        question: '🔎 CO JE NA TÉHLE SLAVNÉ FOTCE?',
         options: [
-          { id: 'bh',     icon: '⚫', label: 'čierna diera' },
-          { id: 'planet', icon: '🪐', label: 'planéta s prstencom' },
-          { id: 'nebula', icon: '☁️', label: 'hmlovina' },
-          { id: 'star',   icon: '⭐', label: 'hviezda zblízka' }
+          { id: 'bh',     icon: '⚫', label: 'černá díra' },
+          { id: 'planet', icon: '🪐', label: 'planeta s prstencem' },
+          { id: 'nebula', icon: '☁️', label: 'mlhovina' },
+          { id: 'star',   icon: '⭐', label: 'hvězda zblízka' }
         ],
         correct: 'bh',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Je to Sagittarius A* – čierna diera v strede našej galaxie. Tá tma v strede je ona.',
-        retryText: 'Skús ešte raz. To svetlo je horúci plyn, ktorý sa točí okolo niečoho, čo je úplne čierne.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Je to Sagittarius A* – černá díra ve středu naší galaxie. Ta tma ve středu je ona.',
+        retryText: 'Zkus to ještě jednou. To světlo je horký plyn, který se točí okolo něčeho, co je úplně ' +
+                   'černé.',
         xp: 10
       },
       {
         type: 'info',
-        title: '⚫ ODKIAĽ NEUJDE ANI SVETLO',
+        title: '⚫ ODKUD NEUTEČE ANI SVĚTLO',
         image: 'sgra',
         lines: [
-          'Čierna diera je miesto, kde je hmota natlačená do tak malého bodu, že jej gravitácia je obrovská.',
-          'Nič, čo sa dostane príliš blízko, už neunikne – ani svetlo.',
-          'Preto ju nevidíme priamo. Vidíme len žiariaci plyn, ktorý sa okolo nej točí.'
+          'Černá díra je místo, kde je hmota natlačená do tak malého bodu, že její gravitace je ' +
+          'obrovská.',
+          'Nic, co se dostane příliš blízko, už neunikne – ani světlo.',
+          'Proto ji nevidíme přímo. Vidíme jen žhnoucí plyn, který se okolo ní točí.'
         ],
         more: [
-          'Čierna diera nie je diera ani vysávač. Je to obyčajná hmota, len natlačená do neuveriteľne malého miesta. Keby si Slnko stlačil do gule s priemerom šesť kilometrov, stala by sa z neho čierna diera – a planéty by okolo neho obiehali presne tak ako dnes.',
-          'Hranica, za ktorou už nič neunikne, sa nazýva horizont udalostí. Nie je to žiadny povrch – je to len miesto, odkiaľ by aj svetlo muselo letieť rýchlejšie než svetlo, aby sa dostalo von.',
-          'Prvú fotografiu čiernej diery zverejnili astronómi v roku 2019. Nie je na nej vidieť diera samotná, ale jej tmavý tieň v žiariacom plyne okolo – a presne to teória predpovedala.'
+          'Černá díra není díra ani vysavač. Je to obyčejná hmota, jen natlačená do neuvěřitelně ' +
+          'malého místa. Kdybys Slunce stlačil do kule s průměrem šest kilometrů, stala by se z ' +
+          'něj černá díra – a planety by okolo něj obíhaly přesně tak jako dnes.',
+          'Hranice, za kterou už nic neunikne, se nazývá horizont událostí. Není to žádný povrch ' +
+          '– je to jen místo, odkud by i světlo muselo letět rychleji než světlo, aby se dostalo ' +
+          'ven.',
+          'První fotografii černé díry zveřejnili astronomové v roce 2019. Není na ní vidět díra ' +
+          'samotná, ale její temný stín v žhnoucím plynu okolo – a přesně to teorie předpověděla.'
         ],
-        cta: 'Odkiaľ sa berú?'
+        cta: 'Odkud se berou?'
       },
       { type: 'fact', factId: 'sgra-4mil' },
       {
         type: 'cards',
-        title: 'DVA DRUHY ČIERNYCH DIER',
-        subtitle: 'Otoč obe karty.',
+        title: 'DVA DRUHY ČERNÝCH DĚR',
+        subtitle: 'Otoč obě karty.',
         cards: [
-          { icon: '💥', name: 'Z veľkej hviezdy', short: 'Zostane po supernove.',
-            text: 'Keď je hviezda naozaj veľká, jej stred sa po výbuchu zrúti až na čiernu dieru. Váži niekoľkonásobok Slnka.',
-            image: 'm1', exampleLabel: 'Vzniká po výbuchu hviezdy' },
-          { icon: '🌌', name: 'Supermasívna', short: 'V strede galaxií.',
-            text: 'Sedí v strede skoro každej veľkej galaxie a váži milióny až miliardy Sĺnk. Tá naša sa volá Sagittarius A*.',
-            image: 'sgra', exampleLabel: 'Sagittarius A* – 4 milióny Sĺnk' }
+          { icon: '💥', name: 'Z velké hvězdy', short: 'Zůstane po supernově.',
+            text: 'Když je hvězda opravdu velká, její střed se po výbuchu zhroutí až na černou díru. Váží ' +
+                  'několikanásobek Slunce.',
+            image: 'm1', exampleLabel: 'Vzniká po výbuchu hvězdy' },
+          { icon: '🌌', name: 'Supermasivní', short: 'Ve středu galaxií.',
+            text: 'Sedí ve středu skoro každé velké galaxie a váží miliony až miliardy Sluncí. Ta naše se ' +
+                  'jmenuje Sagittarius A*.',
+            image: 'sgra', exampleLabel: 'Sagittarius A* – 4 miliony Sluncí' }
         ],
-        cta: 'Ale ako sa to dá vyfotiť?',
+        cta: 'Ale jak se to dá vyfotit?',
         xp: 15
       },
       {
         type: 'howto',
-        title: '📸 AKO VYFOTIŤ NIEČO, ČO NESVIETI',
-        lead: 'Toto je jeden z najväčších trikov v histórii astronómie.',
+        title: '📸 JAK VYFOTIT NĚCO, CO NESVÍTÍ',
+        lead: 'Tohle je jeden z největších triků v historii astronomie.',
         steps: [
-          { icon: '🌍', title: 'Spojili osem observatórií',
-            text: 'Rádiové ďalekohľady po celej planéte pozorovali naraz to isté miesto – a spolu fungovali ako jeden ďalekohľad veľký ako Zem.' },
-          { icon: '⏱️', title: 'Pozorovali veľa hodín v kuse',
-            text: 'Presne ako pri dlhej expozícii v Dwarfe. Čím dlhšie, tým viac signálu.' },
-          { icon: '💻', title: 'Počítače dali dáta dokopy',
-            text: 'Z hôr dát počítače poskladali obraz. Plyn okolo diery sa hýbe tak rýchlo, že museli spočítať priemer z mnohých obrázkov.' },
-          { icon: '🎉', title: '12. mája 2022',
-            text: 'Astronómi ukázali svetu prvú fotku čiernej diery v strede našej galaxie.' }
+          { icon: '🌍', title: 'Spojili osm observatoří',
+            text: 'Rádiové dalekohledy po celé planetě pozorovaly naráz to samé místo – a společně ' +
+                  'fungovaly jako jeden dalekohled velký jako Země.' },
+          { icon: '⏱️', title: 'Pozorovaly mnoho hodin v kuse',
+            text: 'Přesně jako při dlouhé expozici v Dwarfu. Čím delší, tím více signálu.' },
+          { icon: '💻', title: 'Počítače daly data dohromady',
+            text: 'Z hor dat počítače poskládaly obraz. Plyn okolo díry se hýbe tak rychle, že museli ' +
+                  'spočítat průměr z mnoha obrázků.' },
+          { icon: '🎉', title: '12. května 2022',
+            text: 'Astronomové ukázali světu první fotku černé díry ve středu naší galaxie.' }
         ],
-        note: 'Rovnaký princíp ako tvoje skladanie snímok – len v obrovskom meradle.',
+        note: 'Stejný princip jako tvoje skládání snímků – jen v obrovském měřítku.',
         cta: 'To je super',
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Tá čierna diera je 27 000 svetelných rokov daleko a váži ako štyri milióny Sĺnk – a celý čas tam bola potichu.',
-          'Svetlo z jej okolia letelo k nám 27 000 rokov. Keď vyrazilo, ľudia na Zemi kreslili do jaskýň.'
+          'Ta černá díra je 27 000 světelných let daleko a váží jako čtyři miliony Sluncí – a ' +
+          'celou dobu tam byla potichu.',
+          'Světlo z jejího okolí k nám letělo 27 000 let. Když vyrazilo, lidé na Zemi kreslili do ' +
+          'jeskyní.'
         ],
-        footnote: 'Nemusíš sa báť: sme od nej tak daleko, že nás nijako neohrozuje.',
-        cta: 'Ideme na misiu'
+        footnote: 'Nemusíš se bát: jsme od ní tak daleko, že nás nijak neohrožuje.',
+        cta: 'Jdeme na misi'
       },
       { type: 'fact', factId: 'eht-zemsky-dalekohlad' },
       {
         type: 'mission',
-        title: '📸 MISIA: SMER STRED GALAXIE',
+        title: '📸 MISE: SMĚR STŘED GALAXIE',
         objectId: 'sgra',
         tasks: [
-          { icon: '🔭', text: 'V Stellariu napíš „Sgr A*“ a nájdi ho v súhvezdí Strelec.' },
-          { icon: '🌌', text: 'Zisti, kedy je Strelec nad obzorom – najlepšie v lete a v prvej polovici jesene.' },
-          { icon: '📸', text: 'Odfotografuj tú oblasť Dwarfom. Samotnú dieru neuvidíš, ale fotíš smer do stredu našej galaxie.' }
+          { icon: '🔭', text: 'Ve Stellariu napiš „Sgr A*“ a najdi ho v souhvězdí Střelec.' },
+          { icon: '🌌', text: 'Zjisti, kdy je Střelec nad obzorem – nejlépe v létě a v první polovině podzimu.' },
+          { icon: '📸', text: 'Vyfotografuj tu oblast Dwarfem. Samotnou díru neuvidíš, ale fotíš směr do středu naší ' +
+                             'galaxie.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Máš v zbierke stred vlastnej galaxie. Málokto vie, kde na nebi ho hľadať.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Máš ve sbírce střed vlastní galaxie. Málokdo ví, kde ho na nebi hledat.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -1562,67 +1686,69 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo sa čierna diera nazýva čierna?',
+            question: 'Proč se černá díra nazývá černá?',
             options: [
-              { label: 'Lebo z nej neunikne ani svetlo', correct: true },
-              { label: 'Lebo je vyrobená z čierneho prachu' },
-              { label: 'Lebo je vidno len v noci' },
-              { label: 'Lebo je zafarbená na fotkách' }
+              { label: 'Protože z ní neunikne ani světlo', correct: true },
+              { label: 'Protože je vyrobená z černého prachu' },
+              { label: 'Protože je vidět jen v noci' },
+              { label: 'Protože je zabarvená na fotkách' }
             ],
-            explain: 'Jej gravitácia je taká silná, že ani svetlo z nej neujde. Preto je na fotke tmavá.'
+            explain: 'Její gravitace je tak silná, že z ní neuteče ani světlo. Proto je na fotce temná.'
           },
           {
             kind: 'truefalse',
-            question: 'V strede našej galaxie je supermasívna čierna diera.',
+            question: 'Ve středu naší galaxie je supermasivní černá díra.',
             answer: true,
-            explain: 'Volá sa Sagittarius A*, váži ako štyri milióny Sĺnk a je 27 000 svetelných rokov daleko.'
+            explain: 'Jmenuje se Sagittarius A*, váží jako čtyři miliony Sluncí a je 27 000 světelných let ' +
+                     'daleko.'
           },
           {
             kind: 'decide',
-            question: 'Ako astronómi vyfotili čiernu dieru, keď nesvieti?',
+            question: 'Jak astronomové vyfotili černou díru, když nesvítí?',
             options: [
-              { icon: '🌍', label: 'Spojili observatóriá po celej Zemi a zachytili svetlo plynu okolo nej', correct: true },
-              { icon: '🚀', label: 'Poslali k nej sondu s fotoaparátom' }
+              { icon: '🌍', label: 'Spojili observatoře po celé Zemi a zachytili světlo plynu okolo ní', correct: true },
+              { icon: '🚀', label: 'Poslali k ní sondu s fotoaparátem' }
             ],
-            explain: 'Sonda by tam letela stovky miliónov rokov. Použili „ďalekohľad veľký ako Zem“.'
+            explain: 'Sonda by tam letěla stovky milionů let. Použili „dalekohled velký jako Země“.'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok je fotka čiernej diery?',
+            question: 'Který obrázek je fotka černé díry?',
             options: [
               { image: 'sgra', label: 'A', correct: true },
               { image: 'ring', label: 'B' }
             ],
-            explain: 'A je Sagittarius A*. B je planetárna hmlovina – tiež prstenec, ale úplne iný objekt.'
+            explain: 'A je Sagittarius A*. B je planetární mlhovina – také prstenec, ale úplně jiný objekt.'
           },
           {
             kind: 'order',
-            question: 'Zoraď podľa hmotnosti od najmenšej po najväčšiu.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď podle hmotnosti od nejmenší po největší.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Zem', order: 1, icon: '🌍' },
-              { label: 'Slnko', order: 2, icon: '☀️' },
-              { label: 'Neutrónová hviezda', order: 3, icon: '💫' },
+              { label: 'Země', order: 1, icon: '🌍' },
+              { label: 'Slunce', order: 2, icon: '☀️' },
+              { label: 'Neutronová hvězda', order: 3, icon: '💫' },
               { label: 'Sagittarius A*', order: 4, icon: '⚫' }
             ],
-            explain: 'Neutrónová hviezda váži viac ako Slnko, ale Sagittarius A* váži ako štyri milióny Sĺnk.'
+            explain: 'Neutronová hvězda váží více než Slunce, ale Sagittarius A* váží jako čtyři miliony ' +
+                     'Sluncí.'
           }
         ],
-        resultGood: '🌟 Prieskumník temnoty!',
-        resultOk: '🔭 Ešte raz – toto je najtvrdšia lekcia.'
+        resultGood: '🌟 Průzkumník temnoty!',
+        resultOk: '🔭 Ještě jednou – tohle je nejtvrdší lekce.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 10 – DWARF NAOSTRO (praktická)
+     LEKCE 10 – DWARF NAOSTRO (praktická)
      ========================================================================== */
   {
     id: 'dwarf-practice',
     icon: '🔭',
     title: 'DWARF NAOSTRO',
-    teaser: 'Čo v Dwarfe nastaviť, na čo si dať pozor a čo od neho čakať.',
-    minutes: '8 minút',
+    teaser: 'Co v Dwarfu nastavit, na co si dát pozor a co od něj čekat.',
+    minutes: '8 minut',
     badge: 'dwarf-operator',
     basics: [ 'expozicia', 'gain', 'snimka', 'skladanie',
               'sum', 'ostrenie', 'darkframe', 'kalibracia',
@@ -1632,112 +1758,127 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'm27',
-        question: '🔎 FOTKA HMLOVINY JE TAKMER ČIERNA. ČO UROBÍŠ?',
+        question: '🔎 FOTKA MLHOVINY JE TÉMĚŘ ČERNÁ. CO UDĚLÁŠ?',
         options: [
-          { id: 'more',  icon: '⏱️', label: 'Predĺžim expozíciu a pridám snímky' },
-          { id: 'zoom',  icon: '🔍', label: 'Zväčším priblíženie' },
-          { id: 'clean', icon: '🧽', label: 'Utriem objektív' },
-          { id: 'close', icon: '🚗', label: 'Pôjdem k nej bližšie' }
+          { id: 'more',  icon: '⏱️', label: 'Prodloužím expozici a přidám snímky' },
+          { id: 'zoom',  icon: '🔍', label: 'Zvětším přiblížení' },
+          { id: 'clean', icon: '🧽', label: 'Utřu objektiv' },
+          { id: 'close', icon: '🚗', label: 'Půjdu k ní blíž' }
         ],
         correct: 'more',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Slabé objekty potrebujú čas. Dlhšia expozícia a viac snímok – nič iné nepomôže.',
-        retryText: 'Skús ešte raz. Hmlovina nie je malá, je slabá. Čo teda treba pridať?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Slabé objekty potřebují čas. Delší expozice a více snímků – nic jiného nepomůže.',
+        retryText: 'Zkus to ještě jednou. Mlhovina není malá, je slabá. Co je tedy třeba přidat?',
         xp: 10
       },
       {
         type: 'info',
-        title: '🔭 DWARF MÁ TRI REŽIMY',
+        title: '🔭 DWARF MÁ TŘI REŽIMY',
         image: 'm44',
         lines: [
-          'Nie každý objekt sa fotí rovnako – preto má Dwarf tri režimy.',
-          'Keď zvolíš správny, appka za teba nastaví väčšinu vecí.',
-          'Zvyšok si nastavíš sám a práve v tom je rozdiel medzi bledou a krásnou fotkou.'
+          'Ne každý objekt se fotí stejně – proto má Dwarf tři režimy.',
+          'Když zvolíš správný, aplikace za tebe nastaví většinu věcí.',
+          'Zbytek si nastavíš sám a právě v tom je rozdíl mezi bledou a krásnou fotkou.'
         ],
         more: [
-          'Dôležité je pochopiť rozdiel medzi expozíciou a gainom. Expozícia je čas, počas ktorého senzor naozaj zbiera svetlo – dlhšia expozícia znamená viac skutočného svetla. Gain je len zosilnenie toho, čo už senzor nazbieral, podobne ako keď zosilníš potichu nahranú pesničku: bude hlasnejšia, ale aj zašumenejšia.',
-          'Preto sa vždy najprv snažíme predĺžiť expozíciu a zvýšiť počet snímok, a gain zvyšujeme až vtedy, keď to inak nejde.',
-          'A ešte jedna vec, ktorú začiatočníci podceňujú: zaostrenie. Aj tá najlepšie nastavená expozícia je zbytočná, ak sú hviezdy rozmazané. Zaostruj vždy na jasnú hviezdu a hľadaj bod, kde je najmenšia a najostrejšia.'
+          'Důležité je pochopit rozdíl mezi expozicí a gainem. Expozice je čas, po který senzor ' +
+          'opravdu sbírá světlo – delší expozice znamená více skutečného světla. Gain je jen ' +
+          'zesílení toho, co už senzor nasbíral, podobně jako když zesílíš potichu nahranou ' +
+          'písničku: bude hlasitější, ale i víc zašuměná.',
+          'Proto se vždy nejprve snažíme prodloužit expozici a zvýšit počet snímků, a gain ' +
+          'zvyšujeme až tehdy, když to jinak nejde.',
+          'A ještě jedna věc, kterou začátečníci podceňují: zaostření. I ta nejlépe nastavená ' +
+          'expozice je zbytečná, pokud jsou hvězdy rozmazané. Zaostřuj vždy na jasnou hvězdu a ' +
+          'hledej bod, kde je nejmenší a nejostřejší.'
         ],
-        cta: 'Ktoré to sú?'
+        cta: 'Které to jsou?'
       },
       {
         type: 'cards',
-        title: 'KEDY KTORÝ REŽIM',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'KDY KTERÝ REŽIM',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🌄', name: 'General', short: 'Denné fotenie.',
-            text: 'Na krajinu, oblaky, zvieratá. Máš na výber širokouhlý alebo ďalekohľadový objektív, foto, video aj časosběr.',
-            image: 'citysky', exampleLabel: 'Cez deň a na krajinu' },
-          { icon: '🌌', name: 'Deep Sky', short: 'Hmloviny, galaxie, hviezdokopy.',
-            text: 'Tu Dwarf skladá stovky snímok na sebe. Práve v tomto režime treba nastaviť expozíciu, gain a počet snímok.',
-            image: 'm42', exampleLabel: 'Slabé objekty ďaleko v galaxii' },
-          { icon: '🌙', name: 'Solar System', short: 'Slnko, Mesiac, planéty.',
-            text: 'Pre jasné objekty blízko nás. Dwarf sám zvolí veľmi krátke expozície – a Slnko sa smie fotiť len s priloženým filtrom.',
-            image: 'moonphase', exampleLabel: 'Jasné objekty v našej soustave' }
+          { icon: '🌄', name: 'General', short: 'Denní focení.',
+            text: 'Na krajinu, oblaka, zvířata. Máš na výběr širokoúhlý nebo dalekohledový objektiv, ' +
+                  'foto, video i časosběr.',
+            image: 'citysky', exampleLabel: 'Přes den a na krajinu' },
+          { icon: '🌌', name: 'Deep Sky', short: 'Mlhoviny, galaxie, hvězdokupy.',
+            text: 'Tady Dwarf skládá stovky snímků na sebe. Právě v tomto režimu je třeba nastavit ' +
+                  'expozici, gain a počet snímků.',
+            image: 'm42', exampleLabel: 'Slabé objekty daleko v galaxii' },
+          { icon: '🌙', name: 'Solar System', short: 'Slunce, Měsíc, planety.',
+            text: 'Pro jasné objekty blízko nás. Dwarf sám zvolí velmi krátké expozice – a Slunce se smí ' +
+                  'fotit jen s přiloženým filtrem.',
+            image: 'moonphase', exampleLabel: 'Jasné objekty v naší soustavě' }
         ],
-        cta: 'Ako nastaviť Deep Sky?',
+        cta: 'Jak nastavit Deep Sky?',
         xp: 15
       },
       { type: 'fact', factId: 'dwarf-15s' },
       {
         type: 'howto',
-        title: '⚙️ NASTAVENIE PRE HMLOVINY A GALAXIE',
-        lead: 'Štyri čísla, ktoré rozhodujú o tom, ako bude fotka vyzerať.',
+        title: '⚙️ NASTAVENÍ PRO MLHOVINY A GALAXIE',
+        lead: 'Čtyři čísla, která rozhodují o tom, jak bude fotka vypadat.',
         steps: [
-          { icon: '⏱️', title: 'Expozícia 15 – 60 sekúnd',
-            text: 'Koľko svetla zbiera jedna snímka. Automatika nedá viac než 15 s, preto prepni na ručné. V EQ režime zvládne aj 90 s.' },
+          { icon: '⏱️', title: 'Expozice 15 – 60 sekund',
+            text: 'Kolik světla nasbírá jeden snímek. Automatika nedá víc než 15 s, proto přepni na ' +
+                  'ruční. V EQ režimu zvládne i 90 s.' },
           { icon: '🎚️', title: 'Gain 60 – 80',
-            text: 'Zosilnenie signálu. Málo gainu = tmavá fotka, veľa gainu = šum. U ďalekohľadového objektívu sa nedá ísť pod 40.' },
-          { icon: '🧩', title: '200 – 400 snímok',
-            text: 'Čím viac snímok Dwarf poskladá, tým čistejšia fotka. Sto snímok je minimum, štyristo je paráda.' },
+            text: 'Zesílení signálu. Málo gainu = tmavá fotka, mnoho gainu = šum. U dalekohledového ' +
+                  'objektivu se nedá jít pod 40.' },
+          { icon: '🧩', title: '200 – 400 snímků',
+            text: 'Čím více snímků Dwarf poskládá, tím čistější fotka. Sto snímků je minimum, čtyři sta ' +
+                  'je paráda.' },
           { icon: '⬛', title: 'Dark framy',
-            text: 'Snímky so zakrytým objektívom, ktorými sa odpočíta šum senzora. Musia mať rovnakú expozíciu, gain aj podobnú teplotu (do ±8 °C).' }
+            text: 'Snímky se zakrytým objektivem, kterými se odečte šum senzoru. Musí mít stejnou ' +
+                  'expozici, gain i podobnou teplotu (do ±8 °C).' }
         ],
-        note: 'Pravidlo pre pamäť: dlhá expozícia dá jasnosť, veľa snímok dá čistotu.',
-        cta: 'Rozumiem, ideme ďalej',
+        note: 'Pravidlo pro zapamatování: dlouhá expozice dá jasnost, mnoho snímků dá čistotu.',
+        cta: 'Rozumím, jdeme dál',
         xp: 20
       },
       { type: 'fact', factId: 'dwarf-fov' },
       {
         type: 'pick',
-        title: '🔎 ZMESTÍ SA TO DO ZÁBERU?',
-        prompt: 'Dwarf zaberie 2,45°. Ktorý z týchto objektov sa mu do záberu celý nezmestí?',
+        title: '🔎 VEJDE SE TO DO ZÁBĚRU?',
+        prompt: 'Dwarf zabere 2,45°. Který z těchto objektů se mu do záběru celý nevejde?',
         options: [
-          { image: 'm44', correct: false, explain: 'Jasličky sa zmestia krásne – to je pre Dwarf ideálny cieľ.' },
-          { image: 'm31', correct: true,  explain: 'Presne! Andromeda je na nebi širšia než 2,45°. Odfotíš jej stred, ale celá sa nezmestí – a to je úplne v poriadku.' },
-          { image: 'ring', correct: false, explain: 'Prstencová hmlovina je maličká. Tá je skôr na hranici toho, čo Dwarf rozlíši.' },
-          { image: 'm27', correct: false, explain: 'Činka je malá a pohodlne sa zmestí.' }
+          { image: 'm44', correct: false, explain: 'Jesličky se vejdou krásně – to je pro Dwarf ideální cíl.' },
+          { image: 'm31', correct: true,  explain: 'Přesně! Andromeda je na nebi širší než 2,45°. Vyfotíš její střed, ale celá se nevejde ' +
+                                                   '– a to je úplně v pořádku.' },
+          { image: 'ring', correct: false, explain: 'Prstencová mlhovina je malinká. Ta je spíš na hranici toho, co Dwarf rozliší.' },
+          { image: 'm27', correct: false, explain: 'Činka je malá a pohodlně se vejde.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Objektív Dwarfu je široký len 30 milimetrov – menší než dva a pol centimetra.',
-          'A napriek tomu s ním odfotíš galaxiu 31 miliónov svetelných rokov daleko. Nie je to o veľkosti, je to o čase.'
+          'Objektiv Dwarfu je široký jen 30 milimetrů – menší než dva a půl centimetru.',
+          'A přesto s ním vyfotíš galaxii 31 milionů světelných let daleko. Není to o velikosti, ' +
+          'je to o čase.'
         ],
-        footnote: 'Presne preto sa astrofotografia dá robiť aj z balkóna.',
-        cta: 'Ideme si to vyskúšať'
+        footnote: 'Právě proto se astrofotografie dá dělat i z balkonu.',
+        cta: 'Jdeme si to vyzkoušet'
       },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'fotolab', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📸 MISIA: AUTOMATIKA vs. RUČNE',
+        title: '📸 MISE: AUTOMATIKA vs. RUČNĚ',
         objectId: 'm44',
         tasks: [
-          { icon: '🔭', text: 'Nájdi M44 (Jasličky) v Stellariu a over, že je vyššie než 30° nad obzorom.' },
-          { icon: '🤖', text: 'Odfoť ju na automatiku – nechaj Dwarf, aby si všetko nastavil sám.' },
-          { icon: '🎚️', text: 'Potom to isté ručne: expozícia 30 s, gain 70, 200 snímok.' },
-          { icon: '🔍', text: 'Fotky si polož vedľa seba a nájdi rozdiel.' }
+          { icon: '🔭', text: 'Najdi M44 (Jesličky) ve Stellariu a ověř, že je výš než 30° nad obzorem.' },
+          { icon: '🤖', text: 'Vyfotografuj ji na automatiku – nech Dwarf, aby si všechno nastavil sám.' },
+          { icon: '🎚️', text: 'Potom to samé ručně: expozice 30 s, gain 70, 200 snímků.' },
+          { icon: '🔍', text: 'Fotky si polož vedle sebe a najdi rozdíl.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Jasličky sú v zbierke – a ty už vieš, čo tie čísla v appke naozaj robia.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Jesličky jsou ve sbírce – a ty už víš, co ta čísla v aplikaci opravdu dělají.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -1745,55 +1886,59 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Akú najdlhšiu expozíciu ti Dwarf nastaví sám v automatike?',
+            question: 'Jakou nejdelší expozici ti Dwarf nastaví sám v automatice?',
             options: [
-              { label: '15 sekúnd', correct: true },
-              { label: '60 sekúnd' },
-              { label: '90 sekúnd' },
-              { label: '5 minút' }
+              { label: '15 sekund', correct: true },
+              { label: '60 sekund' },
+              { label: '90 sekund' },
+              { label: '5 minut' }
             ],
-            explain: 'Automatika končí na 15 sekundách. Viac dostaneš len ručne – a v EQ režime až 90 sekúnd.'
+            explain: 'Automatika končí na 15 sekundách. Více dostaneš jen ručně – a v EQ režimu až 90 ' +
+                     'sekund.'
           },
           {
             kind: 'decide',
-            question: 'Objekt je len 10 stupňov nad obzorom. Čo urobíš?',
+            question: 'Objekt je jen 10 stupňů nad obzorem. Co uděláš?',
             options: [
-              { icon: '⏳', label: 'Počkám, kým vystúpi vyššie než 30°', correct: true },
-              { icon: '📸', label: 'Fotím hneď, aspoň niečo z toho bude' }
+              { icon: '⏳', label: 'Počkám, až vystoupá výš než 30°', correct: true },
+              { icon: '📸', label: 'Fotím hned, aspoň něco z toho bude' }
             ],
-            explain: 'Nízko nad obzorom pozeráš cez najviac rozvírený vzduch. Trpezlivosť tu spraví viac než akékoľvek nastavenie.'
+            explain: 'Nízko nad obzorem se díváš přes nejvíc rozvířený vzduch. Trpělivost tu udělá víc než ' +
+                     'jakékoli nastavení.'
           },
           {
             kind: 'truefalse',
-            question: 'Dark framy sa fotia so zakrytým objektívom a musia mať rovnaké nastavenia ako normálne snímky.',
+            question: 'Dark framy se fotí se zakrytým objektivem a musí mít stejná nastavení jako normální ' +
+                      'snímky.',
             answer: true,
-            explain: 'Presne tak – rovnaká expozícia, rovnaký gain a podobná teplota. Inak šum neodpočítajú správne.'
+            explain: 'Přesně tak – stejná expozice, stejný gain a podobná teplota. Jinak šum neodečtou ' +
+                     'správně.'
           },
           {
             kind: 'image',
-            question: 'Ktorý objekt sa Dwarfu do záberu celý nezmestí?',
+            question: 'Který objekt se Dwarfu do záběru celý nevejde?',
             options: [
               { image: 'm31', label: 'A', correct: true },
               { image: 'm44', label: 'B' }
             ],
-            explain: 'Andromeda je na nebi širšia než výsek 2,45°, ktorý Dwarf zaberie.'
+            explain: 'Andromeda je na nebi širší než výsek 2,45°, který Dwarf zabere.'
           },
           {
             kind: 'order',
-            question: 'Zoraď postup pri fotení hmloviny.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď postup při fotografování mlhoviny.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Postaviť statív a zapnúť Dwarf', order: 1, icon: '📐' },
-              { label: 'Nechať urobiť kalibráciu', order: 2, icon: '🧭' },
-              { label: 'Vybrať objekt vysoko na oblohe', order: 3, icon: '🎯' },
-              { label: 'Nastaviť expozíciu, gain a počet snímok', order: 4, icon: '🎚️' },
-              { label: 'Spustiť sériu a nechať zbierať svetlo', order: 5, icon: '⏱️' }
+              { label: 'Postavit stativ a zapnout Dwarf', order: 1, icon: '📐' },
+              { label: 'Nechat provést kalibraci', order: 2, icon: '🧭' },
+              { label: 'Vybrat objekt vysoko na obloze', order: 3, icon: '🎯' },
+              { label: 'Nastavit expozici, gain a počet snímků', order: 4, icon: '🎚️' },
+              { label: 'Spustit sérii a nechat sbírat světlo', order: 5, icon: '⏱️' }
             ],
-            explain: 'Bez kalibrácie Dwarf nevie, kam sa pozerá – preto ide hneď po zapnutí.'
+            explain: 'Bez kalibrace Dwarf neví, kam se dívá – proto jde hned po zapnutí.'
           }
         ],
         resultGood: '🌟 Operátor Dwarfu!',
-        resultOk: '🔭 Ešte raz – tie štyri čísla sa naučíš hneď.'
+        resultOk: '🔭 Ještě jednou – ta čtyři čísla se naučíš hned.'
       }
     ]
   },
@@ -1804,9 +1949,9 @@ const LESSONS = [
   {
     id: 'sun',
     icon: '☀️',
-    title: 'SLNKO',
-    teaser: 'Jedinú hviezdu, ktorú vidíš aj cez deň. Ale pozor na oči!',
-    minutes: '7 minút',
+    title: 'SLUNCE',
+    teaser: 'Jedinou hvězdu, kterou vidíš i přes den. Ale pozor na oči!',
+    minutes: '7 minut',
     badge: 'sun-watcher',
     basics: [ 'hviezda', 'slnecne-skvrny', 'slnecny-cyklus', 'nd-filter',
               'senzor', 'svetelna-minuta', 'expozicia' ],
@@ -1815,94 +1960,105 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'sun',
-        question: '🔎 ČO JE SLNKO?',
+        question: '🔎 CO JE SLUNCE?',
         options: [
-          { id: 'star',   icon: '⭐', label: 'obyčajná hviezda, len veľmi blízko' },
-          { id: 'planet', icon: '🪐', label: 'veľmi horúca planéta' },
-          { id: 'fire',   icon: '🔥', label: 'obrovský ohnivý balón' },
-          { id: 'hole',   icon: '🕳️', label: 'diera do vesmíru' }
+          { id: 'star',   icon: '⭐', label: 'obyčejná hvězda, jen velmi blízko' },
+          { id: 'planet', icon: '🪐', label: 'velmi horká planeta' },
+          { id: 'fire',   icon: '🔥', label: 'obrovský ohnivý balon' },
+          { id: 'hole',   icon: '🕳️', label: 'díra do vesmíru' }
         ],
         correct: 'star',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Slnko je úplne obyčajná žltá hviezda. Zdá sa nám iné len preto, že je 270-tisíckrát bližšie než ktorákoľvek iná.',
-        retryText: 'Skús ešte raz. V lekcii o hviezdach sme sa učili, že Slnko je stredne horúca žltá… čo?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Slunce je úplně obyčejná žlutá hvězda. Zdá se nám jiné jen proto, že je 270tisíckrát ' +
+                     'blíž než kterákoli jiná.',
+        retryText: 'Zkus to ještě jednou. V lekci o hvězdách jsme se učili, že Slunce je středně horká ' +
+                   'žlutá… co?',
         xp: 10
       },
       {
         type: 'info',
-        title: '☀️ NAŠA VLASTNÁ HVIEZDA',
+        title: '☀️ NAŠE VLASTNÍ HVĚZDA',
         image: 'sun',
         lines: [
-          'Slnko je asi 100-krát širšie ako Zem.',
-          'Na povrchu má okolo 5 500 stupňov Celzia.',
-          'A je od nás 150 miliónov kilometrov – čo je 8 svetelných minút.'
+          'Slunce je asi 100krát širší než Země.',
+          'Na povrchu má okolo 5 500 stupňů Celsia.',
+          'A je od nás 150 milionů kilometrů – což je 8 světelných minut.'
         ],
         more: [
-          'Slnko nesvieti tým, že by horelo ako ohník. V jeho strede je taký tlak a teplota (asi 15 miliónov stupňov), že sa jadrá vodíka spájajú na hélium – a pri každom takom spojení sa uvoľní trocha energie. Tomu sa hovorí jadrová fúzia.',
-          'Energia zo stredu sa na povrch prediera stovky tisíc rokov. Svetlo, ktoré dnes vidíš, sa začalo vyrábať ešte v dobe, keď na Zemi nebol nikto, kto by sa naň mohol pozerať.',
-          'Slnko svieti asi 4,6 miliardy rokov a paliva má ešte približne na rovnako dlho. Nie je preto ani mladá, ani stará hviezda – je presne v polovici života.'
+          'Slunce nesvítí tím, že by hořelo jako ohníček. V jeho středu je takový tlak a teplota ' +
+          '(asi 15 milionů stupňů), že se jádra vodíku spojují na helium – a při každém takovém ' +
+          'spojení se uvolní trocha energie. Tomu se říká jaderná fúze.',
+          'Energie ze středu se na povrch prodírá stovky tisíc let. Světlo, které dnes vidíš, se ' +
+          'začalo vyrábět ještě v době, kdy na Zemi nebyl nikdo, kdo by se na něj mohl dívat.',
+          'Slunce svítí asi 4,6 miliardy let a paliva má ještě přibližně na stejně dlouho. Není ' +
+          'proto ani mladá, ani stará hvězda – je přesně v polovině života.'
         ],
-        cta: 'Čo sú tie tmavé škvrny?'
+        cta: 'Co jsou ty tmavé skvrny?'
       },
       { type: 'fact', factId: 'slnko-8-minut' },
       {
         type: 'cards',
-        title: 'ČO SA DÁ NA SLNKU VIDIEŤ',
-        subtitle: 'Otoč obe karty.',
+        title: 'CO SE DÁ NA SLUNCI VIDĚT',
+        subtitle: 'Otoč obě karty.',
         cards: [
-          { icon: '🟤', name: 'Slnečné škvrny', short: 'Chladnejšie miesta.',
-            text: 'Sú „len“ okolo 3 500 °C, a preto sa nám na jasnom povrchu zdajú tmavé. Najväčšie sú širšie než celá Zem.',
-            image: 'sun', exampleLabel: 'Menia sa zo dňa na deň' },
-          { icon: '🔄', name: 'Slnečný cyklus', short: 'Asi 11 rokov.',
-            text: 'Počet škvŕn stúpa a klesá v cykle asi 11 rokov. Keď je škvŕn veľa, býva viac polárnych žiar.',
-            image: 'starYellow', exampleLabel: 'Slnko sa „nadychuje“ 11 rokov' }
+          { icon: '🟤', name: 'Sluneční skvrny', short: 'Chladnější místa.',
+            text: 'Jsou „jen“ okolo 3 500 °C, a proto se nám na jasném povrchu zdají tmavé. Největší jsou ' +
+                  'širší než celá Země.',
+            image: 'sun', exampleLabel: 'Mění se ze dne na den' },
+          { icon: '🔄', name: 'Sluneční cyklus', short: 'Asi 11 let.',
+            text: 'Počet skvrn stoupá a klesá v cyklu asi 11 let. Když je skvrn mnoho, bývá víc polárních ' +
+                  'září.',
+            image: 'starYellow', exampleLabel: 'Slunce se „nadechuje“ 11 let' }
         ],
-        cta: 'Ako ho fotiť bezpečne?',
+        cta: 'Jak ho fotit bezpečně?',
         xp: 15
       },
       {
         type: 'howto',
-        title: '🛡️ BEZPEČNÉ FOTENIE SLNKA',
-        lead: 'Toto je jediná lekcia, kde na poradí naozaj záleží. Slnko dokáže zničiť senzor aj oči.',
+        title: '🛡️ BEZPEČNÉ FOCENÍ SLUNCE',
+        lead: 'Tohle je jediná lekce, kde na pořadí opravdu záleží. Slunce dokáže zničit senzor i ' +
+              'oči.',
         steps: [
-          { icon: '🥇', title: 'Najprv filter, potom všetko ostatné',
-            text: 'Na Dwarf nasaď priložený ND slnečný filter. Bez neho na Slnko nikdy nemieri – ani na sekundu, ani „len rýchlo“.' },
+          { icon: '🥇', title: 'Nejprve filtr, potom všechno ostatní',
+            text: 'Na Dwarf nasaď přiložený ND sluneční filtr. Bez něj na Slunce nikdy nemiř – ani na ' +
+                  'sekundu, ani „jen rychle“.' },
           { icon: '🌙', title: 'Zapni režim Solar System',
-            text: 'Iné režimy nedokážu nastaviť čas tak krátko a fotka bude prepálená.' },
-          { icon: '👀', title: 'Nikdy nepozeraj priamo očami',
-            text: 'Ani cez hľadáčik, ani cez ďalekohľad bez filtra. Pozeraj sa len na obrazovku telefónu.' },
-          { icon: '🌡️', title: 'Nefoť príliš dlho v kuse',
-            text: 'Dwarf sa pri Slnku zahrieva. Nad 60 °C sa sám vypne, aby sa nepoškodil – daj mu pauzu.' }
+            text: 'Jiné režimy nedokážou nastavit čas tak krátce a fotka bude přepálená.' },
+          { icon: '👀', title: 'Nikdy se nedívej přímo očima',
+            text: 'Ani hledáčkem, ani dalekohledem bez filtru. Dívej se jen na obrazovku telefonu.' },
+          { icon: '🌡️', title: 'Nefotografuj příliš dlouho v kuse',
+            text: 'Dwarf se u Slunce zahřívá. Nad 60 °C se sám vypne, aby se nepoškodil – dej mu pauzu.' }
         ],
-        note: 'Toto je pravidlo, ktoré si astronómi opakujú celý život: Slnko len s filtrom.',
-        cta: 'Rozumiem – filter vždy',
+        note: 'Tohle je pravidlo, které si astronomové opakují celý život: Slunce jen s filtrem.',
+        cta: 'Rozumím – filtr vždy',
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Keby Slnko práve teraz zhaslo, zistili by sme to až po ôsmich minútach.',
-          'Slnko, ktoré vidíš na oblohe, je vlastne Slnko z minulosti – len z veľmi nedávnej.'
+          'Kdyby Slunce právě teď zhaslo, zjistili bychom to až po osmi minutách.',
+          'Slunce, které vidíš na obloze, je vlastně Slunce z minulosti – jen z velmi nedávné.'
         ],
-        footnote: 'A tú istú vec robí každá hviezda. Len u nich to nie sú minúty, ale roky až miliardy rokov.',
+        footnote: 'A tu samou věc dělá každá hvězda. Jen u nich to nejsou minuty, ale roky až miliardy ' +
+                  'let.',
         cta: 'To je super'
       },
       { type: 'fact', factId: 'slnecne-skvrny' },
       {
         type: 'mission',
-        title: '📸 MISIA: SLNEČNÉ ŠKVRNY',
+        title: '📸 MISE: SLUNEČNÍ SKVRNY',
         objectId: 'sun',
         tasks: [
-          { icon: '🛡️', text: 'Nasaď na Dwarf ND slnečný filter (bez neho nič!).' },
-          { icon: '🌙', text: 'Zapni režim Solar System a odfotografuj Slnko.' },
-          { icon: '🔢', text: 'Spočítaj na fotke slnečné škvrny a zapíš si dátum.' },
-          { icon: '📅', text: 'O týždeň to zopakuj – škvrny sa posunú, lebo sa Slnko otáča.' }
+          { icon: '🛡️', text: 'Nasaď na Dwarf ND sluneční filtr (bez něj nic!).' },
+          { icon: '🌙', text: 'Zapni režim Solar System a vyfotografuj Slunce.' },
+          { icon: '🔢', text: 'Spočítej na fotce sluneční skvrny a zapiš si datum.' },
+          { icon: '📅', text: 'Za týden to zopakuj – skvrny se posunou, protože se Slunce otáčí.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Máš v zbierke vlastnú hviezdu – a urobil si svoje prvé opakované meranie.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Máš ve sbírce vlastní hvězdu – a udělal jsi své první opakované měření.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -1910,67 +2066,68 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Ako dlho letí svetlo zo Slnka k nám?',
+            question: 'Jak dlouho letí světlo ze Slunce k nám?',
             options: [
-              { label: 'Asi 8 minút', correct: true },
-              { label: 'Asi 8 sekúnd' },
-              { label: 'Asi 8 hodín' },
-              { label: 'Dorazí okamžite' }
+              { label: 'Asi 8 minut', correct: true },
+              { label: 'Asi 8 sekund' },
+              { label: 'Asi 8 hodin' },
+              { label: 'Dorazí okamžitě' }
             ],
-            explain: 'Slnko je 8 svetelných minút daleko. Preto ho vždy vidíš také, aké bolo pred ôsmimi minútami.'
+            explain: 'Slunce je 8 světelných minut daleko. Proto ho vždy vidíš takové, jaké bylo před osmi ' +
+                     'minutami.'
           },
           {
             kind: 'truefalse',
-            question: 'Keď je obloha trochu zamračená, Slnko sa dá odfotiť aj bez filtra.',
+            question: 'Když je obloha trochu zamračená, Slunce se dá vyfotit i bez filtru.',
             answer: false,
-            explain: 'Nikdy. Mraky sa môžu roztrhať v tej najhoršej sekunde. Filter vždy, bez výnimky.'
+            explain: 'Nikdy. Mraky se mohou roztrhat v té nejhorší sekundě. Filtr vždy, bez výjimky.'
           },
           {
             kind: 'decide',
-            question: 'Čo sú slnečné škvrny?',
+            question: 'Co jsou sluneční skvrny?',
             options: [
-              { icon: '❄️', label: 'Chladnejšie miesta na povrchu Slnka', correct: true },
-              { icon: '🕳️', label: 'Diery, ktorými vidno dovnútra Slnka' }
+              { icon: '❄️', label: 'Chladnější místa na povrchu Slunce', correct: true },
+              { icon: '🕳️', label: 'Díry, kterými je vidět dovnitř Slunce' }
             ],
-            explain: 'Sú „len“ okolo 3 500 °C, a preto sa vedľa jasnejšieho povrchu zdajú tmavé.'
+            explain: 'Jsou „jen“ okolo 3 500 °C, a proto se vedle jasnějšího povrchu zdají tmavé.'
           },
           {
             kind: 'image',
-            question: 'Ktorý z týchto objektov sa smie fotiť iba so slnečným filtrom?',
+            question: 'Který z těchto objektů se smí fotit jen se slunečním filtrem?',
             options: [
               { image: 'sun', label: 'A', correct: true },
               { image: 'm42', label: 'B' }
             ],
-            explain: 'Slnko. Hmlovina je taká slabá, že tam je problém presne opačný.'
+            explain: 'Slunce. Mlhovina je tak slabá, že tam je problém přesně opačný.'
           },
           {
             kind: 'order',
-            question: 'Zoraď, ako budeš fotiť Slnko.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď, jak budeš fotit Slunce.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Nasadiť ND slnečný filter', order: 1, icon: '🛡️' },
-              { label: 'Zapnúť režim Solar System', order: 2, icon: '🌙' },
-              { label: 'Zamerať Slnko podľa obrazovky', order: 3, icon: '🎯' },
-              { label: 'Fotiť krátke snímky a dať Dwarfu pauzu', order: 4, icon: '⏱️' }
+              { label: 'Nasadit ND sluneční filtr', order: 1, icon: '🛡️' },
+              { label: 'Zapnout režim Solar System', order: 2, icon: '🌙' },
+              { label: 'Zamířit na Slunce podle obrazovky', order: 3, icon: '🎯' },
+              { label: 'Fotit krátké snímky a dát Dwarfu pauzu', order: 4, icon: '⏱️' }
             ],
-            explain: 'Filter je vždy prvý krok. Až potom sa Dwarf smie otočiť k Slnku.'
+            explain: 'Filtr je vždy první krok. Až potom se Dwarf smí otočit ke Slunci.'
           }
         ],
-        resultGood: '🌟 Slnečný hliadkar!',
-        resultOk: '🔭 Ešte raz – hlavne to pravidlo s filtrom.'
+        resultGood: '🌟 Sluneční hlídač!',
+        resultOk: '🔭 Ještě jednou – hlavně to pravidlo s filtrem.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 12 – FÁZY MESIACA A ZATMENIA
+     LEKCE 12 – FÁZE MĚSÍCE A ZATMĚNÍ
      ========================================================================== */
   {
     id: 'phases',
     icon: '🌗',
-    title: 'FÁZY A ZATMENIA',
-    teaser: 'Prečo Mesiac mení tvar – a prečo to nie je tieň Zeme.',
-    minutes: '7 minút',
+    title: 'FÁZE A ZATMĚNÍ',
+    teaser: 'Proč Měsíc mění tvar – a proč to není stín Země.',
+    minutes: '7 minut',
     badge: 'phase-keeper',
     basics: [ 'faza', 'terminator', 'tidalne-uzamknutie', 'zatmenie',
               'orbita', 'mesiac' ],
@@ -1979,110 +2136,122 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'moonphase',
-        question: '🔎 PREČO VIDÍME LEN ČASŤ MESIACA?',
+        question: '🔎 PROČ VIDÍME JEN ČÁST MĚSÍCE?',
         options: [
-          { id: 'lit',    icon: '🔦', label: 'Vidíme len tú časť, ktorú osvetľuje Slnko' },
-          { id: 'shadow', icon: '🌍', label: 'Zakrýva ho tieň Zeme' },
-          { id: 'clouds', icon: '☁️', label: 'Zakrývajú ho mraky' },
-          { id: 'shrink', icon: '🍪', label: 'Mesiac sa naozaj zmenšuje' }
+          { id: 'lit',    icon: '🔦', label: 'Vidíme jen tu část, kterou osvětluje Slunce' },
+          { id: 'shadow', icon: '🌍', label: 'Zakrývá ho stín Země' },
+          { id: 'clouds', icon: '☁️', label: 'Zakrývají ho mraky' },
+          { id: 'shrink', icon: '🍪', label: 'Měsíc se opravdu zmenšuje' }
         ],
         correct: 'lit',
-        successTitle: '🎉 PRESNE TAK!',
-        successText: 'Slnko vždy osvetľuje presne polovicu Mesiaca. Mení sa len to, akú veľkú časť tej osvetlenej polovice odtiaľto vidíme.',
-        retryText: 'Skús ešte raz. Keby to bol tieň Zeme, museli by sme mať zatmenie každú noc.',
+        successTitle: '🎉 PŘESNĚ TAK!',
+        successText: 'Slunce vždy osvětluje přesně polovinu Měsíce. Mění se jen to, jak velkou část té ' +
+                     'osvětlené poloviny odsud vidíme.',
+        retryText: 'Zkus to ještě jednou. Kdyby to byl stín Země, museli bychom mít zatmění každou noc.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🌗 FÁZY NIE SÚ TIEŇ',
+        title: '🌗 FÁZE NEJSOU STÍN',
         image: 'moonphase',
         lines: [
-          'Mesiac obieha okolo Zeme a my ho vidíme z rôznych strán.',
-          'Preto sa nám zdá raz ako tenký polmesiac, raz ako celý kruh.',
-          'Celý kolobeh ôsmich fáz trvá 29,5 dňa.'
+          'Měsíc obíhá okolo Země a my ho vidíme z různých stran.',
+          'Proto se nám zdá jednou jako tenký půlměsíc, jednou jako celý kruh.',
+          'Celý koloběh osmi fází trvá 29,5 dne.'
         ],
         more: [
-          'Osvetlená je vždy presne polovica Mesiaca – tá, ktorá je otočená k Slnku. To sa nikdy nemení. Mení sa len to, z akého uhla sa na tú osvetlenú polovicu pozeráme zo Zeme.',
-          'Keď je Mesiac medzi nami a Slnkom, mieri k nám tmavou stranou a máme nov. Keď je na opačnej strane od Slnka, vidíme celú osvetlenú polovicu a máme spln.',
-          'Tieň Zeme v tom naozaj nie je – ten padne na Mesiac len zriedka a vtedy hovoríme o zatmení Mesiaca. A ešte jedna zvláštnosť: Mesiac k nám má stále otočenú tú istú tvár, pretože sa okolo svojej osi otočí presne raz za jeden obeh Zeme.'
+          'Osvětlená je vždy přesně polovina Měsíce – ta, která je otočená ke Slunci. To se nikdy ' +
+          'nemění. Mění se jen to, z jakého úhlu se na tu osvětlenou polovinu díváme ze Země.',
+          'Když je Měsíc mezi námi a Sluncem, míří k nám temnou stranou a máme nov. Když je na ' +
+          'opačné straně od Slunce, vidíme celou osvětlenou polovinu a máme úplněk.',
+          'Stín Země v tom opravdu není – ten na Měsíc padne jen zřídka a tehdy mluvíme o zatmění ' +
+          'Měsíce. A ještě jedna zvláštnost: Měsíc k nám má stále otočenou tutéž tvář, protože se ' +
+          'kolem své osy otočí přesně jednou za jeden oběh Země.'
         ],
         diagram: 'sky-rotation',
-        cta: 'A čo zatmenia?'
+        cta: 'A co zatmění?'
       },
       { type: 'fact', factId: 'mesiac-29-dni' },
       {
         type: 'cards',
-        title: 'DVE ÚPLNE INÉ ZATMENIA',
-        subtitle: 'Otoč obe karty.',
+        title: 'DVĚ ÚPLNĚ JINÁ ZATMĚNÍ',
+        subtitle: 'Otoč obě karty.',
         cards: [
-          { icon: '🌑', name: 'Zatmenie Slnka', short: 'Mesiac zakryje Slnko.',
-            text: 'Mesiac sa dostane presne medzi Zem a Slnko a vrhne na Zem malý tieň. Je vidno len z úzkeho pásu na Zemi – a nikdy sa nesmie pozerať bez filtra.',
-            image: 'sun', exampleLabel: 'Deje sa cez deň' },
-          { icon: '🌕', name: 'Zatmenie Mesiaca', short: 'Zem zakryje Mesiac.',
-            text: 'Zem sa dostane medzi Slnko a Mesiac a hodí naň svoj tieň. Mesiac zčervená a je to vidno z celej nočnej strany Zeme – úplne bezpečne.',
-            image: 'moon', exampleLabel: 'Deje sa v noci, pri splne' }
+          { icon: '🌑', name: 'Zatmění Slunce', short: 'Měsíc zakryje Slunce.',
+            text: 'Měsíc se dostane přesně mezi Zemi a Slunce a vrhne na Zemi malý stín. Je vidět jen z ' +
+                  'úzkého pásu na Zemi – a nikdy se nesmíš dívat bez filtru.',
+            image: 'sun', exampleLabel: 'Děje se přes den' },
+          { icon: '🌕', name: 'Zatmění Měsíce', short: 'Země zakryje Měsíc.',
+            text: 'Země se dostane mezi Slunce a Měsíc a hodí na něj svůj stín. Měsíc zčervená a je to ' +
+                  'vidět z celé noční strany Země – úplně bezpečně.',
+            image: 'moon', exampleLabel: 'Děje se v noci, při úplňku' }
         ],
-        cta: 'Prečo teda nie sú každý mesiac?',
+        cta: 'Proč tedy nejsou každý měsíc?',
         xp: 15
       },
       {
         type: 'compare',
-        title: '🌗 SPLN vs. ŠTVRŤ',
-        lead: 'Ten istý Mesiac, ten istý ďalekohľad – a úplne iná fotka.',
+        title: '🌗 ÚPLNĚK vs. ČTVRŤ',
+        lead: 'Tentýž Měsíc, tentýž dalekohled – a úplně jiná fotka.',
         eye: {
           icon: '🌕',
-          label: 'SPLN',
+          label: 'ÚPLNĚK',
           art: 'moon',
-          text: 'Krásne jasný, ale plochý. Slnko svieti priamo spredu, takže nič nevrhá tiene a krátery sa strácajú.'
+          text: 'Krásně jasný, ale plochý. Slunce svítí přímo zpředu, takže nic nevrhá stíny a krátery ' +
+                'se ztrácejí.'
         },
         camera: {
           icon: '🌗',
-          label: 'ŠTVRŤ',
+          label: 'ČTVRŤ',
           image: 'moonphase',
-          text: 'Na hranici svetla a tmy vrhajú hory a krátery dlhé tiene. Práve tu je Mesiac najkrajší – a najviac plastický.'
+          text: 'Na hranici světla a tmy vrhají hory a krátery dlouhé stíny. Právě tady je Měsíc ' +
+                'nejkrásnější – a nejvíc plastický.'
         },
         check: {
-          question: 'Kedy teda fotiť krátery?',
+          question: 'Kdy tedy fotit krátery?',
           options: [
-            { label: 'Keď je Mesiac v štvrti, na hranici svetla a tmy', correct: true,
-              explain: 'Áno! Tá hranica sa volá terminátor a je to najlepšie miesto na Mesiaci.' },
-            { label: 'Pri splne, keď je najviac svetla', correct: false,
-              explain: 'Pri splne je svetla dosť, ale žiadne tiene – a bez tieňov krátery nevidno.' }
+            { label: 'Když je Měsíc ve čtvrti, na hranici světla a tmy', correct: true,
+              explain: 'Ano! Ta hranice se jmenuje terminátor a je to nejlepší místo na Měsíci.' },
+            { label: 'Při úplňku, když je nejvíc světla', correct: false,
+              explain: 'Při úplňku je světla dost, ale žádné stíny – a bez stínů krátery nevidíš.' }
           ]
         },
-        cta: 'Ideme na misiu'
+        cta: 'Jdeme na misi'
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Mesiac sa okolo svojej osi otočí presne raz za jeden obeh okolo Zeme. Preto k nám vždy otáča tú istú stranu.',
-          'Jeho odvrátenú stranu nikto z ľudí nevidel, kým tam neposlali sondu.'
+          'Měsíc se okolo své osy otočí přesně jednou za jeden oběh okolo Země. Proto k nám vždy ' +
+          'otáčí tutéž stranu.',
+          'Jeho odvrácenou stranu nikdo z lidí neviděl, dokud tam neposlali sondu.'
         ],
-        footnote: 'Nie je to „tmavá strana“ – Slnko na ňu svieti rovnako. Len ju odtiaľto nikdy neuvidíme.',
-        cta: 'To je šialené 🤯'
+        footnote: 'Není to „temná strana“ – Slunce na ni svítí stejně. Jen ji odsud nikdy neuvidíme.',
+        cta: 'To je šílené 🤯'
       },
       { type: 'fact', factId: 'mesiac-odvratena' },
       { type: 'fact', factId: 'mesiac-kratery' },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'mesiac-fazy', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📸 MISIA: DESAŤ VEČEROV',
+        title: '📸 MISE: DESET VEČERŮ',
         image: 'moonphase',
-        subtitle: 'Séria fáz Mesiaca',
-        lead: 'Tvoj prvý projekt, ktorý trvá dlhšie než jeden večer. Výsledok sa dá vytlačiť a zavesiť.',
+        subtitle: 'Série fází Měsíce',
+        lead: 'Tvůj první projekt, který trvá déle než jeden večer. Výsledek se dá vytisknout a ' +
+              'vyvěsit.',
         tasks: [
-          { icon: '📅', text: 'Odfotografuj Mesiac desať večerov po sebe – vždy podobne veľký v zábere.' },
-          { icon: '🗂️', text: 'Fotky ulož do jedného priečinka a pomenuj ich podľa dátumu.' },
-          { icon: '🖼️', text: 'Poskládaj ich za sebou – vznikne ti séria fáz.' }
+          { icon: '📅', text: 'Vyfotografuj Měsíc deset večerů po sobě – vždy podobně velký v záběru.' },
+          { icon: '🗂️', text: 'Fotky ulož do jedné složky a pojmenuj je podle data.' },
+          { icon: '🖼️', text: 'Poskládej je za sebou – vznikne ti série fází.' }
         ],
-        note: 'Ak jeden večer bude zamračené, nič sa nedeje. Pokračuj ďalší deň a poznač si medzeru.',
-        button: '✅ MISIA SPLNENÁ',
+        note: 'Když bude jeden večer zataženo, nic se neděje. Pokračuj další den a poznač si mezeru.',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Toto je presne to, čo robia astronómi: pozorovať tú istú vec opakovane a hľadať zmenu.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Tohle je přesně to, co dělají astronomové: pozorovat tutéž věc opakovaně a hledat ' +
+                  'změnu.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -2090,67 +2259,67 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo má Mesiac fázy?',
+            question: 'Proč má Měsíc fáze?',
             options: [
-              { label: 'Vidíme rôzne veľkú časť jeho osvetlenej polovice', correct: true },
-              { label: 'Padá na neho tieň Zeme' },
-              { label: 'Zakrývajú ho mraky' },
-              { label: 'Mesiac sa nafukuje a zmenšuje' }
+              { label: 'Vidíme různě velkou část jeho osvětlené poloviny', correct: true },
+              { label: 'Padá na něj stín Země' },
+              { label: 'Zakrývají ho mraky' },
+              { label: 'Měsíc se nafukuje a zmenšuje' }
             ],
-            explain: 'Slnko osvetľuje vždy presne polovicu Mesiaca. Mení sa len náš pohľad na ňu.'
+            explain: 'Slunce osvětluje vždy přesně polovinu Měsíce. Mění se jen náš pohled na ni.'
           },
           {
             kind: 'truefalse',
-            question: 'Zo Zeme vidíme vždy tú istú stranu Mesiaca.',
+            question: 'Ze Země vidíme vždy tutéž stranu Měsíce.',
             answer: true,
-            explain: 'Mesiac sa otočí raz za jeden obeh, takže k nám mieri stále tou istou stranou.'
+            explain: 'Měsíc se otočí jednou za jeden oběh, takže k nám míří stále tou samou stranou.'
           },
           {
             kind: 'decide',
-            question: 'Ako dlho trvá celý kolobeh fáz?',
+            question: 'Jak dlouho trvá celý cyklus fází?',
             options: [
-              { icon: '📅', label: 'Asi 29,5 dňa', correct: true },
-              { icon: '🗓️', label: 'Presne 7 dní' }
+              { icon: '📅', label: 'Asi 29,5 dne', correct: true },
+              { icon: '🗓️', label: 'Přesně 7 dní' }
             ],
-            explain: 'Od novu do novu je to 29,5 dňa – preto máme v roku dvanásť „mesiacov“.'
+            explain: 'Od novu do novu je to 29,5 dne – proto máme v roce dvanáct „měsíců“.'
           },
           {
             kind: 'order',
-            question: 'Zoraď fázy Mesiaca od novu.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď fáze Měsíce od novu.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Nov (Mesiac nevidno)', order: 1, icon: '🌑' },
-              { label: 'Dorastajúci polmesiac', order: 2, icon: '🌒' },
-              { label: 'Prvá štvrť', order: 3, icon: '🌓' },
-              { label: 'Spln', order: 4, icon: '🌕' }
+              { label: 'Nov (Měsíc není vidět)', order: 1, icon: '🌑' },
+              { label: 'Dorůstající půlměsíc', order: 2, icon: '🌒' },
+              { label: 'První čtvrť', order: 3, icon: '🌓' },
+              { label: 'Úplněk', order: 4, icon: '🌕' }
             ],
-            explain: 'A potom to ide naopak, kým sa Mesiac znova nestratí v nove.'
+            explain: 'A potom to jde naopak, dokud se Měsíc znovu neztratí v novu.'
           },
           {
             kind: 'image',
-            question: 'Na ktorej fotke uvidíš krátery najlepšie?',
+            question: 'Na které fotce uvidíš krátery nejlépe?',
             options: [
               { image: 'moonphase', label: 'A', correct: true },
               { image: 'moon', label: 'B' }
             ],
-            explain: 'Na hranici svetla a tmy vrhajú krátery dlhé tiene. Pri splne je Mesiac plochý.'
+            explain: 'Na hranici světla a tmy vrhají krátery dlouhé stíny. Při úplňku je Měsíc plochý.'
           }
         ],
-        resultGood: '🌟 Strážca fáz!',
-        resultOk: '🔭 Ešte raz – a Mesiac ti už nič neutají.'
+        resultGood: '🌟 Strážce fází!',
+        resultOk: '🔭 Ještě jednou – a Měsíc ti už nic neutají.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 13 – ČÍTANIE OBLOHY
+     LEKCE 13 – ČTENÍ OBLOHY
      ========================================================================== */
   {
     id: 'sky-reading',
     icon: '🗺️',
-    title: 'ČÍTANIE OBLOHY',
-    teaser: 'Ako sa na nebi nestratiť a nájsť si čokoľvek sám.',
-    minutes: '7 minút',
+    title: 'ČTENÍ OBLOHY',
+    teaser: 'Jak se na nebi neztratit a najít si cokoli sám.',
+    minutes: '7 minut',
     badge: 'sky-cartographer',
     basics: [ 'suhvezdie', 'suradnice', 'vyska-nad-obzorom', 'zenit',
               'magnituda', 'precesia', 'kalibracia' ],
@@ -2159,17 +2328,19 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'polaris',
-        question: '🔎 ČO JE SÚHVEZDIE?',
+        question: '🔎 CO JE SOUHVĚZDÍ?',
         options: [
-          { id: 'map',     icon: '🗺️', label: 'Dielik mapy oblohy' },
-          { id: 'family',  icon: '👨‍👩‍👧', label: 'Skupina hviezd, ktoré patria k sebe' },
-          { id: 'galaxy',  icon: '🌌', label: 'Iné meno pre galaxiu' },
-          { id: 'cluster', icon: '✨', label: 'Iné meno pre hviezdokopu' }
+          { id: 'map',     icon: '🗺️', label: 'Dílek mapy oblohy' },
+          { id: 'family',  icon: '👨‍👩‍👧', label: 'Skupina hvězd, které patří k sobě' },
+          { id: 'galaxy',  icon: '🌌', label: 'Jiné jméno pro galaxii' },
+          { id: 'cluster', icon: '✨', label: 'Jiné jméno pro hvězdokupu' }
         ],
         correct: 'map',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Súhvezdie je políčko na mape oblohy. Jeho hviezdy spolu väčšinou nemajú nič – len ležia v rovnakom smere.',
-        retryText: 'Skús ešte raz. Hviezdy v jednom súhvezdí bývajú od seba stovky svetelných rokov. Čo to teda vlastne je?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Souhvězdí je políčko na mapě oblohy. Jeho hvězdy spolu většinou nemají nic – jen leží ' +
+                     've stejném směru.',
+        retryText: 'Zkus to ještě jednou. Hvězdy v jednom souhvězdí bývají od sebe stovky světelných let. ' +
+                   'Co to tedy vlastně je?',
         xp: 10
       },
       {
@@ -2177,72 +2348,83 @@ const LESSONS = [
         title: '🗺️ OBLOHA JE MAPA',
         image: 'milkyway',
         lines: [
-          'Astronómi rozdelili celú oblohu na 88 súhvezdí – ako dieliky puzzle.',
-          'Slúžia na orientáciu: „M42 je v Orióne“ je adresa, nie príbeh.',
-          'A každý objekt má aj presné súradnice, ktoré vie Dwarf použiť.'
+          'Astronomové rozdělili celou oblohu na 88 souhvězdí – jako dílky puzzle.',
+          'Slouží k orientaci: „M42 je v Orionu“ je adresa, ne příběh.',
+          'A každý objekt má i přesné souřadnice, které umí Dwarf použít.'
         ],
         more: [
-          'Súhvezdie nie je skupina hviezd, ktoré patria k sebe. Je to len obrazec, ktorý vzniká tým, ako sa hviezdy premietnu na oblohu z nášho miesta. Hviezdy jedného súhvezdia môžu byť od seba stokrát ďalej než od nás.',
-          'Aby sa dala poloha objektu zapísať presne, používajú astronómi súradnice: rektascenziu a deklináciu. Je to to isté ako zemepisná šírka a dĺžka, len premietnuté na oblohu. Práve tieto čísla dostane Dwarf, keď mu povieš, kam sa má pozrieť.',
-          'Obloha sa nám točí a mení aj počas roka. Preto sa hmloviny v Orióne dajú fotiť v zime, a Mliečna cesta je najkrajšia v lete – v opačnej polovici roka sú na dennej strane oblohy.'
+          'Souhvězdí není skupina hvězd, které patří k sobě. Je to jen obrazec, který vzniká tím, ' +
+          'jak se hvězdy promítnou na oblohu z našeho místa. Hvězdy jednoho souhvězdí mohou být ' +
+          'od sebe stokrát dál než od nás.',
+          'Aby se dala poloha objektu zapsat přesně, používají astronomové souřadnice: ' +
+          'rektascenzi a deklinaci. Je to totéž jako zeměpisná šířka a délka, jen promítnuté na ' +
+          'oblohu. Právě tahle čísla dostane Dwarf, když mu řekneš, kam se má podívat.',
+          'Obloha se nám otáčí a mění se i během roku. Proto se mlhoviny v Orionu dají fotit v ' +
+          'zimě a Mléčná dráha je nejkrásnější v létě – v opačné polovině roku jsou na denní ' +
+          'straně oblohy.'
         ],
-        cta: 'Ako tá adresa vyzerá?'
+        cta: 'Jak ta adresa vypadá?'
       },
       { type: 'fact', factId: '88-suhvezdi' },
       {
         type: 'cards',
-        title: 'AKO SI NÁJSŤ OBJEKT',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'JAK SI NAJÍT OBJEKT',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '👆', name: 'Podľa obrazcov', short: 'Skákanie po hviezdach.',
-            text: 'Nájdeš si výrazný obrazec – Veľký voz, Orionov pás, W Kasiopeje – a od neho „skáčeš“ na cieľ. Toto funguje aj bez techniky.',
-            image: 'polaris', exampleLabel: 'Klasika: od Veľkého voza na Polárku' },
-          { icon: '📍', name: 'Podľa súradníc', short: 'Rektascenzia a deklinácia.',
-            text: 'Presná adresa na nebi. Deklinácia je ako zemepisná šírka, rektascenzia ako dĺžka. Dwarf sa podľa nich otočí sám.',
-            image: 'transit', exampleLabel: 'Presné a rýchle' },
-          { icon: '📱', name: 'Podľa Stellaria', short: 'Plán na celý večer.',
-            text: 'Nastavíš si dátum a čas a vidíš, čo bude kedy vysoko. Tak si vyberieš cieľ, ktorý bude nad 30° – a nie za stromom.',
-            image: 'dome', exampleLabel: 'Najlepší pomocník pred pozorovaním' }
+          { icon: '👆', name: 'Podle obrazců', short: 'Skákání po hvězdách.',
+            text: 'Najdeš si výrazný obrazec – Velký vůz, Orionův pás, W Kasiopeji – a od něj „skáčeš“ na ' +
+                  'cíl. Tohle funguje i bez techniky.',
+            image: 'polaris', exampleLabel: 'Klasika: od Velkého vozu k Polárce' },
+          { icon: '📍', name: 'Podle souřadnic', short: 'Rektascenze a deklinace.',
+            text: 'Přesná adresa na nebi. Deklinace je jako zeměpisná šířka, rektascenze jako délka. ' +
+                  'Dwarf se podle nich otočí sám.',
+            image: 'transit', exampleLabel: 'Přesné a rychlé' },
+          { icon: '📱', name: 'Podle Stellaria', short: 'Plán na celý večer.',
+            text: 'Nastavíš si datum a čas a vidíš, co bude kdy vysoko. Tak si vybereš cíl, který bude ' +
+                  'nad 30° – a ne za stromem.',
+            image: 'dome', exampleLabel: 'Nejlepší pomocník před pozorováním' }
         ],
-        cta: 'Ideme na úlohu',
+        cta: 'Jdeme na úkol',
         xp: 15
       },
       { type: 'fact', factId: 'obloha-adresa' },
       {
         type: 'pick',
-        title: '🔎 KTORÝ OBJEKT JE V ORIÓNE?',
-        prompt: 'Skús to bez pomoci – jeden z týchto štyroch je v súhvezdí Orión.',
+        title: '🔎 KTERÝ OBJEKT JE V ORIONU?',
+        prompt: 'Zkus to bez pomoci – jeden z těchto čtyř je v souhvězdí Orion.',
         options: [
-          { image: 'm13', correct: false, explain: 'M13 je v Herkulovi – letná obloha.' },
-          { image: 'm42', correct: true,  explain: 'Áno! M42 leží hneď pod tromi hviezdami Orionovho pásu. Preto sa jej hovorí Orionova hmlovina.' },
-          { image: 'm31', correct: false, explain: 'M31 je v Andromede – jesenná obloha, blízko Kasiopeje.' },
-          { image: 'm44', correct: false, explain: 'M44 je v Rakovi – jarná obloha.' }
+          { image: 'm13', correct: false, explain: 'M13 je v Herkulovi – letní obloha.' },
+          { image: 'm42', correct: true,  explain: 'Ano! M42 leží hned pod třemi hvězdami Orionova pásu. Proto se jí říká Orionova ' +
+                                                   'mlhovina.' },
+          { image: 'm31', correct: false, explain: 'M31 je v Andromedě – podzimní obloha, blízko Kasiopeji.' },
+          { image: 'm44', correct: false, explain: 'M44 je v Raku – jarní obloha.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Hviezdy jedného súhvezdia spolu väčšinou nemajú absolútne nič.',
-          'Sú od seba stovky svetelných rokov – len z našej strany sa nám náhodou premietnu do jedného obrazca. Z inej hviezdy by Orión vôbec nebol Orión.'
+          'Hvězdy jednoho souhvězdí spolu většinou nemají absolutně nic.',
+          'Jsou od sebe stovky světelných let – jen z naší strany se nám náhodou promítnou do ' +
+          'jednoho obrazce. Z jiné hvězdy by Orion vůbec nebyl Orion.'
         ],
-        footnote: 'Súhvezdia sú teda náš výmysel. Užitočný, ale výmysel.',
-        cta: 'Ideme si to overiť'
+        footnote: 'Souhvězdí jsou tedy náš výmysl. Užitečný, ale výmysl.',
+        cta: 'Jdeme si to ověřit'
       },
       {
         type: 'mission',
-        title: '📸 MISIA: NÁJDI TO SÁM',
+        title: '📸 MISE: NAJDI TO SÁM',
         objectId: 'm27',
         tasks: [
-          { icon: '📱', text: 'V Stellariu napíš „M27“ a zisti, v ktorom súhvezdí je a ako vysoko bude dnes.' },
-          { icon: '📍', text: 'Opíš si jej súradnice – rektascenziu a deklináciu.' },
-          { icon: '🔭', text: 'Nájdi ju Dwarfom a odfotografuj.' }
+          { icon: '📱', text: 'Ve Stellariu napiš „M27“ a zjisti, ve kterém souhvězdí je a jak vysoko bude dnes.' },
+          { icon: '📍', text: 'Opiš si její souřadnice – rektascenzi a deklinaci.' },
+          { icon: '🔭', text: 'Najdi ji Dwarfem a vyfotografuj.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Prvý objekt, ktorý si našiel podľa adresy na nebi. Odteraz si nájdeš čokoľvek.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'První objekt, který jsi našel podle adresy na nebi. Odteď si najdeš cokoli.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -2250,54 +2432,55 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Koľko je oficiálnych súhvezdí?',
+            question: 'Kolik je oficiálních souhvězdí?',
             options: [
               { label: '88', correct: true },
               { label: '12' },
               { label: '100' },
-              { label: 'nekonečne mnoho' }
+              { label: 'nekonečně mnoho' }
             ],
-            explain: 'Astronómi sa dohodli na 88 súhvezdiach, ktoré pokrývajú celú oblohu.'
+            explain: 'Astronomové se dohodli na 88 souhvězdích, která pokrývají celou oblohu.'
           },
           {
             kind: 'truefalse',
-            question: 'Hviezdy v jednom súhvezdí sú blízko seba aj v skutočnosti.',
+            question: 'Hvězdy v jednom souhvězdí jsou blízko sebe i ve skutečnosti.',
             answer: false,
-            explain: 'Väčšinou nie. Bývajú od seba stovky svetelných rokov – len z našej strany vytvárajú obrazec.'
+            explain: 'Většinou ne. Bývají od sebe stovky světelných let – jen z naší strany vytvářejí ' +
+                     'obrazec.'
           },
           {
             kind: 'decide',
-            question: 'Čo je rektascenzia a deklinácia?',
+            question: 'Co je rektascenze a deklinace?',
             options: [
-              { icon: '📍', label: 'Súradnice – adresa objektu na nebi', correct: true },
-              { icon: '⭐', label: 'Mená dvoch jasných hviezd' }
+              { icon: '📍', label: 'Souřadnice – adresa objektu na nebi', correct: true },
+              { icon: '⭐', label: 'Jména dvou jasných hvězd' }
             ],
-            explain: 'Sú to nebeské súradnice, presne ako zemepisná šírka a dĺžka na Zemi.'
+            explain: 'Jsou to nebeské souřadnice, přesně jako zeměpisná šířka a délka na Zemi.'
           },
           {
             kind: 'image',
-            question: 'Ktorý objekt je v súhvezdí Orión?',
+            question: 'Který objekt je v souhvězdí Orion?',
             options: [
               { image: 'm42', label: 'A', correct: true },
               { image: 'm13', label: 'B' }
             ],
-            explain: 'M42 – Orionova hmlovina. M13 je v Herkulovi.'
+            explain: 'M42 – Orionova mlhovina. M13 je v Herkulovi.'
           },
           {
             kind: 'order',
-            question: 'Zoraď, ako si naplánuješ pozorovanie.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď, jak si naplánuješ pozorování.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'V Stellariu vybrať objekt na dnešný večer', order: 1, icon: '📱' },
-              { label: 'Overiť, či bude vyššie než 30°', order: 2, icon: '📐' },
-              { label: 'Zadať ho v appke Dwarfu', order: 3, icon: '🔭' },
-              { label: 'Kalibrovať a fotiť', order: 4, icon: '📸' }
+              { label: 'Ve Stellariu vybrat objekt na dnešní večer', order: 1, icon: '📱' },
+              { label: 'Ověřit, jestli bude výše než 30°', order: 2, icon: '📐' },
+              { label: 'Zadat ho v aplikaci Dwarfu', order: 3, icon: '🔭' },
+              { label: 'Kalibrovat a fotit', order: 4, icon: '📸' }
             ],
-            explain: 'Plánovanie pred pozorovaním ušetrí najviac času. A tiež nervov.'
+            explain: 'Plánování před pozorováním ušetří nejvíc času. A také nervů.'
           }
         ],
         resultGood: '🌟 Kartograf oblohy!',
-        resultOk: '🔭 Ešte raz – tá mapa sa naučí ľahko.'
+        resultOk: '🔭 Ještě jednou – tu mapu se naučíš snadno.'
       }
     ]
   },
@@ -2308,9 +2491,9 @@ const LESSONS = [
   {
     id: 'iss',
     icon: '🛰️',
-    title: 'ČO LETÍ NAD NAMI',
-    teaser: 'Nad tvojou hlavou práve teraz žijú ľudia. Chytíš ich?',
-    minutes: '6 minút',
+    title: 'CO LETÍ NAD NÁMI',
+    teaser: 'Nad tvou hlavou právě teď žijí lidé. Chytíš je?',
+    minutes: '6 minut',
     badge: 'sky-tracker',
     basics: [ 'druzica', 'orbita', 'magnituda', 'expozicia',
               'zorne-pole', 'seeing' ],
@@ -2319,106 +2502,118 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'iss',
-        question: '🔎 ČO JE TÁ ROVNÁ SVETLÁ ČIARA?',
+        question: '🔎 CO JE TA ROVNÁ SVĚTLÁ ČÁRA?',
         options: [
-          { id: 'sat',    icon: '🛰️', label: 'umelá družica, napríklad ISS' },
+          { id: 'sat',    icon: '🛰️', label: 'umělá družice, například ISS' },
           { id: 'meteor', icon: '🌠', label: 'meteor' },
-          { id: 'plane',  icon: '✈️', label: 'lietadlo' },
-          { id: 'star',   icon: '⭐', label: 'veľmi rýchla hviezda' }
+          { id: 'plane',  icon: '✈️', label: 'letadlo' },
+          { id: 'star',   icon: '⭐', label: 'velmi rychlá hvězda' }
         ],
         correct: 'sat',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Družica letí pomaly, rovnomerne a nebliká. Meteor je blesk na jednu sekundu, lietadlo bliká červeno-bielo.',
-        retryText: 'Skús ešte raz. Táto čiara je dlhá a rovnomerná – meteor by bol krátky záblesk.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Družice letí pomalu, rovnoměrně a nebliká. Meteor je blesk na jednu sekundu, letadlo ' +
+                     'bliká červeno-bíle.',
+        retryText: 'Zkus to ještě jednou. Tahle čára je dlouhá a rovnoměrná – meteor by byl krátký ' +
+                   'záblesk.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🛰️ NAD NAMI JE RUŠNO',
+        title: '🛰️ NAD NÁMI JE RUŠNO',
         image: 'iss',
         lines: [
-          'Okolo Zeme obieha množstvo umelých družíc.',
-          'Nesvietia samy – vidíme na nich odraz slnečného svetla.',
-          'Najjasnejšia z nich je Medzinárodná vesmírna stanica, na ktorej žijú ľudia.'
+          'Kolem Země obíhá množství umělých družic.',
+          'Nesvítí samy – vidíme na nich odraz slunečního světla.',
+          'Nejjasnější z nich je Mezinárodní vesmírná stanice, na které žijí lidé.'
         ],
         more: [
-          'Stanica letí okolo Zeme rýchlosťou približne 28 000 kilometrov za hodinu a jeden obeh jej trvá asi 90 minút. Za jeden deň teda vidí zhruba šestnásť východov a šestnásť západov Slnka.',
-          'Nezostáva na obežnej dráhe „len tak“ – padá. Padá k Zemi, ale zároveň letí dopredu tak rýchlo, že zakrivenie Zeme padá spolu s ňou. Preto ľudia vo vnútri plávajú: nie sú bez gravitácie, ale v neustálom voľnom páde.',
-          'Vidieť ju môžeš len krátko po zotmení alebo pred svitaním. Vtedy je pri zemi už tma, ale stanica vysoko nad nami je ešte osvetlená Slnkom. V hlbokej noci vletí do tieňa Zeme a zmizne.'
+          'Stanice letí kolem Země rychlostí přibližně 28 000 kilometrů za hodinu a jeden oběh jí ' +
+          'trvá asi 90 minut. Za jeden den tedy vidí zhruba šestnáct východů a šestnáct západů ' +
+          'Slunce.',
+          'Nezůstává na oběžné dráze „jen tak“ – padá. Padá k Zemi, ale zároveň letí dopředu tak ' +
+          'rychle, že zakřivení Země padá spolu s ní. Proto lidé uvnitř plavou: nejsou bez ' +
+          'gravitace, ale v neustálém volném pádu.',
+          'Vidět ji můžeš jen krátce po setmění nebo před svítáním. Tehdy je u země už tma, ale ' +
+          'stanice vysoko nad námi je ještě osvětlená Sluncem. V hluboké noci vletí do stínu Země ' +
+          'a zmizí.'
         ],
-        cta: 'Ako ich rozoznať?'
+        cta: 'Jak je rozeznat?'
       },
       { type: 'fact', factId: 'iss-16-vychodov' },
       {
         type: 'cards',
-        title: 'AKO ROZOZNAŤ, ČO TO LETÍ',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'JAK ROZEZNAT, CO TO LETÍ',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
           { icon: '🛰️', name: 'ISS', short: 'Jasná, pomalá, nebliká.',
-            text: 'Preletí oblohu za dve až päť minút, svieti stabilne ako jasná hviezda a nikdy nebliká. Občas počas preletu zmizne – vletela do tieňa Zeme.',
-            image: 'iss', exampleLabel: 'Najjasnejší objekt, čo letí' },
-          { icon: '✈️', name: 'Lietadlo', short: 'Bliká červeno a bielo.',
-            text: 'Má farebné blikajúce svetlá a je ho niekedy aj slyšať. Letí oveľa nižšie než družice.',
-            image: 'citysky', exampleLabel: 'Bliká = lietadlo' },
+            text: 'Přeletí oblohu za dvě až pět minut, svítí stabilně jako jasná hvězda a nikdy nebliká. ' +
+                  'Občas během přeletu zmizí – vletěla do stínu Země.',
+            image: 'iss', exampleLabel: 'Nejjasnější objekt, co letí' },
+          { icon: '✈️', name: 'Letadlo', short: 'Bliká červeně a bíle.',
+            text: 'Má barevná blikající světla a někdy je ho i slyšet. Letí mnohem níž než družice.',
+            image: 'citysky', exampleLabel: 'Bliká = letadlo' },
           { icon: '🌠', name: 'Meteor', short: 'Blesk na sekundu.',
-            text: 'Zjaví sa a hneď zmizne – trvá zlomok sekundy až pár sekúnd. Družica letí pokojne desiatky sekúnd.',
-            image: 'meteors', exampleLabel: 'Krátky záblesk' }
+            text: 'Objeví se a hned zmizí – trvá zlomek sekundy až pár sekund. Družice letí pokojně ' +
+                  'desítky sekund.',
+            image: 'meteors', exampleLabel: 'Krátký záblesk' }
         ],
-        cta: 'Kedy ich vidno?',
+        cta: 'Kdy je vidět?',
         xp: 15
       },
       {
         type: 'compare',
-        title: '🌆 PREČO LEN PO ZÁPADE SLNKA?',
-        lead: 'Družice vidno hlavne krátko po zotmení a pred rozsvitom. Má to jednoduchý dôvod.',
+        title: '🌆 PROČ JEN PO ZÁPADU SLUNCE?',
+        lead: 'Družice jsou vidět hlavně krátce po setmění a před rozedněním. Má to jednoduchý důvod.',
         eye: {
           icon: '🌃',
           label: 'U NÁS UŽ TMA',
           art: 'citysky',
-          text: 'My sme v tieni Zeme, takže obloha je tmavá a slabé svetlo vidíme.'
+          text: 'My jsme ve stínu Země, takže obloha je tmavá a slabé světlo vidíme.'
         },
         camera: {
           icon: '☀️',
-          label: 'NAHORE UŽ SVIETI SLNKO',
+          label: 'NAHOŘE UŽ SVÍTÍ SLUNCE',
           image: 'iss',
-          text: 'Družica je 400 km vysoko, takže na ňu Slnko svieti ešte aj vtedy, keď u nás už zapadlo. Preto sa leskne na tmavom nebi.'
+          text: 'Družice je 400 km vysoko, takže na ni Slunce svítí ještě i tehdy, když u nás už ' +
+                'zapadlo. Proto se leskne na tmavém nebi.'
         },
         check: {
-          question: 'Prečo teda ISS uprostred noci často nevidno?',
+          question: 'Proč tedy ISS uprostřed noci často není vidět?',
           options: [
-            { label: 'Lebo vtedy je aj ona v tieni Zeme', correct: true,
-              explain: 'Presne. Nesvieti sama – keď na ňu nesvieti Slnko, nemáme čo vidieť.' },
-            { label: 'Lebo v noci vypína svetlá', correct: false,
-              explain: 'To nie – žiadne svetlá nevidíme. Vidíme len odraz Slnka na jej paneloch.' }
+            { label: 'Protože tehdy je i ona ve stínu Země', correct: true,
+              explain: 'Přesně. Nesvítí sama – když na ni nesvítí Slunce, nemáme co vidět.' },
+            { label: 'Protože v noci vypíná světla', correct: false,
+              explain: 'To ne – žádná světla nevidíme. Vidíme jen odraz Slunce na jejích panelech.' }
           ]
         },
-        cta: 'Ideme ju chytiť'
+        cta: 'Jdeme ji chytit'
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'To svetlo, ktoré uvidíš, je odraz Slnka na paneloch stanice veľkej ako futbalové hřiště.',
-          'A vnútri sú ľudia. Práve teraz. Ľudia tam nepretržite žijú od novembra 2000.'
+          'To světlo, které uvidíš, je odraz Slunce na panelech stanice velké jako fotbalové ' +
+          'hřiště.',
+          'A vevnitř jsou lidé. Právě teď. Lidé tam nepřetržitě žijí od listopadu 2000.'
         ],
-        footnote: 'Keď zamáš, neuvidia ťa. Ale je fajn vedieť, že sú tam.',
-        cta: 'Chcem ju vidieť'
+        footnote: 'Když zamáváš, neuvidí tě. Ale je fajn vědět, že tam jsou.',
+        cta: 'Chci ji vidět'
       },
       { type: 'fact', factId: 'iss-od-2000' },
       {
         type: 'mission',
-        title: '🛰️ MISIA: CHYŤ ISS',
+        title: '🛰️ MISE: ULOV ISS',
         objectId: 'iss',
         tasks: [
-          { icon: '📱', text: 'V Stellariu si zapni satelity a nájdi „ISS“ – zisti, kedy dnes preletí.' },
-          { icon: '⏰', text: 'Buďte vonku dve minúty pred časom a pozerajte v smere, ktorý ti Stellarium ukáže.' },
-          { icon: '👀', text: 'Sleduj ju voľným okom – nebliká a letí rovnomerne.' },
-          { icon: '📸', text: 'Skús dlhšiu expozíciu Dwarfom širokouhlo – zostane po nej svetelný pruh.' }
+          { icon: '📱', text: 'Ve Stellariu si zapni satelity a najdi „ISS“ – zjisti, kdy dnes přeletí.' },
+          { icon: '⏰', text: 'Buďte venku dvě minuty před časem a dívejte se do směru, který ti Stellarium ukáže.' },
+          { icon: '👀', text: 'Sleduj ji volným okem – nebliká a letí rovnoměrně.' },
+          { icon: '📸', text: 'Zkus delší expozici Dwarfem širokoúhle – zůstane po ní světelný pruh.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Videl si ľudmi obývanú stanicu na oblohe. Ďalší prelet je zvyčajne o 90 minút.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Viděl jsi lidmi obydlenou stanici na obloze. Další přelet je obvykle za 90 minut.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -2426,54 +2621,54 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo družice na nebi vidíme?',
+            question: 'Proč družice na nebi vidíme?',
             options: [
-              { label: 'Odrážajú svetlo Slnka', correct: true },
-              { label: 'Svietia vlastnými reflektormi' },
-              { label: 'Horia v atmosfére' },
-              { label: 'Sú rozžeravené od rýchlosti' }
+              { label: 'Odrážejí světlo Slunce', correct: true },
+              { label: 'Svítí vlastními reflektory' },
+              { label: 'Hoří v atmosféře' },
+              { label: 'Jsou rozžhavené od rychlosti' }
             ],
-            explain: 'Rovnako ako Mesiac – svietia odrazeným slnečným svetlom.'
+            explain: 'Stejně jako Měsíc – svítí odraženým slunečním světlem.'
           },
           {
             kind: 'decide',
-            question: 'Objekt letí pomaly a rovnomerne, nebliká a preletí za tri minúty. Čo to je?',
+            question: 'Objekt letí pomalu a rovnoměrně, nebliká a přeletí za tři minuty. Co to je?',
             options: [
-              { icon: '🛰️', label: 'Družica – pravdepodobne ISS', correct: true },
+              { icon: '🛰️', label: 'Družice – pravděpodobně ISS', correct: true },
               { icon: '🌠', label: 'Meteor' }
             ],
-            explain: 'Meteor trvá sekundu. Blikanie by prezradilo lietadlo.'
+            explain: 'Meteor trvá sekundu. Blikání by prozradilo letadlo.'
           },
           {
             kind: 'truefalse',
-            question: 'Na ISS žijú ľudia nepretržite už od roku 2000.',
+            question: 'Na ISS žijí lidé nepřetržitě už od roku 2000.',
             answer: true,
-            explain: 'Od novembra 2000 tam vždy niekto je. Stanica je dlhá 109 metrov.'
+            explain: 'Od listopadu 2000 tam vždy někdo je. Stanice je dlouhá 109 metrů.'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok ukazuje prelet družice?',
+            question: 'Který obrázek ukazuje přelet družice?',
             options: [
               { image: 'iss', label: 'A', correct: true },
               { image: 'meteors', label: 'B' }
             ],
-            explain: 'A je jedna dlhá rovnomerná čiara. B sú meteory – krátke záblesky z jedného miesta.'
+            explain: 'A je jedna dlouhá rovnoměrná čára. B jsou meteory – krátké záblesky z jednoho místa.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od najbližšieho k najvzdialenejšiemu.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od nejbližšího k nejvzdálenějšímu.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Lietadlo (asi 10 km)', order: 1, icon: '✈️' },
+              { label: 'Letadlo (asi 10 km)', order: 1, icon: '✈️' },
               { label: 'ISS (asi 400 km)', order: 2, icon: '🛰️' },
-              { label: 'Mesiac (384 400 km)', order: 3, icon: '🌙' },
-              { label: 'Slnko (150 miliónov km)', order: 4, icon: '☀️' }
+              { label: 'Měsíc (384 400 km)', order: 3, icon: '🌙' },
+              { label: 'Slunce (150 milionů km)', order: 4, icon: '☀️' }
             ],
-            explain: 'ISS je vesmír „hneď za dverami“ – štyridsaťkrát bližšie než by si čakal.'
+            explain: 'ISS je vesmír „hned za dveřmi“ – čtyřicetkrát blíž, než bys čekal.'
           }
         ],
         resultGood: '🌟 Sledovač oblohy!',
-        resultOk: '🔭 Ešte raz – a potom rovno von.'
+        resultOk: '🔭 Ještě jednou – a potom hned ven.'
       }
     ]
   },
@@ -2484,9 +2679,9 @@ const LESSONS = [
   {
     id: 'astrophoto',
     icon: '📸',
-    title: 'ASTROFOTO MAJSTER',
-    teaser: 'Prečo je sto snímok lepších než jedna – a ako z fotky dostať farby.',
-    minutes: '7 minút',
+    title: 'ASTROFOTO MISTR',
+    teaser: 'Proč je sto snímků lepších než jeden – a jak z fotky dostat barvy.',
+    minutes: '7 minut',
     badge: 'astrophoto-master',
     basics: [ 'skladanie', 'sum', 'gain', 'darkframe',
               'ostrenie', 'svetelne-znecistenie', 'falosne-farby', 'rosa' ],
@@ -2495,96 +2690,110 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'm42',
-        question: '🔎 ČO UROBÍ FOTKU HMLOVINY ČISTEJŠOU?',
+        question: '🔎 CO UDĚLÁ FOTKU MLHOVINY ČISTŠÍ?',
         options: [
-          { id: 'stack', icon: '🧩', label: 'Poskladať veľa snímok na sebe' },
-          { id: 'gain',  icon: '🎚️', label: 'Nastaviť gain na maximum' },
-          { id: 'light', icon: '🔦', label: 'Prisvietiť baterkou' },
-          { id: 'zoom',  icon: '🔍', label: 'Zväčšiť priblíženie' }
+          { id: 'stack', icon: '🧩', label: 'Poskládat mnoho snímků na sebe' },
+          { id: 'gain',  icon: '🎚️', label: 'Nastavit gain na maximum' },
+          { id: 'light', icon: '🔦', label: 'Přisvítit baterkou' },
+          { id: 'zoom',  icon: '🔍', label: 'Zvětšit přiblížení' }
         ],
         correct: 'stack',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Šum je v každej snímke inde, hmlovina je vždy na tom istom mieste. Keď snímky poskladáš, šum sa vyruší a hmlovina zostane.',
-        retryText: 'Skús ešte raz. Gain na maximum pridá jasnosť, ale aj šum. Čo šum naopak odstráni?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Šum je v každém snímku jinde, mlhovina je vždy na tomtéž místě. Když snímky poskládáš, ' +
+                     'šum se vyruší a mlhovina zůstane.',
+        retryText: 'Zkus to ještě jednou. Gain na maximum přidá jasnost, ale i šum. Co šum naopak ' +
+                   'odstraní?',
         xp: 10
       },
       {
         type: 'info',
-        title: '🧩 KÚZLO SKLADANIA SNÍMOK',
+        title: '🧩 KOUZLO SKLÁDÁNÍ SNÍMKŮ',
         image: 'm42',
         lines: [
-          'Jedna snímka hmloviny je slabá a plná šumu.',
-          'Šum je ale v každej snímke náhodne inde, kým hmlovina je vždy na tom istom mieste.',
-          'Keď Dwarf snímky poskladá na sebe, šum sa vyruší a objekt sa vynorí.'
+          'Jeden snímek mlhoviny je slabý a plný šumu.',
+          'Šum je ale v každém snímku náhodně jinde, kdežto mlhovina je vždy na tomtéž místě.',
+          'Když Dwarf snímky poskládá na sebe, šum se vyruší a objekt se vynoří.'
         ],
         more: [
-          'Šum je náhodný, a preto sa dá vyrušiť. Keď poskladáš štyri snímky, šum klesne na polovicu; pri stonásobku snímok bude desaťkrát menší. Platí to ako pravidlo odmocniny – a preto sa od určitého počtu snímok už ďalšie pridávanie takmer neprejaví.',
-          'Objekt sa naopak nasčíta, pretože je na každej snímke na tom istom mieste. Skladanie teda nezosilňuje objekt – zoslabuje šum okolo neho, a preto sa objekt vynorí.',
-          'Astronómi robia aj takzvané kalibračné snímky: darky s uzavretým objektívom (aby vedeli, čo si senzor vymýšľa sám), a flaty rovnomerne osvetlenej plochy (aby vedeli, kde je objektív zaprášený). Dwarf väčšinu tejto práce robí za teba.'
+          'Šum je náhodný, a proto se dá vyrušit. Když poskládáš čtyři snímky, šum klesne na ' +
+          'polovinu; při stonásobku snímků bude desetkrát menší. Platí to jako pravidlo odmocniny ' +
+          '– a proto se od určitého počtu snímků další přidávání už téměř neprojeví.',
+          'Objekt se naopak nasčítá, protože je na každém snímku na tomtéž místě. Skládání tedy ' +
+          'nezesiluje objekt – zeslabuje šum okolo něj, a proto se objekt vynoří.',
+          'Astronomové dělají i takzvané kalibrační snímky: darky se zavřeným objektivem (aby ' +
+          'věděli, co si senzor vymýšlí sám), a flaty rovnoměrně osvětlené plochy (aby věděli, ' +
+          'kde je objektiv zaprášený). Dwarf většinu téhle práce dělá za tebe.'
         ],
-        cta: 'Čo ešte pomôže?'
+        cta: 'Co ještě pomůže?'
       },
       { type: 'fact', factId: 'stovky-snimok' },
       {
         type: 'howto',
-        title: '🏆 ŠTYRI VECI, KTORÉ ROBIA DOBRÚ FOTKU',
-        lead: 'V tomto poradí. Prvá vec pomôže najviac, posledná najmenej – ale všetky sa počítajú.',
+        title: '🏆 ČTYŘI VĚCI, KTERÉ DĚLAJÍ DOBROU FOTKU',
+        lead: 'V tomto pořadí. První věc pomůže nejvíc, poslední nejméně – ale všechny se počítají.',
         steps: [
-          { icon: '🧩', title: 'Veľa snímok',
-            text: 'Sto je minimum, dvesto až štyristo je paráda. Toto je najsilnejší nástroj, aký máš.' },
-          { icon: '🌑', title: 'Tmavá obloha',
-            text: 'Odchod z mesta pomôže viac než akékoľvek nastavenie. Aj kraj dediny je veľký rozdiel.' },
-          { icon: '🎯', title: 'Presné zaostrenie',
-            text: 'Rozostrená fotka sa nedá zachrániť ničím. Skontroluj si na obrazovke, či sú hviezdy malé body.' },
+          { icon: '🧩', title: 'Hodně snímků',
+            text: 'Sto je minimum, dvě stě až čtyři sta je paráda. Tohle je nejsilnější nástroj, jaký ' +
+                  'máš.' },
+          { icon: '🌑', title: 'Temná obloha',
+            text: 'Odjezd z města pomůže víc než jakékoli nastavení. I okraj vesnice je velký rozdíl.' },
+          { icon: '🎯', title: 'Přesné zaostření',
+            text: 'Rozostřenou fotku nezachrání nic. Zkontroluj si na obrazovce, jestli jsou hvězdy malé ' +
+                  'body.' },
           { icon: '⬛', title: 'Dark framy',
-            text: 'Odpočítajú šum senzora. Rovnaká expozícia, rovnaký gain, podobná teplota.' }
+            text: 'Odečtou šum senzoru. Stejná expozice, stejný gain, podobná teplota.' }
         ],
-        note: 'A ešte jedna vec: Mesiac v splne rozsvieti celú oblohu. Slabé hmloviny fotievaj, keď Mesiac nesvieti.',
-        cta: 'Rozumiem',
+        note: 'A ještě jedna věc: Měsíc v úplňku rozsvítí celou oblohu. Slabé mlhoviny fotografuj, ' +
+              'když Měsíc nesvítí.',
+        cta: 'Rozumím',
         xp: 20
       },
       { type: 'fact', factId: 'darkframe' },
       {
         type: 'pick',
-        title: '🔎 VYBER SI DOBRÝ CIEĽ',
-        prompt: 'Ktorý objekt je najlepší na tréning skladania snímok?',
+        title: '🔎 VYBER SI DOBRÝ CÍL',
+        prompt: 'Který objekt je nejlepší na trénink skládání snímků?',
         options: [
-          { image: 'm44', correct: true,  explain: 'Áno! Jasná, veľká, celá sa zmestí do záberu. Hneď vidíš, či máš dobre zaostrené a či sa niečo hýbe.' },
-          { image: 'ring', correct: false, explain: 'Prstencová hmlovina je maličká – na tréning je príliš náročná.' },
-          { image: 'sgra', correct: false, explain: 'Čiernu dieru Dwarf neuvidí vôbec. Toto by bol nezaslúžený smútok.' },
-          { image: 'sun', correct: false, explain: 'Slnko sa fotí úplne inak – krátke expozície a vždy s filtrom. A v noci ho na nebi nenájdeš.' }
+          { image: 'm44', correct: true,  explain: 'Ano! Jasná, velká, celá se vejde do záběru. Hned vidíš, jestli máš dobře zaostřeno a ' +
+                                                   'jestli se něco hýbe.' },
+          { image: 'ring', correct: false, explain: 'Prstencová mlhovina je maličká – na trénink je příliš náročná.' },
+          { image: 'sgra', correct: false, explain: 'Černou díru Dwarf neuvidí vůbec. Tohle by byl nezasloužený smutek.' },
+          { image: 'sun', correct: false, explain: 'Slunce se fotí úplně jinak – krátké expozice a vždy s filtrem. A v noci ho na nebi ' +
+                                                   'nenajdeš.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Slávne fotky z Hubbla nie sú jedna snímka. Niektoré sú zložené z desiatok hodín pozorovania.',
-          'A farby na nich často nie sú tie, ktoré by videlo oko – sú to skutočné dáta o svetle, prevedené na farby, aby sme videli, čo tam naozaj je.'
+          'Slavné fotky z Hubbla nejsou jeden snímek. Některé jsou složené z desítek hodin ' +
+          'pozorování.',
+          'A barvy na nich často nejsou ty, které by vidělo oko – jsou to skutečná data o světle, ' +
+          'převedená na barvy, abychom viděli, co tam opravdu je.'
         ],
-        footnote: 'Nie je to podvod. Je to ako tepelná kamera: reálne meranie, len prekreslené do farieb.',
-        cta: 'Ideme to vyskúšať'
+        footnote: 'Není to podvod. Je to jako termokamera: reálné měření, jen překreslené do barev.',
+        cta: 'Jdeme to vyzkoušet'
       },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'skladanie', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📸 MISIA: 10 vs. 100 SNÍMOK',
+        title: '📸 MISE: 10 vs. 100 SNÍMKŮ',
         image: 'm42',
-        subtitle: 'Dokáž si to na vlastných dátach',
-        lead: 'Najlepší spôsob, ako uveriť skladaniu snímok, je vidieť rozdiel na tom istom objekte.',
+        subtitle: 'Dokaž si to na vlastních datech',
+        lead: 'Nejlepší způsob, jak uvěřit skládání snímků, je vidět rozdíl na tomtéž objektu.',
         tasks: [
-          { icon: '🔟', text: 'Odfoť si vybraný objekt s 10 snímkami a fotku si ulož.' },
-          { icon: '💯', text: 'Bez toho, aby si niečo iné menil, odfoť ho so 100 snímkami.' },
-          { icon: '🔍', text: 'Fotky polož vedľa seba a pozri sa na pozadie – nie na objekt.' }
+          { icon: '🔟', text: 'Vyfotografuj si vybraný objekt s 10 snímky a fotku si ulož.' },
+          { icon: '💯', text: 'Bez toho, abys cokoli jiného měnil, vyfotografuj ho se 100 snímky.' },
+          { icon: '🔍', text: 'Fotky polož vedle sebe a podívej se na pozadí – ne na objekt.' }
         ],
-        note: 'Rozdiel bude najviac vidieť práve na pozadí: v prvej fotke „sneží“, v druhej je hladké.',
-        button: '✅ MISIA SPLNENÁ',
+        note: 'Rozdíl bude nejvíc vidět právě na pozadí: v první fotce „sněží“, v druhé je hladké.',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Toto je celé tajomstvo astrofotografie. Zvyšok je už len trpezlivosť.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Tohle je celé tajemství astrofotografie. Zbytek je už jen trpělivost.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -2592,67 +2801,67 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo skladanie snímok odstráni šum?',
+            question: 'Proč skládání snímků odstraní šum?',
             options: [
-              { label: 'Šum je v každej snímke inde, objekt je vždy na tom istom mieste', correct: true },
-              { label: 'Šum sa pri skladaní zväčší a praskne' },
+              { label: 'Šum je v každém snímku jinde, objekt je vždy na tomtéž místě', correct: true },
+              { label: 'Šum se při skládání zvětší a praskne' },
               { label: 'Dwarf šum vymaže gumou' },
-              { label: 'Šum zmizne, keď je fotka menšia' }
+              { label: 'Šum zmizí, když je fotka menší' }
             ],
-            explain: 'Náhodný šum sa priemerovaním vyruší, kým skutočný signál zostane.'
+            explain: 'Náhodný šum se průměrováním vyruší, zatímco skutečný signál zůstane.'
           },
           {
             kind: 'truefalse',
-            question: 'Rozostrenú fotku sa dá zachrániť tým, že poskladáš viac snímok.',
+            question: 'Rozostřenou fotku lze zachránit tím, že složíš více snímků.',
             answer: false,
-            explain: 'Nedá. Zaostrenie treba mať dobré od začiatku – skladanie pomôže so šumom, nie s ostrosťou.'
+            explain: 'Nelze. Zaostření musí být dobré od začátku – skládání pomůže se šumem, ne s ostrostí.'
           },
           {
             kind: 'decide',
-            question: 'Chceš fotiť slabú hmlovinu. Čo pomôže najviac?',
+            question: 'Chceš fotit slabou mlhovinu. Co pomůže nejvíc?',
             options: [
-              { icon: '🌑', label: 'Ísť na tmavé miesto a nafotiť veľa snímok', correct: true },
-              { icon: '🎚️', label: 'Nastaviť gain na maximum' }
+              { icon: '🌑', label: 'Jít na temné místo a nafotit hodně snímků', correct: true },
+              { icon: '🎚️', label: 'Nastavit gain na maximum' }
             ],
-            explain: 'Maximálny gain pridá aj šum. Tmavá obloha a veľa snímok sú skutočné riešenie.'
+            explain: 'Maximální gain přidá i šum. Temná obloha a hodně snímků jsou skutečné řešení.'
           },
           {
             kind: 'image',
-            question: 'Ktorý cieľ je najvhodnejší na tréning?',
+            question: 'Který cíl je nejvhodnější na trénink?',
             options: [
               { image: 'm44', label: 'A', correct: true },
               { image: 'ring', label: 'B' }
             ],
-            explain: 'Veľká jasná hviezdokopa. Malá slabá hmlovina je na tréning frustrujúca.'
+            explain: 'Velká jasná hvězdokupa. Malá slabá mlhovina je na trénink frustrující.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od toho, čo fotke pomôže najviac.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od toho, co fotce pomůže nejvíc.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Veľa snímok (200 – 400)', order: 1, icon: '🧩' },
-              { label: 'Tmavá obloha bez lámp', order: 2, icon: '🌑' },
-              { label: 'Presné zaostrenie', order: 3, icon: '🎯' },
+              { label: 'Hodně snímků (200 – 400)', order: 1, icon: '🧩' },
+              { label: 'Temná obloha bez lamp', order: 2, icon: '🌑' },
+              { label: 'Přesné zaostření', order: 3, icon: '🎯' },
               { label: 'Dark framy', order: 4, icon: '⬛' }
             ],
-            explain: 'Všetky štyri pomáhajú – ale keby si mal urobiť len jednu vec, nafoť viac snímok.'
+            explain: 'Všechny čtyři pomáhají – ale kdybys měl udělat jen jednu věc, udělej víc snímků.'
           }
         ],
-        resultGood: '🌟 Astrofoto majster!',
-        resultOk: '🔭 Ešte raz – hlavne to o šume.'
+        resultGood: '🌟 Astrofoto mistr!',
+        resultOk: '🔭 Ještě jednou – hlavně to o šumu.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 16 – Z ČOHO SÚ HVIEZDY (SPEKTRUM)
+     LEKCE 16 – Z ČEHO JSOU HVĚZDY (SPEKTRUM)
      ========================================================================== */
   {
     id: 'spectrum',
     icon: '🔬',
-    title: 'Z ČOHO SÚ HVIEZDY',
-    teaser: 'Nikto tam nebol. Ako teda vieme, z čoho hviezdy sú?',
-    minutes: '7 minút',
+    title: 'Z ČEHO JSOU HVĚZDY',
+    teaser: 'Nikdo tam nebyl. Jak tedy víme, z čeho hvězdy jsou?',
+    minutes: '7 minut',
     badge: 'light-reader',
     basics: [ 'spektrum', 'cerveny-posun', 'farba-teplota', 'infracervene-svetlo',
               'senzor', 'hviezda' ],
@@ -2661,99 +2870,112 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'spectrum',
-        question: '🔎 ČO SÚ TIE TMAVÉ ČIARY V DÚHE?',
+        question: '🔎 CO JSOU TY TMAVÉ ČÁRY V DUZE?',
         options: [
-          { id: 'elements', icon: '🧪', label: 'odtlačky prvkov v hviezde' },
-          { id: 'scratch',  icon: '🪥', label: 'škrabance na objektíve' },
-          { id: 'clouds',   icon: '☁️', label: 'mraky pred hviezdou' },
-          { id: 'error',    icon: '🖨️', label: 'chyba pri tlači' }
+          { id: 'elements', icon: '🧪', label: 'otisky prvků ve hvězdě' },
+          { id: 'scratch',  icon: '🪥', label: 'škrábance na objektivu' },
+          { id: 'clouds',   icon: '☁️', label: 'mraky před hvězdou' },
+          { id: 'error',    icon: '🖨️', label: 'chyba při tisku' }
         ],
         correct: 'elements',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Každý prvok pohltí presne určité farby. V spektre po ňom zostane tmavá čiara – jeho odtlačok prsta.',
-        retryText: 'Skús ešte raz. Tie čiary sú vždy na tých istých miestach, aj keď zmeníš ďalekohľad. Takže to nie je chyba prístroja.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Každý prvek pohltí přesně určité barvy. Ve spektru po něm zůstane tmavá čára – jeho ' +
+                     'otisk prstu.',
+        retryText: 'Zkus to ještě jednou. Ty čáry jsou vždy na stejných místech, i když změníš dalekohled. ' +
+                   'Takže to není chyba přístroje.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🌈 SVETLO SA DÁ ROZLOŽIŤ',
+        title: '🌈 SVĚTLO SE DÁ ROZLOŽIT',
         image: 'spectrum',
         lines: [
-          'Biele svetlo nie je jedna farba – je to zmes všetkých.',
-          'Keď ho rozložíš, dostaneš dúhu, ktorej astronómi hovoria spektrum.',
-          'A práve v tej dúhe je ukryté, z čoho je hviezda a aká je horúca.'
+          'Bílé světlo není jedna barva – je to směs všech.',
+          'Když ho rozložíš, dostaneš duhu, které astronomové říkají spektrum.',
+          'A právě v té duze je ukryté, z čeho je hvězda a jak je horká.'
         ],
         more: [
-          'Každý plyn pohltí a vyžiari svetlo len v presne určených farbách – ako keby mal vlastný čiarový kód. Keď astronóm v spektre hviezdy uvidí tieto čiary, vie s istotou, ktoré látky v nej sú, aj keď je hviezda miliardy kilometrov daleko.',
-          'Hélium našli ľudia najprv v spektre Slnka a až potom na Zemi. Odtiaľ má aj meno – po grécky „hélios“ znamená Slnko.',
-          'Ak sa celý čiarový kód posunie do červena, znamená to, že sa objekt od nás vzďaľuje. Práve takto astronómi zistili, že sa vesmír rozpína.'
+          'Každý plyn pohltí a vyzáří světlo jen v přesně určených barvách – jako by měl vlastní ' +
+          'čárový kód. Když astronom ve spektru hvězdy uvidí tyto čáry, ví s jistotou, které ' +
+          'látky v ní jsou, i když je hvězda miliardy kilometrů daleko.',
+          'Helium našli lidé nejprve ve spektru Slunce a až potom na Zemi. Odtud má i jméno – ' +
+          'řecky „hélios“ znamená Slunce.',
+          'Když se celý čárový kód posune do červena, znamená to, že se objekt od nás vzdaluje. ' +
+          'Právě takto astronomové zjistili, že se vesmír rozpíná.'
         ],
-        cta: 'Čo všetko to prezradí?'
+        cta: 'Co všechno to prozradí?'
       },
       { type: 'fact', factId: 'spektrum-carky' },
       {
         type: 'cards',
-        title: 'ČO SA DÁ VYČÍTAŤ ZO SVETLA',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'CO SE DÁ VYČÍST ZE SVĚTLA',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🌡️', name: 'Teplota', short: 'Podľa farby.',
-            text: 'Ak je v spektre najviac modrej, hviezda je horúca. Ak červenej, je chladnejšia. Presne to sme videli v lekcii o hviezdach.',
-            image: 'starBlue', exampleLabel: 'Modrá = horúca' },
-          { icon: '🧪', name: 'Z čoho je', short: 'Podľa čiar.',
-            text: 'Vodík robí svoj vzor čiar, hélium iný, železo ďalší. Keď ich v spektre nájdeš, vieš, čo v hviezde je.',
-            image: 'spectrum', exampleLabel: 'Čiary = zloženie' },
-          { icon: '🏃', name: 'Či sa hýbe', short: 'Podľa posunu čiar.',
-            text: 'Keď sa objekt vzďaľuje, celý vzor čiar sa posunie k červenej. Práve tak sme zistili, že sa vesmír rozpína.',
-            image: 'deepfield', exampleLabel: 'Červený posun = vzďaľuje sa' }
+          { icon: '🌡️', name: 'Teplota', short: 'Podle barvy.',
+            text: 'Když je ve spektru nejvíc modré, hvězda je horká. Když červené, je chladnější. Přesně ' +
+                  'to jsme viděli v lekci o hvězdách.',
+            image: 'starBlue', exampleLabel: 'Modrá = horká' },
+          { icon: '🧪', name: 'Z čeho je', short: 'Podle čar.',
+            text: 'Vodík dělá svůj vzor čar, helium jiný, železo další. Když je ve spektru najdeš, víš, ' +
+                  'co ve hvězdě je.',
+            image: 'spectrum', exampleLabel: 'Čáry = složení' },
+          { icon: '🏃', name: 'Jestli se hýbe', short: 'Podle posunu čar.',
+            text: 'Když se objekt vzdaluje, celý vzor čar se posune k červené. Právě tak jsme zjistili, ' +
+                  'že se vesmír rozpíná.',
+            image: 'deepfield', exampleLabel: 'Červený posuv = vzdaluje se' }
         ],
-        cta: 'Vyskúšame to doma?',
+        cta: 'Vyzkoušíme to doma?',
         xp: 15
       },
       {
         type: 'howto',
-        title: '🧪 POKUS DOMA: VLASTNÉ SPEKTRUM',
-        lead: 'Na toto nepotrebuješ Dwarf. Stačí staré CD a päť minút.',
+        title: '🧪 POKUS DOMA: VLASTNÍ SPEKTRUM',
+        lead: 'Na tohle nepotřebuješ Dwarf. Stačí staré CD a pět minut.',
         steps: [
           { icon: '💿', title: 'Vezmi staré CD',
-            text: 'Na jeho lesklej strane sú tisíce jemných drážok, ktoré svetlo rozložia na farby – rovnako ako prizma.' },
-          { icon: '💡', title: 'Nasmeruj naň svetlo žiarovky',
-            text: 'Nakláňaj CD, kým na ňom neuvidíš dúhu. To je spektrum tej žiarovky.' },
-          { icon: '🔆', title: 'Porovnaj rôzne svetlá',
-            text: 'Žiarovka dá plynulú dúhu, LED-ka a úsporná žiarivka dajú dúhu s dierami. Rôzne svetlá majú rôzne spektrá.' },
-          { icon: '🛡️', title: 'A Slnko – iba cez filter',
-            text: 'Slnečné spektrum je najkrajšie, ale platí to isté pravidlo ako vždy: nikdy sa nepozeraj do Slnka bez filtra.' }
+            text: 'Na jeho lesklé straně jsou tisíce jemných drážek, které světlo rozloží na barvy – ' +
+                  'stejně jako prizma.' },
+          { icon: '💡', title: 'Nasměruj na něj světlo žárovky',
+            text: 'Naklápěj CD, dokud na něm neuvidíš duhu. To je spektrum té žárovky.' },
+          { icon: '🔆', title: 'Porovnej různá světla',
+            text: 'Žárovka dá plynulou duhu, LED-ka a úsporná zářivka dají duhu s dírami. Různá světla ' +
+                  'mají různá spektra.' },
+          { icon: '🛡️', title: 'A Slunce – jen přes filtr',
+            text: 'Sluneční spektrum je nejkrásnější, ale platí totéž pravidlo jako vždy: nikdy se ' +
+                  'nedívej do Slunce bez filtru.' }
         ],
-        note: 'Presne toto robia astronómi, len s ďalekohľadom a citlivým prístrojom namiesto CD.',
-        cta: 'Skvelé',
+        note: 'Přesně tohle dělají astronomové, jen s dalekohledem a citlivým přístrojem místo CD.',
+        cta: 'Skvělé',
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'V spektre Slnka našli astronómi čiaru, ktorá nepatrila žiadnemu známemu prvku.',
-          'Pomenovali ho hélium – podľa gréckeho boha Slnka. Na Zemi ho objavili až desiatky rokov potom.'
+          'Ve spektru Slunce našli astronomové čáru, která nepatřila žádnému známému prvku.',
+          'Pojmenovali ho helium – podle řeckého boha Slunce. Na Zemi ho objevili až desítky let ' +
+          'potom.'
         ],
-        footnote: 'Prvok, ktorý dnes máš v balónoch, teda ľudia prvýkrát „videli“ na hviezde.',
+        footnote: 'Prvek, který dnes máš v balonech, tedy lidé poprvé „viděli“ na hvězdě.',
         cta: 'To je fakt dobré'
       },
       { type: 'fact', factId: 'helium-slnko' },
       {
         type: 'mission',
-        title: '🧪 MISIA: ROZLOŽ SVETLO',
+        title: '🧪 MISE: ROZLOŽ SVĚTLO',
         image: 'spectrum',
-        subtitle: 'Pokus s CD alebo prizmou',
-        lead: 'Urob si vlastný spektroskop a porovnaj tri rôzne svetlá.',
+        subtitle: 'Pokus s CD nebo prizmatem',
+        lead: 'Udělej si vlastní spektroskop a porovnej tři různá světla.',
         tasks: [
-          { icon: '💿', text: 'Rozlož svetlo žiarovky pomocou CD alebo prizmy.' },
-          { icon: '💡', text: 'To isté skús s LED-kou a s úspornou žiarivkou.' },
-          { icon: '✏️', text: 'Nakresli si, čím sa tie tri dúhy líšia.' }
+          { icon: '💿', text: 'Rozlož světlo žárovky pomocí CD nebo prizmatu.' },
+          { icon: '💡', text: 'Totéž zkus s LED-kou a s úspornou zářivkou.' },
+          { icon: '✏️', text: 'Nakresli si, čím se ty tři duhy liší.' }
         ],
-        note: 'Ak máš doma prizmu, funguje to najkrajšie. CD však stačí úplne.',
-        button: '✅ MISIA SPLNENÁ',
+        note: 'Pokud máš doma prizma, funguje to nejkrásněji. CD ale stačí úplně.',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Práve si urobil to isté, čo astronómi robia s hviezdami – len na kuchynskej lampe.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Právě jsi udělal totéž, co astronomové dělají s hvězdami – jen na kuchyňské lampě.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -2761,67 +2983,67 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Ako vieme, z čoho je hviezda, keď tam nikto nebol?',
+            question: 'Jak víme, z čeho je hvězda, když tam nikdo nebyl?',
             options: [
-              { label: 'Z čiar v jej rozloženom svetle', correct: true },
-              { label: 'Poslali sme tam sondu' },
-              { label: 'Podľa toho, ako bliká' },
-              { label: 'Podľa jej mena' }
+              { label: 'Z čar v jejím rozloženém světle', correct: true },
+              { label: 'Poslali jsme tam sondu' },
+              { label: 'Podle toho, jak bliká' },
+              { label: 'Podle jejího jména' }
             ],
-            explain: 'Každý prvok robí v spektre svoj vlastný vzor čiar.'
+            explain: 'Každý prvek dělá ve spektru svůj vlastní vzor čar.'
           },
           {
             kind: 'decide',
-            question: 'Spektrum hviezdy má najviac modrej. Čo to znamená?',
+            question: 'Spektrum hvězdy má nejvíc modré. Co to znamená?',
             options: [
-              { icon: '🔥', label: 'Je horúca', correct: true },
+              { icon: '🔥', label: 'Je horká', correct: true },
               { icon: '❄️', label: 'Je chladná' }
             ],
-            explain: 'Modrá znamená vysokú teplotu, červená nižšiu.'
+            explain: 'Modrá znamená vysokou teplotu, červená nižší.'
           },
           {
             kind: 'truefalse',
-            question: 'Hélium objavili najprv na Zemi a potom na Slnku.',
+            question: 'Helium objevili nejprve na Zemi a potom na Slunci.',
             answer: false,
-            explain: 'Presne naopak – prvýkrát ho našli v spektre Slnka, preto sa tak volá.'
+            explain: 'Přesně naopak – poprvé ho našli ve spektru Slunce, proto se tak jmenuje.'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok je spektrum?',
+            question: 'Který obrázek je spektrum?',
             options: [
               { image: 'spectrum', label: 'A', correct: true },
               { image: 'milkyway', label: 'B' }
             ],
-            explain: 'A je svetlo rozložené na farby s tmavými čiarami prvkov.'
+            explain: 'A je světlo rozložené na barvy s tmavými čarami prvků.'
           },
           {
             kind: 'order',
-            question: 'Zoraď, ako astronóm zistí zloženie hviezdy.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď, jak astronom zjistí složení hvězdy.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Zachytí svetlo hviezdy ďalekohľadom', order: 1, icon: '🔭' },
-              { label: 'Rozloží ho na farby', order: 2, icon: '🌈' },
-              { label: 'Nájde v ňom tmavé čiary', order: 3, icon: '📊' },
-              { label: 'Porovná čiary so vzormi prvkov', order: 4, icon: '🧪' }
+              { label: 'Zachytí světlo hvězdy dalekohledem', order: 1, icon: '🔭' },
+              { label: 'Rozloží ho na barvy', order: 2, icon: '🌈' },
+              { label: 'Najde v něm tmavé čáry', order: 3, icon: '📊' },
+              { label: 'Porovná čáry se vzory prvků', order: 4, icon: '🧪' }
             ],
-            explain: 'A z toho vie povedať, čo v hviezde je – aj keď je miliardy kilometrov daleko.'
+            explain: 'A z toho umí říct, co ve hvězdě je – i když je miliardy kilometrů daleko.'
           }
         ],
-        resultGood: '🌟 Čítač svetla!',
-        resultOk: '🔭 Ešte raz – tie čiary sú kľúč.'
+        resultGood: '🌟 Čtenář světla!',
+        resultOk: '🔭 Ještě jednou – ty čáry jsou klíč.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 17 – VESMÍRNE VZDIALENOSTI
+     LEKCE 17 – VESMÍRNÉ VZDÁLENOSTI
      ========================================================================== */
   {
     id: 'distances',
     icon: '📏',
-    title: 'VESMÍRNE VZDIALENOSTI',
-    teaser: 'Čo je svetelný rok a prečo je vesmír skoro celý prázdny.',
-    minutes: '7 minút',
+    title: 'VESMÍRNÉ VZDÁLENOSTI',
+    teaser: 'Co je světelný rok a proč je vesmír skoro celý prázdný.',
+    minutes: '7 minut',
     badge: 'distance-meter',
     basics: [ 'svetelny-rok', 'svetelna-minuta', 'astronomicka-jednotka', 'orbita',
               'slnecna-soustava', 'gravitacia' ],
@@ -2830,97 +3052,111 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'deepfield',
-        question: '🔎 ČO JE SVETELNÝ ROK?',
+        question: '🔎 CO JE SVĚTELNÝ ROK?',
         options: [
-          { id: 'dist',  icon: '📏', label: 'vzdialenosť, ktorú svetlo preletí za rok' },
-          { id: 'time',  icon: '⏰', label: 'čas, rok meraný svetlom' },
-          { id: 'speed', icon: '🏎️', label: 'rýchlosť svetla' },
-          { id: 'size',  icon: '⭐', label: 'veľkosť veľmi jasnej hviezdy' }
+          { id: 'dist',  icon: '📏', label: 'vzdálenost, kterou světlo proletí za rok' },
+          { id: 'time',  icon: '⏰', label: 'čas, rok měřený světlem' },
+          { id: 'speed', icon: '🏎️', label: 'rychlost světla' },
+          { id: 'size',  icon: '⭐', label: 'velikost velmi jasné hvězdy' }
         ],
         correct: 'dist',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Je to vzdialenosť, nie čas – aj keď to podľa mena vyzerá inak. Svetlo za rok preletí 9,46 bilióna kilometrov.',
-        retryText: 'Skús ešte raz. Pomôcka: „autohodina“ by bola tiež vzdialenosť – to, čo prejde auto za hodinu.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Je to vzdálenost, ne čas – i když to podle jména vypadá jinak. Světlo za rok proletí ' +
+                     '9,46 bilionu kilometrů.',
+        retryText: 'Zkus to ještě jednou. Pomůcka: „autohodina“ by byla taky vzdálenost – to, co ujede ' +
+                   'auto za hodinu.',
         xp: 10
       },
       {
         type: 'info',
-        title: '📏 KILOMETRE TU NESTAČIA',
+        title: '📏 KILOMETRY TU NESTAČÍ',
         image: 'deepfield',
         lines: [
-          'Svetlo letí 300 000 kilometrov za sekundu – nič nie je rýchlejšie.',
-          'Za rok teda preletí 9,46 bilióna kilometrov. Tomu sa hovorí svetelný rok.',
-          'Vesmírne vzdialenosti sa v kilometroch nedajú ani napísať, preto astronómi merajú svetlom.'
+          'Světlo letí 300 000 kilometrů za sekundu – nic není rychlejší.',
+          'Za rok tedy proletí 9,46 bilionu kilometrů. Tomu se říká světelný rok.',
+          'Vesmírné vzdálenosti se v kilometrech nedají ani napsat, proto astronomové měří ' +
+          'světlem.'
         ],
         more: [
-          'Svetelný rok nie je čas, ale vzdialenosť – tá, ktorú svetlo preletí za rok. Ľahko sa to pomýli, ale je to rovnaké, ako keď povieš, že je to „dve hodiny autom“.',
-          'Keď sa pozeráš na hviezdu 100 svetelných rokov daleko, vidíš ju takú, aká bola pred sto rokmi. Nevidíš vesmír, aký je – vidíš vesmír, aký bol. Čím dalej sa pozeráš, tým hlbšie do minulosti.',
-          'Pre blízke hviezdy používajú astronómi ešte jednu jednotku, parsek (asi 3,26 svetelného roka). Vychádza z toho, ako sa hviezda zdanlivo pohne na oblohe, keď Zem preletí na druhú stranu svojej dráhy – a to je zároveň spôsob, ako sa vzdialenosti naozaj merajú.'
+          'Světelný rok není čas, ale vzdálenost – ta, kterou světlo proletí za rok. Snadno se to ' +
+          'poplete, ale je to stejné, jako když řekneš, že je to „dvě hodiny autem“.',
+          'Když se podíváš na hvězdu 100 světelných let daleko, vidíš ji takovou, jaká byla před ' +
+          'sto lety. Nevidíš vesmír, jaký je – vidíš vesmír, jaký byl. Čím dál se podíváš, tím ' +
+          'hlouběji do minulosti.',
+          'Pro blízké hvězdy používají astronomové ještě jednu jednotku, parsek (asi 3,26 ' +
+          'světelného roku). Vychází z toho, jak se hvězda zdánlivě pohne na obloze, když Země ' +
+          'přeletí na druhou stranu své dráhy – a to je zároveň způsob, jak se vzdálenosti ' +
+          'opravdu měří.'
         ],
-        cta: 'Ako daleko je čo?'
+        cta: 'Jak daleko je co?'
       },
       { type: 'fact', factId: 'svetelny-rok-946' },
       {
         type: 'cards',
-        title: 'AKO DLHO K NÁM LETÍ SVETLO',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'JAK DLOUHO K NÁM LETÍ SVĚTLO',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🌙', name: 'Z Mesiaca', short: 'Nieco cez sekundu.',
-            text: 'Mesiac je 384 400 km daleko. Svetlo odtiaľ letí asi 1,3 sekundy – preto astronauti pri rozhovore s Mesiacom mierne „laggovali“.',
+          { icon: '🌙', name: 'Z Měsíce', short: 'Něco přes sekundu.',
+            text: 'Měsíc je 384 400 km daleko. Světlo odtud letí asi 1,3 sekundy – proto astronauti při ' +
+                  'rozhovoru s Měsícem mírně měli zpoždění.',
             image: 'moon', exampleLabel: '1,3 sekundy' },
-          { icon: '☀️', name: 'Zo Slnka', short: 'Osem minút.',
-            text: 'Slnko je 150 miliónov km daleko. Jeho svetlo je k nám na ceste 8 minút – vždy ho teda vidíš o 8 minút staršie.',
-            image: 'sun', exampleLabel: '8 minút' },
-          { icon: '⭐', name: 'Z najbližšej hviezdy', short: 'Štyri roky.',
-            text: 'Proxima Centauri je 4,25 svetelného roka daleko. Medzi hviezdami je teda oveľa väčšia diera než v celej našej soustave.',
-            image: 'starRed', exampleLabel: '4,25 roka' }
+          { icon: '☀️', name: 'Ze Slunce', short: 'Osm minut.',
+            text: 'Slunce je 150 milionů km daleko. Jeho světlo je k nám na cestě 8 minut – vždy ho tedy ' +
+                  'vidíš o 8 minut starší.',
+            image: 'sun', exampleLabel: '8 minut' },
+          { icon: '⭐', name: 'Z nejbližší hvězdy', short: 'Čtyři roky.',
+            text: 'Proxima Centauri je 4,25 světelného roku daleko. Mezi hvězdami je tedy o hodně větší ' +
+                  'díra než v celé naší soustavě.',
+            image: 'starRed', exampleLabel: '4,25 roku' }
         ],
-        cta: 'A ako daleko sú hmloviny?',
+        cta: 'A jak daleko jsou mlhoviny?',
         xp: 15
       },
       { type: 'fact', factId: 'proxima-4-25' },
       {
         type: 'pick',
-        title: '🔎 ČO JE NAJĎALEJ?',
-        prompt: 'Ktorý z týchto objektov je od nás najďalej?',
+        title: '🔎 CO JE NEJDÁL?',
+        prompt: 'Který z těchto objektů je od nás nejdál?',
         options: [
-          { image: 'moon', correct: false, explain: 'Mesiac je od nás 1,3 svetelnej sekundy. To je vesmírne povedané za dverami.' },
-          { image: 'm42', correct: false, explain: 'Orionova hmlovina je asi 1 300 svetelných rokov – stále v našej galaxii.' },
-          { image: 'm31', correct: false, explain: 'Andromeda je 2,5 milióna svetelných rokov. Už veľmi daleko, ale ešte nie najviac.' },
-          { image: 'm51', correct: true,  explain: 'Áno! Galaxia Vír je 31 miliónov svetelných rokov daleko – dvanásťkrát ďalej než Andromeda.' }
+          { image: 'moon', correct: false, explain: 'Měsíc je od nás 1,3 světelné sekundy. To je vesmírně řečeno za dveřmi.' },
+          { image: 'm42', correct: false, explain: 'Orionova mlhovina je asi 1 300 světelných let – stále v naší galaxii.' },
+          { image: 'm31', correct: false, explain: 'Andromeda je 2,5 milionu světelných let. Už velmi daleko, ale ještě ne nejvíc.' },
+          { image: 'm51', correct: true,  explain: 'Ano! Galaxie Vír je 31 milionů světelných let daleko – dvanáctkrát dál než Andromeda.' }
         ],
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Keby bolo Slnko veľké ako futbalová lopta, Zem by bola zrniečko veľké 2 milimetre – a bola by od nej 24 metrov daleko.',
-          'A najbližšia hviezda? Tá by bola ďalších 6 500 kilometrov odtiaľ. To je ako z Bratislavy do Ameriky.'
+          'Kdyby bylo Slunce velké jako fotbalový míč, Země by byla zrníčko velké 2 milimetry – a ' +
+          'byla by od něj 24 metrů daleko.',
+          'A nejbližší hvězda? Ta by byla dalších 6 500 kilometrů odtud. To je jako z Prahy do ' +
+          'Ameriky.'
         ],
-        footnote: 'Preto sa hovorí, že vesmír je hlavne prázdno – s pár zrniečkami v ňom.',
-        cta: 'Ideme si to postaviť'
+        footnote: 'Proto se říká, že vesmír je hlavně prázdno – s pár zrníčky v něm.',
+        cta: 'Jdeme si to postavit'
       },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'vzdialenosti', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📏 MISIA: MODEL NA CHODNÍKU',
+        title: '📏 MISE: MODEL NA CHODNÍKU',
         image: 'deepfield',
-        subtitle: 'Slnečná soustava v skutočnej škále',
-        lead: 'Toto sa nedá pochopiť z obrázka v knihe. Musí sa to odkráčať.',
+        subtitle: 'Sluneční soustava ve skutečném měřítku',
+        lead: 'Tohle se nedá pochopit z obrázku v knize. Musí se to odkráčet.',
         tasks: [
-          { icon: '⚽', text: 'Slnko = futbalová lopta. Polož ju na jeden konec chodníka.' },
-          { icon: '🚶', text: 'Odkráčaj 24 metrov – tam je Zem, zrniečko veľké 2 milimetre.' },
-          { icon: '🪐', text: 'Saturn by bol asi 230 metrov od lopty. Skús aj to.' },
-          { icon: '🤯', text: 'A najbližšia hviezda? Tá by bola 6 500 kilometrov daleko.' }
+          { icon: '⚽', text: 'Slunce = fotbalový míč. Polož ho na jeden konec chodníku.' },
+          { icon: '🚶', text: 'Odkráčej 24 metrů – tam je Země, zrníčko velké 2 milimetry.' },
+          { icon: '🪐', text: 'Saturn by byl asi 230 metrů od míče. Zkus i to.' },
+          { icon: '🤯', text: 'A nejbližší hvězda? Ta by byla 6 500 kilometrů daleko.' }
         ],
-        note: 'Keď to odkráčaš, už nikdy nebudeš pozerať na obrázok Slnečnej soustavy rovnako.',
-        button: '✅ MISIA SPLNENÁ',
+        note: 'Až to odkráčíš, už nikdy se nebudeš na obrázek Sluneční soustavy dívat stejně.',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Teraz už vieš, prečo sondy letia k planétam roky – a k hviezdam by leteli desaťtisíce rokov.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Teď už víš, proč sondy letí k planetám roky – a k hvězdám by letěly desetitisíce let.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -2928,68 +3164,68 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Svetelný rok je…',
+            question: 'Světelný rok je…',
             options: [
-              { label: 'vzdialenosť, ktorú svetlo preletí za jeden rok', correct: true },
-              { label: 'rok, ktorý má viac svetla' },
-              { label: 'rýchlosť svetla' },
-              { label: 'čas, ktorý svetlo letí zo Slnka' }
+              { label: 'vzdálenost, kterou světlo proletí za jeden rok', correct: true },
+              { label: 'rok, který má více světla' },
+              { label: 'rychlost světla' },
+              { label: 'čas, který světlo letí ze Slunce' }
             ],
-            explain: 'Je to vzdialenosť: 9,46 bilióna kilometrov.'
+            explain: 'Je to vzdálenost: 9,46 bilionu kilometrů.'
           },
           {
             kind: 'decide',
-            question: 'Ako rýchlo letí svetlo?',
+            question: 'Jak rychle letí světlo?',
             options: [
               { icon: '⚡', label: '300 000 km za sekundu', correct: true },
               { icon: '🚀', label: '300 000 km za hodinu' }
             ],
-            explain: 'Za sekundu. Za tú jednu sekundu by sedemkrát obletelo Zem.'
+            explain: 'Za sekundu. Za tu jednu sekundu by sedmkrát obletělo Zemi.'
           },
           {
             kind: 'truefalse',
-            question: 'Svetlo zo Slnka k nám letí asi 8 minút.',
+            question: 'Světlo ze Slunce k nám letí asi 8 minut.',
             answer: true,
-            explain: 'Preto Slnko vždy vidíš také, aké bolo pred ôsmimi minútami.'
+            explain: 'Proto Slunce vždy vidíš takové, jaké bylo před osmi minutami.'
           },
           {
             kind: 'order',
-            question: 'Zoraď od najbližšieho po najvzdialenejšie.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď od nejbližšího po nejvzdálenější.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Mesiac (1,3 svetelnej sekundy)', order: 1, icon: '🌙' },
-              { label: 'Slnko (8 svetelných minút)', order: 2, icon: '☀️' },
-              { label: 'Proxima Centauri (4,25 svetelného roka)', order: 3, icon: '⭐' },
-              { label: 'M42 (asi 1 300 svetelných rokov)', order: 4, icon: '☁️' },
-              { label: 'M31 (2,5 milióna svetelných rokov)', order: 5, icon: '🌀' }
+              { label: 'Měsíc (1,3 světelné sekundy)', order: 1, icon: '🌙' },
+              { label: 'Slunce (8 světelných minut)', order: 2, icon: '☀️' },
+              { label: 'Proxima Centauri (4,25 světelného roku)', order: 3, icon: '⭐' },
+              { label: 'M42 (asi 1 300 světelných let)', order: 4, icon: '☁️' },
+              { label: 'M31 (2,5 milionu světelných let)', order: 5, icon: '🌀' }
             ],
-            explain: 'Od sekúnd po milióny rokov – a to je len maličký kúsok vesmíru.'
+            explain: 'Od sekund po miliony let – a to je jen maličký kousek vesmíru.'
           },
           {
             kind: 'image',
-            question: 'Ktorý objekt je od nás najďalej?',
+            question: 'Který objekt je od nás nejdál?',
             options: [
               { image: 'm51', label: 'A', correct: true },
               { image: 'm42', label: 'B' }
             ],
-            explain: 'M51 je 31 miliónov svetelných rokov, M42 asi 1 300. Rozdiel je ohromný.'
+            explain: 'M51 je 31 milionů světelných let, M42 asi 1 300. Rozdíl je ohromný.'
           }
         ],
-        resultGood: '🌟 Merač vesmíru!',
-        resultOk: '🔭 Ešte raz – hlavne to, že svetelný rok je vzdialenosť.'
+        resultGood: '🌟 Měřič vesmíru!',
+        resultOk: '🔭 Ještě jednou – hlavně to, že světelný rok je vzdálenost.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 18 – KDE SME VO VESMÍRE
+     LEKCE 18 – KDE JSME VE VESMÍRU
      ========================================================================== */
   {
     id: 'cosmic-address',
     icon: '🌍',
-    title: 'KDE SME VO VESMÍRE',
-    teaser: 'Tvoja vesmírna adresa – od Zeme až po okraj toho, čo vidíme.',
-    minutes: '8 minút',
+    title: 'KDE JSME VE VESMÍRU',
+    teaser: 'Tvoje vesmírná adresa – od Země až po okraj toho, co vidíme.',
+    minutes: '8 minut',
     badge: 'cosmic-address',
     basics: [ 'slnecna-soustava', 'mliecna-cesta', 'miestna-grupa', 'nadkopa',
               'viditelny-vesmir', 'rozpinanie-vesmiru', 'svetelny-rok' ],
@@ -2998,110 +3234,127 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'deepfield',
-        question: '🔎 ČO JE VÄČŠINA TÝCHTO ŠKVŔN?',
+        question: '🔎 CO JE VĚTŠINA TĚCHTO SKVRN?',
         options: [
           { id: 'galaxies', icon: '🌀', label: 'celé galaxie' },
-          { id: 'stars',    icon: '⭐', label: 'jednotlivé hviezdy' },
-          { id: 'planets',  icon: '🪐', label: 'planéty' },
-          { id: 'dust',     icon: '🫧', label: 'prach na objektíve' }
+          { id: 'stars',    icon: '⭐', label: 'jednotlivé hvězdy' },
+          { id: 'planets',  icon: '🪐', label: 'planety' },
+          { id: 'dust',     icon: '🫧', label: 'prach na objektivu' }
         ],
         correct: 'galaxies',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Takmer každá škvrna je celá galaxia s miliardami hviezd. A toto je len maličký výsek oblohy.',
-        retryText: 'Skús ešte raz. Všimni si, že tie škvrny majú tvary – špirály, ovály. Hviezda by bola len bod.',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Téměř každá skvrna je celá galaxie s miliardami hvězd. A tohle je jen maličký výsek ' +
+                     'oblohy.',
+        retryText: 'Zkus to ještě jednou. Všimni si, že ty skvrny mají tvary – spirály, ovály. Hvězda by ' +
+                   'byla jen bod.',
         xp: 10
       },
       {
         type: 'info',
-        title: '🌍 TVOJA VESMÍRNA ADRESA',
+        title: '🌍 TVOJE VESMÍRNÁ ADRESA',
         image: 'milkyway',
         lines: [
-          'Zem je v Slnečnej soustave, tá je v Mliečnej ceste.',
-          'Naša galaxia je súčasťou Miestnej grupy galaxií a tá zase väčšej nadkopy.',
-          'A všetko dokopy je vo vnútri toho, čomu hovoríme viditeľný vesmír.'
+          'Země je ve Sluneční soustavě, ta je v Mléčné dráze.',
+          'Naše galaxie je součástí Místní grupy galaxií a ta zase větší nadkupy.',
+          'A všechno dohromady je uvnitř toho, čemu říkáme viditelný vesmír.'
         ],
         more: [
-          'Nič vo vesmíre nestojí. Zem sa otáča, obieha Slnko, Slnko obieha stred galaxie a celá naša galaxia letí voči susedným galaxiám. Všetky tieto pohyby sa skladajú na sebe – a nikde neexistuje bod, o ktorom by sa dalo povedať, že je úplne v pokoji.',
-          'Vesmír sa navyše rozpína, ale nie tak, že by galaxie leteli od nás preč do prázdna. Rozpína sa samotný priestor medzi nimi. Preto sa nedá povedať, že by sme boli v strede: rovnako to vyzerá z každej galaxie.',
-          'To, čo vidíme, je len viditeľná časť vesmíru – tá, odkiaľ k nám svetlo za 13,8 miliardy rokov stihlo doletieť. Čo je za tou hranicou, nevieme; nie preto, že by to bol koniec, ale preto, že sa k nám to svetlo ešte nedostalo.'
+          'Nic ve vesmíru nestojí. Země se otáčí, obíhá Slunce, Slunce obíhá střed galaxie a celá ' +
+          'naše galaxie letí vůči okolním galaxiím. Všechny tyto pohyby se skládají na sebe – a ' +
+          'nikde neexistuje bod, o kterém by se dalo říct, že je úplně v klidu.',
+          'Vesmír se navíc rozpíná, ale ne tak, že by galaxie letěly od nás pryč do prázdna. ' +
+          'Rozpíná se samotný prostor mezi nimi. Proto se nedá říct, že bychom byli ve středu: ' +
+          'stejně to vypadá z každé galaxie.',
+          'To, co vidíme, je jen viditelná část vesmíru – ta, odkud k nám světlo za 13,8 miliardy ' +
+          'let stihlo doletět. Co je za tou hranicí, nevíme; ne proto, že by to byl konec, ale ' +
+          'proto, že se k nám to světlo ještě nedostalo.'
         ],
-        cta: 'Poď na to po krokoch'
+        cta: 'Pojď na to po krocích'
       },
       { type: 'fact', factId: 'nasa-galaxia' },
       {
         type: 'cards',
-        title: 'ADRESA AKO MATRIOŠKA',
-        subtitle: 'Otoč všetky štyri karty – od najmenšieho po najväčšie.',
+        title: 'ADRESA JAKO MATRJOŠKA',
+        subtitle: 'Otoč všechny čtyři karty – od nejmenšího po největší.',
         cards: [
-          { icon: '🪐', name: '1. Slnečná soustava', short: 'Slnko a jeho planéty.',
-            text: 'Naše Slnko, osem planét a kopa mesiacov, kometek a kameňov. Svetlo ju preletí za niekoľko hodín.',
-            image: 'saturn', exampleLabel: 'Náš najbližší domov' },
-          { icon: '🌌', name: '2. Mliečna cesta', short: 'Naša galaxia.',
-            text: 'Stovky miliárd hviezd v špirále širokej 100 000 svetelných rokov. Slnko je asi 26 000 svetelných rokov od stredu.',
-            image: 'milkyway', exampleLabel: 'Sme na predmestí' },
-          { icon: '👨‍👩‍👧‍👦', name: '3. Miestna grupa', short: 'Naši susedia.',
-            text: 'Skupina galaxií, do ktorej patríme aj s Andromedou. Sú v nej desiatky menších galaxií.',
-            image: 'm31', exampleLabel: 'Najväčší sused: Andromeda' },
-          { icon: '🫧', name: '4. Viditeľný vesmír', short: 'Kam dovidíme.',
-            text: 'Oblasť, z ktorej k nám mohlo doletieť svetlo. Je široká okolo 94 miliárd svetelných rokov a je v nej nespočet galaxií.',
-            image: 'deepfield', exampleLabel: 'Dalej než sem nedovidíme' }
+          { icon: '🪐', name: '1. Sluneční soustava', short: 'Slunce a jeho planety.',
+            text: 'Naše Slunce, osm planet a hromada měsíců, kometek a kamenů. Světlo ji přeletí za ' +
+                  'několik hodin.',
+            image: 'saturn', exampleLabel: 'Náš nejbližší domov' },
+          { icon: '🌌', name: '2. Mléčná dráha', short: 'Naše galaxie.',
+            text: 'Stovky miliard hvězd ve spirále široké 100 000 světelných let. Slunce je asi 26 000 ' +
+                  'světelných let od středu.',
+            image: 'milkyway', exampleLabel: 'Jsme na předměstí' },
+          { icon: '👨‍👩‍👧‍👦', name: '3. Místní grupa', short: 'Naši sousedi.',
+            text: 'Skupina galaxií, do které patříme i s Andromedou. Jsou v ní desítky menších galaxií.',
+            image: 'm31', exampleLabel: 'Největší soused: Andromeda' },
+          { icon: '🫧', name: '4. Viditelný vesmír', short: 'Kam dohlédneme.',
+            text: 'Oblast, ze které k nám mohlo doletět světlo. Je široká okolo 94 miliard světelných let ' +
+                  'a je v ní nespočet galaxií.',
+            image: 'deepfield', exampleLabel: 'Dál než sem nedohlédneme' }
         ],
-        cta: 'A kto je hneď vedľa nás?',
+        cta: 'A kdo je hned vedle nás?',
         xp: 15
       },
       {
         type: 'compare',
-        title: '⭐ KTO SÚ NAŠI SUSEDIA',
-        lead: 'Najbližšie hviezdy sú prekvapivo daleko – a tie, čo poznáš z oblohy, nie sú tie najbližšie.',
+        title: '⭐ KDO JSOU NAŠI SOUSEDI',
+        lead: 'Nejbližší hvězdy jsou překvapivě daleko – a ty, které znáš z oblohy, nejsou ty ' +
+              'nejbližší.',
         eye: {
           icon: '🔴',
           label: 'PROXIMA CENTAURI',
           art: 'starRed',
-          text: 'Najbližšia hviezda po Slnku – 4,25 svetelného roka. Je to malá červená hviezda a zo Slovenska ju vôbec nevidno: je príliš na juhu.'
+          text: 'Nejbližší hvězda po Slunci – 4,25 světelného roku. Je to malá červená hvězda a z Česka ' +
+                'ji vůbec není vidět: je příliš na jihu.'
         },
         camera: {
           icon: '🔵',
           label: 'SIRIUS',
           image: 'starBlue',
-          text: 'Najjasnejšia hviezda nočnej oblohy a jedna z najbližších – 8,6 svetelného roka. Túto v zime nájdeš ľahko.'
+          text: 'Nejjasnější hvězda noční oblohy a jedna z nejbližších – 8,6 světelného roku. Tuhle v ' +
+                'zimě najdeš snadno.'
         },
         check: {
-          question: 'Prečo Proximu zo Slovenska nevidno?',
+          question: 'Proč není Proxima z Česka vidět?',
           options: [
-            { label: 'Je príliš na juhu – z našej zemepisnej šírky nevyjde nad obzor', correct: true,
-              explain: 'Áno. Z každého miesta na Zemi vidíš inú časť oblohy. Preto sa astronómom vyplatí cestovať.' },
-            { label: 'Je príliš daleko, aby ju bolo vidieť', correct: false,
-              explain: 'Vzdialenosť to nie je – vidíme aj oveľa vzdialenejšie veci. Problém je, kde na oblohe leží.' }
+            { label: 'Je příliš na jihu – z naší zeměpisné šířky nevyjde nad obzor', correct: true,
+              explain: 'Ano. Z každého místa na Zemi vidíš jinou část oblohy. Proto se astronomům vyplatí ' +
+                       'cestovat.' },
+            { label: 'Je příliš daleko, aby byla vidět', correct: false,
+              explain: 'Vzdálenost to není – vidíme i mnohem vzdálenější věci. Problém je, kde na obloze leží.' }
           ]
         },
-        cta: 'Ideme ešte dalej'
+        cta: 'Jdeme ještě dál'
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Vesmír je starý asi 13,8 miliardy rokov – ale oblasť, ktorú vidíme, je široká okolo 94 miliárd svetelných rokov.',
-          'Ako je to možné? Kým to svetlo k nám letelo, priestor sa stále rozpínal. Miesto, odkiaľ vyrazilo, je dnes oveľa dalej.'
+          'Vesmír je starý asi 13,8 miliardy let – ale oblast, kterou vidíme, je široká okolo 94 ' +
+          'miliard světelných let.',
+          'Jak je to možné? Zatímco k nám to světlo letělo, prostor se neustále rozpínal. Místo, ' +
+          'odkud vyrazilo, je dnes mnohem dál.'
         ],
-        footnote: 'A to, čo je za tou hranicou, jednoducho nevidíme – svetlo odtiaľ k nám ešte nedoletelo.',
-        cta: 'To mi hlava nestíha 🤯'
+        footnote: 'A to, co je za tou hranicí, jednoduše nevidíme – světlo odtud k nám ještě nedoletělo.',
+        cta: 'To mi hlava nebere 🤯'
       },
       { type: 'fact', factId: 'vesmir-94' },
       { type: 'fact', factId: 'sirius-8-6' },
       {
         type: 'mission',
-        title: '📸 MISIA: NAJBLIŽŠÍ SUSED, KTORÉHO VIDÍME',
+        title: '📸 MISE: NEJBLIŽŠÍ SOUSED, KTERÉHO VIDÍME',
         objectId: 'sirius',
         tasks: [
-          { icon: '✏️', text: 'Napíš alebo nakresli svoju vesmírnu adresu – všetkých päť úrovní.' },
-          { icon: '📱', text: 'V Stellariu nájdi Proximu Centauri a pozri sa, prečo ju odtiaľto nevidno.' },
-          { icon: '🔭', text: 'Potom nájdi Sirius – v zime nízko na juhu, pod Orionom.' },
-          { icon: '📸', text: 'Odfoť ho Dwarfom. Je to svetlo staré 8,6 roka.' }
+          { icon: '✏️', text: 'Napiš nebo nakresli svou vesmírnou adresu – všech pět úrovní.' },
+          { icon: '📱', text: 'Ve Stellariu najdi Proximu Centauri a podívej se, proč ji odsud není vidět.' },
+          { icon: '🔭', text: 'Potom najdi Sirius – v zimě nízko na jihu, pod Orionem.' },
+          { icon: '📸', text: 'Vyfotografuj ho Dwarfem. Je to světlo staré 8,6 roku.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Máš v zbierke najjasnejšiu hviezdu oblohy – a vieš, kde vo vesmíre stojíš.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Máš ve sbírce nejjasnější hvězdu oblohy – a víš, kde ve vesmíru stojíš.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -3109,68 +3362,71 @@ const LESSONS = [
         questions: [
           {
             kind: 'order',
-            question: 'Zoraď svoju vesmírnu adresu od najmenšieho po najväčšie.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď svou vesmírnou adresu od nejmenšího po největší.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Zem', order: 1, icon: '🌍' },
-              { label: 'Slnečná soustava', order: 2, icon: '🪐' },
-              { label: 'Mliečna cesta', order: 3, icon: '🌌' },
-              { label: 'Miestna grupa galaxií', order: 4, icon: '👨‍👩‍👧‍👦' },
-              { label: 'Viditeľný vesmír', order: 5, icon: '🫧' }
+              { label: 'Země', order: 1, icon: '🌍' },
+              { label: 'Sluneční soustava', order: 2, icon: '🪐' },
+              { label: 'Mléčná dráha', order: 3, icon: '🌌' },
+              { label: 'Místní grupa galaxií', order: 4, icon: '👨‍👩‍👧‍👦' },
+              { label: 'Viditelný vesmír', order: 5, icon: '🫧' }
             ],
-            explain: 'Takto vyzerá tvoja adresa vo vesmíre – od domu až po okraj toho, čo vidíme.'
+            explain: 'Takhle vypadá tvoje adresa ve vesmíru – od domu až po okraj toho, co vidíme.'
           },
           {
             kind: 'choice',
-            question: 'Ktorá hviezda je od Slnka najbližšia?',
+            question: 'Která hvězda je Slunci nejblíž?',
             options: [
               { label: 'Proxima Centauri', correct: true },
               { label: 'Sirius' },
               { label: 'Polárka' },
               { label: 'Betelgeuse' }
             ],
-            explain: 'Proxima je 4,25 svetelného roka daleko. Sirius je druhý v poradí z tých jasných – 8,6 roka.'
+            explain: 'Proxima je 4,25 světelného roku daleko. Sirius je druhý v pořadí z těch jasných – 8,6 ' +
+                     'roku.'
           },
           {
             kind: 'truefalse',
-            question: 'Sirius je najjasnejšia hviezda nočnej oblohy hlavne preto, že je blízko.',
+            question: 'Sirius je nejjasnější hvězda noční oblohy hlavně proto, že je blízko.',
             answer: true,
-            explain: 'Je aj sám jasný, ale hlavne je len 8,6 svetelného roka daleko.'
+            explain: 'Je i sám jasný, ale hlavně je jen 8,6 světelného roku daleko.'
           },
           {
             kind: 'decide',
-            question: 'Vesmír je starý 13,8 miliardy rokov. Ako môže byť viditeľná časť široká 94 miliárd svetelných rokov?',
+            question: 'Vesmír je starý 13,8 miliardy let. Jak může být viditelná část široká 94 miliard ' +
+                      'světelných let?',
             options: [
-              { icon: '🎈', label: 'Priestor sa počas letu svetla stále rozpínal', correct: true },
-              { icon: '🏎️', label: 'Svetlo niekedy letí rýchlejšie' }
+              { icon: '🎈', label: 'Prostor se během letu světla neustále rozpínal', correct: true },
+              { icon: '🏎️', label: 'Světlo někdy letí rychleji' }
             ],
-            explain: 'Svetlo má vždy tú istú rýchlosť. Ale priestor medzi nami a jeho zdrojom sa naťahoval.'
+            explain: 'Světlo má vždy stejnou rychlost. Ale prostor mezi námi a jeho zdrojem se natahoval.'
           },
           {
             kind: 'image',
-            question: 'Na ktorom obrázku je viac než jedna galaxia?',
+            question: 'Na kterém obrázku je více než jedna galaxie?',
             options: [
               { image: 'deepfield', label: 'A', correct: true },
               { image: 'm31', label: 'B' }
             ],
-            explain: 'A je hlboký pohľad – takmer každá škvrna je celá galaxia. B je jedna jediná: Andromeda.'
+            explain: 'A je hluboký pohled – téměř každá skvrna je celá galaxie. B je jedna jediná: ' +
+                     'Andromeda.'
           }
         ],
-        resultGood: '🌟 Vesmírna adresa zapamätaná!',
-        resultOk: '🔭 Ešte raz – tá matrioška sa naučí ľahko.'
+        resultGood: '🌟 Vesmírná adresa zapamatována!',
+        resultOk: '🔭 Ještě jednou – ta matrjoška se naučí snadno.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 19 – EXOPLANÉTY
+     LEKCE 19 – EXOPLANETY
      ========================================================================== */
   {
     id: 'exoplanets',
     icon: '🪐',
-    title: 'EXOPLANÉTY',
-    teaser: 'Planéty pri iných hviezdach. Ako ich vôbec vieme nájsť?',
-    minutes: '7 minút',
+    title: 'EXOPLANETY',
+    teaser: 'Planety u jiných hvězd. Jak je vůbec umíme najít?',
+    minutes: '7 minut',
     badge: 'world-finder',
     basics: [ 'exoplaneta', 'tranzit', 'obyvatelna-zona', 'orbita',
               'magnituda', 'spektrum' ],
@@ -3179,99 +3435,117 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'transit',
-        question: '🔎 AKO ZISTÍME, ŽE PRI HVIEZDE OBIEHA PLANÉTA?',
+        question: '🔎 JAK ZJISTÍME, ŽE U HVĚZDY OBÍHÁ PLANETA?',
         options: [
-          { id: 'dip',   icon: '📉', label: 'Hviezda na chvíľu trochu stmavne' },
-          { id: 'see',   icon: '👀', label: 'Planétu priamo uvidíme na fotke' },
-          { id: 'blink', icon: '✨', label: 'Planéta na nás bliká' },
-          { id: 'radio', icon: '📡', label: 'Ozve sa rádiom' }
+          { id: 'dip',   icon: '📉', label: 'Hvězda na chvíli trochu ztmavne' },
+          { id: 'see',   icon: '👀', label: 'Planetu přímo uvidíme na fotce' },
+          { id: 'blink', icon: '✨', label: 'Planeta na nás bliká' },
+          { id: 'radio', icon: '📡', label: 'Ozve se rádiem' }
         ],
         correct: 'dip',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Keď planéta prejde presne pred svojou hviezdou, zakryje maličkú časť jej svetla. Hviezda stmavne – a to sa dá odmerať.',
-        retryText: 'Skús ešte raz. Planéta je proti hviezde maličká a tmavá. Čo sa teda stane, keď prejde pred ňou?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Když planeta přejde přesně před svou hvězdou, zakryje maličkou část jejího světla. ' +
+                     'Hvězda ztmavne – a to se dá změřit.',
+        retryText: 'Zkus to ještě jednou. Planeta je proti hvězdě maličká a tmavá. Co se tedy stane, když ' +
+                   'přejde před ní?',
         xp: 10
       },
       {
         type: 'info',
-        title: '🪐 SVETY PRI INÝCH HVIEZDACH',
+        title: '🪐 SVĚTY U JINÝCH HVĚZD',
         image: 'transit',
         lines: [
-          'Planéty, ktoré obiehajú pri iných hviezdach, sa nazývajú exoplanéty.',
-          'Sú tak daleko a také slabé, že ich takmer nikdy nevidíme priamo.',
-          'Prezradia sa tým, čo robia so svetlom svojej hviezdy.'
+          'Planety, které obíhají u jiných hvězd, se nazývají exoplanety.',
+          'Jsou tak daleko a tak slabé, že je téměř nikdy nevidíme přímo.',
+          'Prozradí se tím, co dělají se světlem své hvězdy.'
         ],
         more: [
-          'Prvý spôsob, ako sa exoplanéta prezradí, je tranzit: keď prejde presne pred svojou hviezdou, jasnosť hviezdy na chvíľu klesne. Pokles je pritom smiešne malý – u planéty veľkosti Jupitera asi jedno percento, u planéty veľkosti Zeme ani nie stotina percenta.',
-          'Druhý spôsob je ešte prekvapivejší: planéta ťahá gravitáciou svoju hviezdu, takže hviezda sa okolo spoločného stredu trochu kolíše. To kolísanie sa dá zmerať zo zmien v jej spektre.',
-          'Keď planéta prechádza pred hviezdou, prejde svetlo hviezdy aj cez okraj jej atmosféry. V spektre potom pribudnú čiary látok z tejto atmosféry – takto sa dá zistiť, z čoho je vzduch na planéte pri inej hviezde.'
+          'První způsob, jak se exoplaneta prozradí, je tranzit: když přejde přesně před svou ' +
+          'hvězdou, jasnost hvězdy na chvíli klesne. Pokles je přitom směšně malý – u planety ' +
+          'velikosti Jupitera asi jedno procento, u planety velikosti Země ani ne setina ' +
+          'procenta.',
+          'Druhý způsob je ještě překvapivější: planeta táhne gravitací svou hvězdu, takže hvězda ' +
+          'okolo společného středu trochu kolísá. To kolísání se dá změřit ze změn v jejím ' +
+          'spektru.',
+          'Když planeta přechází před hvězdou, projde světlo hvězdy i přes okraj její atmosféry. ' +
+          'Ve spektru potom přibudou čáry látek z této atmosféry – takhle se dá zjistit, z čeho ' +
+          'je vzduch na planetě u jiné hvězdy.'
         ],
-        cta: 'Ako presne?'
+        cta: 'Jak přesně?'
       },
       { type: 'fact', factId: 'exoplanet-6000' },
       {
         type: 'cards',
-        title: 'AKO SA HĽADAJÚ',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'JAK SE HLEDAJÍ',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '📉', name: 'Tranzit', short: 'Hviezda stmavne.',
-            text: 'Planéta prejde pred hviezdou a zakryje maličký kúsok jej svetla. Keď sa to zopakuje pravidelne, je to planéta – a vieme povedať, ako dlho obieha.',
-            image: 'transit', exampleLabel: 'Najúspešnejšia metóda' },
-          { icon: '🥣', name: 'Obývateľná zóna', short: 'Ani horúco, ani zima.',
-            text: 'Pásmo okolo hviezdy, kde môže byť voda tekutá. Astronómi mu hovoria aj zóna Zlatovlásky – ako v tej rozprávke s kašou.',
-            image: 'starYellow', exampleLabel: 'Tam hľadáme život' },
-          { icon: '🌡️', name: 'Divné svety', short: 'Nič ako u nás.',
-            text: 'Našli sa planéty veľké ako Jupiter, ktoré obiehajú okolo hviezdy za pár dní – a sú rozžeravené. Vesmír je oveľa divnejší, než sme čakali.',
-            image: 'jupiter', exampleLabel: 'Horúce jupitery' }
+          { icon: '📉', name: 'Tranzit', short: 'Hvězda ztmavne.',
+            text: 'Planeta přejde před hvězdou a zakryje maličký kousek jejího světla. Když se to ' +
+                  'zopakuje pravidelně, je to planeta – a umíme říct, jak dlouho obíhá.',
+            image: 'transit', exampleLabel: 'Nejúspěšnější metoda' },
+          { icon: '🥣', name: 'Obyvatelná zóna', short: 'Ani horko, ani zima.',
+            text: 'Pásmo okolo hvězdy, kde může být voda tekutá. Astronomové mu říkají také zóna ' +
+                  'Zlatovlásky – jako v té pohádce s kaší.',
+            image: 'starYellow', exampleLabel: 'Tam hledáme život' },
+          { icon: '🌡️', name: 'Divné světy', short: 'Nic jako u nás.',
+            text: 'Našly se planety velké jako Jupiter, které obíhají okolo hvězdy za pár dní – a jsou ' +
+                  'rozžhavené. Vesmír je mnohem divnější, než jsme čekali.',
+            image: 'jupiter', exampleLabel: 'Horké jupitery' }
         ],
-        cta: 'Skúsil by som to sám',
+        cta: 'Zkusil bych to sám',
         xp: 15
       },
       {
         type: 'howto',
-        title: '🔬 AKO BY SI TO ROBIL TY',
-        lead: 'Toto naozaj robia aj amatérski astronómovia – s ďalekohľadom, aký máš doma.',
+        title: '🔬 JAK BYS TO DĚLAL TY',
+        lead: 'Tohle opravdu dělají i amatérští astronomové – s dalekohledem, jaký máš doma.',
         steps: [
-          { icon: '📸', title: 'Fotíš hviezdu stále dokola',
-            text: 'Celé hodiny, jednu snímku za druhou. Nezaujíma ťa krása, ale jasnosť tej jednej hviezdy.' },
-          { icon: '📊', title: 'Meriaš, ako je jasná',
-            text: 'Z každej snímky si zapíšeš jasnosť hviezdy a nakreslíš graf. Väčšinu času je čiara rovná.' },
-          { icon: '📉', title: 'Hľadáš pokles',
-            text: 'Keď planéta prejde pred hviezdou, čiara na chvíľu klesne a potom sa vráti. Pokles býva menší než jedno percento.' },
-          { icon: '🔁', title: 'Overíš to znova',
-            text: 'Jeden pokles nič neznamená – mohol to byť mrak. Až keď sa presne zopakuje, je to planéta.' }
+          { icon: '📸', title: 'Fotíš hvězdu pořád dokola',
+            text: 'Celé hodiny, jeden snímek za druhým. Nezajímá tě krása, ale jasnost té jedné hvězdy.' },
+          { icon: '📊', title: 'Měříš, jak je jasná',
+            text: 'Z každého snímku si zapíšeš jasnost hvězdy a nakreslíš graf. Většinu času je čára ' +
+                  'rovná.' },
+          { icon: '📉', title: 'Hledáš pokles',
+            text: 'Když planeta přejde před hvězdou, čára na chvíli klesne a potom se vrátí. Pokles bývá ' +
+                  'menší než jedno procento.' },
+          { icon: '🔁', title: 'Ověříš to znovu',
+            text: 'Jeden pokles nic neznamená – mohl to být mrak. Až když se přesně zopakuje, je to ' +
+                  'planeta.' }
         ],
-        note: 'Toto je veda v čistej podobe: meraj, hľadaj vzor, over ho.',
-        cta: 'Chápem',
+        note: 'To je věda v čisté podobě: měř, hledej vzor, ověř ho.',
+        cta: 'Chápu',
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Prvú planétu pri hviezde podobnej Slnku našli až v roku 1995. Dovtedy sme o žiadnej cudzej planéte nevedeli isto.',
-          'Dnes ich poznáme vyše šesť tisíc – a to je len maličký zlomok toho, čo tam podľa vedcov je.'
+          'První planetu u hvězdy podobné Slunci našli až v roce 1995. Do té doby jsme o žádné ' +
+          'cizí planetě nevěděli jistě.',
+          'Dnes jich známe přes šest tisíc – a to je jen maličký zlomek toho, co tam podle vědců ' +
+          'je.'
         ],
-        footnote: 'Za jeden ľudský život sme teda z nuly cudzích svetov prešli na tisíce.',
-        cta: 'Ideme sa na jednu pozrieť'
+        footnote: 'Za jeden lidský život jsme tedy z nuly cizích světů přešli na tisíce.',
+        cta: 'Jdeme se na jednu podívat'
       },
       { type: 'fact', factId: 'zlatovlaska-zona' },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'tranzit', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '📸 MISIA: HVIEZDA S PLANÉTOU',
+        title: '📸 MISE: HVĚZDA S PLANETOU',
         objectId: 'peg51',
         tasks: [
-          { icon: '📱', text: 'V Stellariu napíš „51 Pegasi“ – nájdeš ju v štvorci Pegasa na jesennej oblohe.' },
-          { icon: '🔭', text: 'Odfoť ju Dwarfom. Uvidíš len bod – to je v poriadku.' },
-          { icon: '💭', text: 'Uvedom si, čo si práve odfotil: hviezdu, pri ktorej obieha cudzí svet.' }
+          { icon: '📱', text: 'Ve Stellariu napiš „51 Pegasi“ – najdeš ji ve čtverci Pegasa na podzimní obloze.' },
+          { icon: '🔭', text: 'Vyfotografuj ji Dwarfem. Uvidíš jen bod – to je v pořádku.' },
+          { icon: '💭', text: 'Uvědom si, co jsi právě vyfotil: hvězdu, u které obíhá cizí svět.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Odfotil si prvú hviezdu, pri ktorej ľudia našli planétu. Bod na fotke – a pri ňom celý svet.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Vyfotil jsi první hvězdu, u které lidé našli planetu. Bod na fotce – a u něj celý ' +
+                  'svět.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -3279,67 +3553,67 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Čo je exoplanéta?',
+            question: 'Co je exoplaneta?',
             options: [
-              { label: 'Planéta, ktorá obieha okolo inej hviezdy než Slnko', correct: true },
-              { label: 'Planéta, ktorá vyletela z galaxie' },
-              { label: 'Veľmi veľká planéta' },
-              { label: 'Planéta bez mesiaca' }
+              { label: 'Planeta, která obíhá okolo jiné hvězdy než Slunce', correct: true },
+              { label: 'Planeta, která vyletěla z galaxie' },
+              { label: 'Velmi velká planeta' },
+              { label: 'Planeta bez měsíce' }
             ],
-            explain: 'Všetko, čo obieha okolo cudzej hviezdy, je exoplanéta.'
+            explain: 'Všechno, co obíhá okolo cizí hvězdy, je exoplaneta.'
           },
           {
             kind: 'decide',
-            question: 'Ako sa najčastejšie hľadajú?',
+            question: 'Jak se nejčastěji hledají?',
             options: [
-              { icon: '📉', label: 'Podľa toho, že hviezda pravidelne trochu stmavne', correct: true },
-              { icon: '📷', label: 'Priamym fotografovaním planéty' }
+              { icon: '📉', label: 'Podle toho, že hvězda pravidelně trochu ztmavne', correct: true },
+              { icon: '📷', label: 'Přímým fotografováním planety' }
             ],
-            explain: 'Metóda tranzitu. Priame fotenie exoplanét sa podarí len veľmi zriedka.'
+            explain: 'Metoda tranzitu. Přímé fotografování exoplanet se podaří jen velmi zřídka.'
           },
           {
             kind: 'truefalse',
-            question: 'Obývateľná zóna je pásmo okolo hviezdy, kde môže byť tekutá voda.',
+            question: 'Obyvatelná zóna je pásmo okolo hvězdy, kde může být tekutá voda.',
             answer: true,
-            explain: 'Ani horúco, ani zima – preto sa jej hovorí aj zóna Zlatovlásky.'
+            explain: 'Ani horko, ani zima – proto se jí říká také zóna Zlatovlásky.'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok ukazuje tranzit?',
+            question: 'Který obrázek ukazuje tranzit?',
             options: [
               { image: 'transit', label: 'A', correct: true },
               { image: 'ring', label: 'B' }
             ],
-            explain: 'A: tmavá tečka pred hviezdou a graf, kde jasnosť klesla. B je planetárna hmlovina.'
+            explain: 'A: tmavá tečka před hvězdou a graf, kde jasnost klesla. B je planetární mlhovina.'
           },
           {
             kind: 'order',
-            question: 'Zoraď, ako sa potvrdí objav exoplanéty.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď, jak se potvrdí objev exoplanety.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Merať jasnosť hviezdy veľa hodín', order: 1, icon: '📸' },
-              { label: 'Nakresliť graf jasnosti', order: 2, icon: '📊' },
-              { label: 'Nájsť v grafe pokles', order: 3, icon: '📉' },
-              { label: 'Počkať, či sa pokles pravidelne zopakuje', order: 4, icon: '🔁' }
+              { label: 'Měřit jasnost hvězdy mnoho hodin', order: 1, icon: '📸' },
+              { label: 'Nakreslit graf jasnosti', order: 2, icon: '📊' },
+              { label: 'Najít v grafu pokles', order: 3, icon: '📉' },
+              { label: 'Počkat, jestli se pokles pravidelně zopakuje', order: 4, icon: '🔁' }
             ],
-            explain: 'Bez zopakovania to nie je objav – mohol to byť mrak alebo chyba.'
+            explain: 'Bez zopakování to není objev – mohl to být mrak nebo chyba.'
           }
         ],
-        resultGood: '🌟 Hľadač svetov!',
-        resultOk: '🔭 Ešte raz – tranzit je celý trik.'
+        resultGood: '🌟 Hledač světů!',
+        resultOk: '🔭 Ještě jednou – tranzit je celý trik.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 20 – KOMÉTY A METEORY
+     LEKCE 20 – KOMETY A METEORY
      ========================================================================== */
   {
     id: 'comets',
     icon: '☄️',
-    title: 'KOMÉTY A METEORY',
-    teaser: 'Špinavé snehové gule a padajúce hviezdy, ktoré nie sú hviezdy.',
-    minutes: '7 minút',
+    title: 'KOMETY A METEORY',
+    teaser: 'Špinavé sněhové koule a padající hvězdy, které nejsou hvězdy.',
+    minutes: '7 minut',
     badge: 'comet-watcher',
     basics: [ 'kometa', 'chvost-komety', 'meteoroid', 'meteor',
               'meteorit', 'bolid', 'roj' ],
@@ -3348,93 +3622,107 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'comet',
-        question: '🔎 Z ČOHO JE KOMÉTA?',
+        question: '🔎 Z ČEHO JE KOMETA?',
         options: [
-          { id: 'ice',   icon: '🧊', label: 'z ľadu a prachu' },
-          { id: 'fire',  icon: '🔥', label: 'z ohňa' },
-          { id: 'star',  icon: '⭐', label: 'je to malá hviezda' },
+          { id: 'ice',   icon: '🧊', label: 'z ledu a prachu' },
+          { id: 'fire',  icon: '🔥', label: 'z ohně' },
+          { id: 'star',  icon: '⭐', label: 'je to malá hvězda' },
           { id: 'metal', icon: '⚙️', label: 'z čistého kovu' }
         ],
         correct: 'ice',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Kométa je zmrznutá guľa ľadu a prachu – stará 4,6 miliardy rokov, teda z času, keď vznikala Slnečná soustava.',
-        retryText: 'Skús ešte raz. Kométa dostane chvost, keď sa priblíži k Slnku a začne sa vyparovať. Čo sa teda vyparuje?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Kometa je zmrzlá koule ledu a prachu – stará 4,6 miliardy let, tedy z časů, kdy ' +
+                     'vznikala Sluneční soustava.',
+        retryText: 'Zkus to ještě jednou. Kometa dostane ohon, když se přiblíží k Slunci a začne se ' +
+                   'vypařovat. Co se tedy vypařuje?',
         xp: 10
       },
       {
         type: 'info',
-        title: '☄️ ŠPINAVÁ SNEHOVÁ GUĽA',
+        title: '☄️ ŠPINAVÁ SNĚHOVÁ KOULE',
         image: 'comet',
         lines: [
-          'Kométa je zvyšok z čias, keď sa rodila Slnečná soustava.',
-          'Keď priletí blízko k Slnku, ľad sa začne vyparovať a okolo jadra vznikne obrovský obal.',
-          'Slnečné svetlo a častice ho potom rozfúkajú do dvoch chvostov.'
+          'Kometa je zbytek z časů, kdy se rodila Sluneční soustava.',
+          'Když přiletí blízko k Slunci, led se začne vypařovat a okolo jádra vznikne obrovský ' +
+          'obal.',
+          'Sluneční světlo a částice ho potom rozfoukají do dvou ohonů.'
         ],
         more: [
-          'Jadro kométy je malé – len niekoľko kilometrov – a je z ľadu, prachu a zamrznutých plynov. Väčšinu času je daleko od Slnka a je úplne tmavé a nezaujímavé. Až teplo Slnka z neho urobí to, čo poznáme z fotiek.',
-          'Kométa má dva chvosty, a to nie je náhoda. Prachový chvost je zakrivený a nechá sa unášať po dráhe kométy, kým plynový chvost je namierený presne od Slnka, pretože ho odfukuje slnečný vietor.',
-          'A pozor na jednu vec, ktorá mnohých mýli: chvost nie je za kométou ako za autom. Keď kométa letí od Slnka, letí chvostom vpredu – smer chvosta určuje Slnko, nie pohyb kométy.'
+          'Jádro komety je malé – jen několik kilometrů – a je z ledu, prachu a zamrzlých plynů. ' +
+          'Většinu času je daleko od Slunce a je úplně temné a nezajímavé. Až teplo Slunce z něj ' +
+          'udělá to, co známe z fotek.',
+          'Kometa má dva ohony, a to není náhoda. Prachový ohon je zakřivený a nechává se unášet ' +
+          'po dráze komety, zatímco plynový ohon je namířený přesně od Slunce, protože ho ' +
+          'odfukuje sluneční vítr.',
+          'A pozor na jednu věc, která mnohé mýlí: ohon není za kometou jako za autem. Když ' +
+          'kometa letí od Slunce, letí ohonem vpředu – směr ohonu určuje Slunce, ne pohyb komety.'
         ],
-        cta: 'A čo padajúce hviezdy?'
+        cta: 'A co padající hvězdy?'
       },
       { type: 'fact', factId: 'kometa-dva-chvosty' },
       {
         type: 'cards',
-        title: 'TRI SLOVÁ, KTORÉ SI ĽUDIA MÝLIA',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'TŘI SLOVA, KTERÁ SI LIDÉ PLETOU',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
-          { icon: '🪨', name: 'Meteoroid', short: 'Kým je vo vesmíre.',
-            text: 'Kamienok alebo zrniečko letiace vesmírom. Môže byť veľké ako prach alebo ako malá asteroida.',
-            image: 'deepfield', exampleLabel: 'Vo vesmíre' },
-          { icon: '🌠', name: 'Meteor', short: 'Kým horí v atmosfére.',
-            text: 'Keď zrniečko vletí do atmosféry a zhorí, vidíme svetelnú čiaru. Toto je tá „padajúca hviezda“ – hoci hviezda to nie je.',
-            image: 'meteors', exampleLabel: 'V atmosfére' },
-          { icon: '🇸🇰', name: 'Meteorit', short: 'Keď dopadne na zem.',
-            text: 'Keď kus prežije let atmosférou a dopadne, je to meteorit. Jeden taký dopadol aj na Slovensko.',
-            image: 'moon', exampleLabel: 'Na zemi – dá sa chytiť' }
+          { icon: '🪨', name: 'Meteoroid', short: 'Dokud je ve vesmíru.',
+            text: 'Kamínek nebo zrníčko letící vesmírem. Může být velké jako prach nebo jako malý ' +
+                  'asteroid.',
+            image: 'deepfield', exampleLabel: 'Ve vesmíru' },
+          { icon: '🌠', name: 'Meteor', short: 'Dokud hoří v atmosféře.',
+            text: 'Když zrníčko vletí do atmosféry a shoří, vidíme světelnou čáru. To je ta „padající ' +
+                  'hvězda“ – i když hvězda to není.',
+            image: 'meteors', exampleLabel: 'V atmosféře' },
+          { icon: '🇸🇰', name: 'Meteorit', short: 'Když dopadne na zem.',
+            text: 'Když kus přežije let atmosférou a dopadne, je to meteorit. Jeden takový dopadl i u ' +
+                  'Příbrami.',
+            image: 'moon', exampleLabel: 'Na zemi – dá se chytit' }
         ],
-        cta: 'Ideme na úlohu',
+        cta: 'Jdeme na úkol',
         xp: 15
       },
       {
         type: 'pick',
-        title: '🔎 ČO JE „PADAJÚCA HVIEZDA“?',
-        prompt: 'Ktorý obrázok ukazuje meteory?',
+        title: '🔎 CO JE „PADAJÍCÍ HVĚZDA“?',
+        prompt: 'Který obrázek ukazuje meteory?',
         options: [
-          { image: 'comet',    correct: false, explain: 'Toto je kométa. Tá na nebi stojí celé týždne, nikam nepadá.' },
-          { image: 'meteors',  correct: true,  explain: 'Áno! Meteory – zrniečka, ktoré zhoreli v atmosfére. Pri roji sa zdá, že vyletujú z jedného miesta.' },
-          { image: 'iss',      correct: false, explain: 'Toto je prelet družice – letí pomaly a rovnomerne, nie ako záblesk.' },
-          { image: 'starBlue', correct: false, explain: 'Toto je hviezda. Tá je od nás svetelné roky a nikam nepadá.' }
+          { image: 'comet',    correct: false, explain: 'Tohle je kometa. Ta na nebi stojí celé týdny, nikam nepadá.' },
+          { image: 'meteors',  correct: true,  explain: 'Ano! Meteory – zrníčka, která shořela v atmosféře. Při roji se zdá, že vylétají z ' +
+                                                        'jednoho místa.' },
+          { image: 'iss',      correct: false, explain: 'Tohle je přelet družice – letí pomalu a rovnoměrně, ne jako záblesk.' },
+          { image: 'starBlue', correct: false, explain: 'Tohle je hvězda. Ta je od nás světelné roky a nikam nepadá.' }
         ],
         xp: 20
       },
       { type: 'fact', factId: 'perzeidy' },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          '28. februára 2010 preletel nad Košicami bolid tisíckrát jasnejší ako Mesiac v splne.',
-          'Vedci potom v okolí našli 218 úlomkov o celkovej hmotnosti 11,28 kilogramu. Kus vesmíru, ktorý dopadol pár hodín cesty odtiaľto.'
+          '7. dubna 1959 přeletěl nad středními Čechami bolid mnohem jasnější než Měsíc v úplňku. ' +
+          'Vyfotografovaly ho hvězdárny v Ondřejově a v Prčici.',
+          'Vědci pak našli čtyři úlomky o celkové hmotnosti 5,8 kilogramu. Kus vesmíru, který ' +
+          'dopadl hodinu cesty od Prahy.'
         ],
-        footnote: 'Na Slovensku teda máme vlastný meteorit – a vieme presne, odkiaľ priletel.',
+        footnote: 'Máme tedy vlastní meteorit – a víme přesně, odkud přiletěl.',
         cta: 'To je super!'
       },
       { type: 'fact', factId: 'meteorit-kosice' },
       { type: 'fact', factId: 'meteorov-44-ton' },
       {
         type: 'mission',
-        title: '🌠 MISIA: POČÍTAJ METEORY',
+        title: '🌠 MISE: POČÍTEJ METEORY',
         objectId: 'perseids',
         tasks: [
-          { icon: '📅', text: 'Nájdi si najbližší meteorický roj – Perzeidy vrcholia 12. – 13. augusta.' },
-          { icon: '🛌', text: 'Ľahni si na deku a pozeraj do širokej časti oblohy. Ďalekohľad tu netreba!' },
-          { icon: '🔢', text: 'Počítaj meteory pol hodiny a zapíš si číslo.' },
-          { icon: '📸', text: 'Dwarf nechaj fotiť dlhé série širokouhlo – niektorý meteor ti do záberu vletí sám.' }
+          { icon: '📅', text: 'Najdi si nejbližší meteorický roj – Perseidy vrcholí 12. – 13. srpna.' },
+          { icon: '🛌', text: 'Lehni si na deku a koukej do široké části oblohy. Dalekohled tu není potřeba!' },
+          { icon: '🔢', text: 'Počítej meteory půl hodiny a zapiš si číslo.' },
+          { icon: '📸', text: 'Dwarf nechej fotit dlouhé série širokoúhle – některý meteor ti do záběru vletí sám.' }
         ],
-        button: '✅ MISIA SPLNENÁ',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Meteorický roj máš v zbierke. A tvoje číslo je skutočné pozorovacie dáta.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Meteorický roj máš ve sbírce. A tvoje číslo jsou skutečná pozorovací data.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -3442,67 +3730,67 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Z čoho sa skladá kométa?',
+            question: 'Z čeho se skládá kometa?',
             options: [
-              { label: 'Hlavne z ľadu a prachu', correct: true },
-              { label: 'Z horúceho plynu ako hviezda' },
+              { label: 'Hlavně z ledu a prachu', correct: true },
+              { label: 'Z horkého plynu jako hvězda' },
               { label: 'Z čistého kovu' },
               { label: 'Z lávy' }
             ],
-            explain: 'Preto sa jej hovorí špinavá snehová guľa.'
+            explain: 'Proto se jí říká špinavá sněhová koule.'
           },
           {
             kind: 'decide',
-            question: 'Kamienok práve horí v atmosfére. Ako sa mu v tej chvíli hovorí?',
+            question: 'Kamínek právě hoří v atmosféře. Jak se mu v té chvíli říká?',
             options: [
               { icon: '🌠', label: 'Meteor', correct: true },
               { icon: '🇸🇰', label: 'Meteorit' }
             ],
-            explain: 'Vo vesmíre je to meteoroid, v atmosfére meteor a na zemi meteorit.'
+            explain: 'Ve vesmíru je to meteoroid, v atmosféře meteor a na zemi meteorit.'
           },
           {
             kind: 'truefalse',
-            question: 'Chvost kométy vždy smeruje dozadu, tam odkiaľ kométa priletela.',
+            question: 'Ohon komety vždy směřuje dozadu, tam odkud kometa přiletěla.',
             answer: false,
-            explain: 'Nie – chvost je vždy odfúknutý od Slnka. Keď kométa letí od Slnka, má chvost vpredu!'
+            explain: 'Ne – ohon je vždy odfouknutý od Slunce. Když kometa letí od Slunce, má ohon vpředu!'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok je meteorický roj?',
+            question: 'Který obrázek je meteorický roj?',
             options: [
               { image: 'meteors', label: 'A', correct: true },
               { image: 'comet', label: 'B' }
             ],
-            explain: 'A: krátke čiary rozbiehajúce sa z jedného miesta. B je kométa s dvomi chvostmi.'
+            explain: 'A: krátké čáry rozbíhající se z jednoho místa. B je kometa se dvěma ohony.'
           },
           {
             kind: 'order',
-            question: 'Zoraď cestu jedného zrniečka prachu.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď cestu jednoho zrníčka prachu.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Odpadne z kométy pri Slnku', order: 1, icon: '☄️' },
-              { label: 'Zostane po nej prachová stopa', order: 2, icon: '✨' },
-              { label: 'Zem preletí cez tú stopu', order: 3, icon: '🌍' },
-              { label: 'Zrniečko zhorí ako meteor', order: 4, icon: '🌠' }
+              { label: 'Odpadne z komety u Slunce', order: 1, icon: '☄️' },
+              { label: 'Zůstane po ní prachová stopa', order: 2, icon: '✨' },
+              { label: 'Země proletí tou stopou', order: 3, icon: '🌍' },
+              { label: 'Zrníčko shoří jako meteor', order: 4, icon: '🌠' }
             ],
-            explain: 'Preto sú niektoré roje každý rok v ten istý čas – Zem prechádza tou istou stopou.'
+            explain: 'Proto jsou některé roje každý rok ve stejný čas – Země prochází tou stejnou stopou.'
           }
         ],
-        resultGood: '🌟 Pozorovateľ kométy!',
-        resultOk: '🔭 Ešte raz – hlavne tie tri slová.'
+        resultGood: '🌟 Pozorovatel komet!',
+        resultOk: '🔭 Ještě jednou – hlavně ta tři slova.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 21 – TMAVÁ OBLOHA
+     LEKCE 21 – TMAVÁ OBLOHA
      ========================================================================== */
   {
     id: 'darksky',
     icon: '🌑',
     title: 'TMAVÁ OBLOHA',
-    teaser: 'Prečo z mesta nevidno hviezdy – a kam ísť za skutočnou tmou.',
-    minutes: '6 minút',
+    teaser: 'Proč z města nejsou vidět hvězdy – a kam jít za skutečnou tmou.',
+    minutes: '6 minut',
     badge: 'dark-guardian',
     basics: [ 'svetelne-znecistenie', 'magnituda', 'zenit', 'sum',
               'expozicia', 'rosa' ],
@@ -3511,111 +3799,121 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'citysky',
-        question: '🔎 PREČO Z MESTA VIDNO LEN MÁLO HVIEZD?',
+        question: '🔎 PROČ JE Z MĚSTA VIDĚT JEN MÁLO HVĚZD?',
         options: [
-          { id: 'lights', icon: '💡', label: 'Svetlo lámp rozsvieti celú oblohu' },
-          { id: 'none',   icon: '🌌', label: 'Nad mestom je menej hviezd' },
-          { id: 'air',    icon: '💨', label: 'Vzduch je nad mestom hustejší' },
-          { id: 'houses', icon: '🏢', label: 'Zakrývajú ich domy' }
+          { id: 'lights', icon: '💡', label: 'Světlo lamp rozsvítí celou oblohu' },
+          { id: 'none',   icon: '🌌', label: 'Nad městem je méně hvězd' },
+          { id: 'air',    icon: '💨', label: 'Vzduch je nad městem hustší' },
+          { id: 'houses', icon: '🏢', label: 'Zakrývají je domy' }
         ],
         correct: 'lights',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Svetlo lámp sa odráža od prachu a vlhkosti v atmosfére a rozsvieti celú oblohu. Slabé hviezdy sa v tej žiare stratia.',
-        retryText: 'Skús ešte raz. Hviezdy sú nad mestom presne tie isté. Čo sa teda zmenilo?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Světlo lamp se odráží od prachu a vlhkosti v atmosféře a rozsvítí celou oblohu. Slabé ' +
+                     'hvězdy se v té záři ztratí.',
+        retryText: 'Zkus to ještě jednou. Hvězdy jsou nad městem přesně ty stejné. Co se tedy změnilo?',
         xp: 10
       },
       {
         type: 'info',
-        title: '💡 OBLOHA, KTORÁ SVIETI',
+        title: '💡 OBLOHA, KTERÁ SVÍTÍ',
         image: 'citysky',
         lines: [
-          'Veľa lámp svieti aj nahor, do oblohy, kde nikto nič nepotrebuje vidieť.',
-          'To svetlo sa v atmosfére rozptýli a obloha prestane byť čierna.',
-          'Z mesta tak uvidíš pár desiatok hviezd, z tmavého miesta tisíce.'
+          'Hodně lamp svítí i nahoru, do oblohy, kde nikdo nic vidět nepotřebuje.',
+          'To světlo se v atmosféře rozptýlí a obloha přestane být černá.',
+          'Z města tak uvidíš pár desítek hvězd, z tmavého místa tisíce.'
         ],
         more: [
-          'Svetlo, ktoré ide zo lámp nahor, sa v atmosfére odrazí od molekúl vzduchu a drobných kvapiek. Obloha sa tým rozsvieti a slabé hviezdy sa v tej žiare stratia – nie sú prekryté, len ich už nedokážeme odlíšiť od pozadia.',
-          'Nie je to len problém pre astronómov. Nočné svetlo mätie vtáky pri migrácii, priťahuje a vyčerpáva nočné motýle a mení chovanie mnohých živočíchov.',
-          'Dobrá správa je, že svetelné znečistenie zmizne v okamihu, keď sa lampa zhasne alebo zastieni. Na rozdiel od väčšiny znečistení nič nezostáva – stačí svietiť nadol a len tam, kde to treba.'
+          'Světlo, které jde z lamp nahoru, se v atmosféře odrazí od molekul vzduchu a drobných ' +
+          'kapiček. Obloha se tím rozsvítí a slabé hvězdy se v té záři ztratí – nejsou překryté, ' +
+          'jen je už nedokážeme odlišit od pozadí.',
+          'Není to jen problém pro astronomy. Noční světlo mate ptáky při migraci, přitahuje a ' +
+          'vyčerpává noční motýly a mění chování mnoha živočichů.',
+          'Dobrá zpráva je, že světelné znečištění zmizí v okamžiku, kdy se lampa zhasne nebo ' +
+          'zastíní. Na rozdíl od většiny znečištění nic nezůstává – stačí svítit dolů a jen tam, ' +
+          'kde to je potřeba.'
         ],
-        cta: 'Aký veľký je ten rozdiel?'
+        cta: 'Jak velký je ten rozdíl?'
       },
       {
         type: 'compare',
-        title: '🌆 MESTO vs. 🌌 TMAVÁ OBLOHA',
-        lead: 'Ten istý večer, tá istá obloha, to isté oko. Len iné miesto.',
+        title: '🌆 MĚSTO vs. 🌌 TMAVÁ OBLOHA',
+        lead: 'Ten samý večer, ta samá obloha, to samé oko. Jen jiné místo.',
         eye: {
           icon: '🌆',
-          label: 'Z MESTA',
+          label: 'Z MĚSTA',
           art: 'citysky',
-          text: 'Oranžová žiara nad domami, pár najjasnejších hviezd a Mesiac. Mliečnu cestu neuvidíš vôbec.'
+          text: 'Oranžová záře nad domy, pár nejjasnějších hvězd a Měsíc. Mléčnou dráhu neuvidíš vůbec.'
         },
         camera: {
           icon: '🌌',
-          label: 'Z TMAVÉHO MIESTA',
+          label: 'Z TMAVÉHO MÍSTA',
           image: 'milkyway',
-          text: 'Tisíce hviezd, Mliečna cesta ako pás cez celé nebo a tmavé prachové oblaky v ňom. Rozdiel je obrovský.'
+          text: 'Tisíce hvězd, Mléčná dráha jako pás přes celé nebe a tmavé prachové oblaky v ní. ' +
+                'Rozdíl je obrovský.'
         },
         check: {
-          question: 'Čo pomôže tvojim fotkám najviac?',
+          question: 'Co pomůže tvým fotkám nejvíc?',
           options: [
-            { label: 'Odviezť sa na tmavé miesto mimo mesta', correct: true,
-              explain: 'Áno – tmavá obloha pomôže viac než akékoľvek nastavenie alebo drahší ďalekohľad.' },
-            { label: 'Nastaviť v appke vyšší gain', correct: false,
-              explain: 'Vyšší gain zosilní aj tú žiaru z mesta. Problém tým nevyriešiš.' }
+            { label: 'Odjet na tmavé místo za město', correct: true,
+              explain: 'Ano – tmavá obloha pomůže víc než jakékoli nastavení nebo dražší dalekohled.' },
+            { label: 'Nastavit v aplikaci vyšší gain', correct: false,
+              explain: 'Vyšší gain zesílí i tu záři z města. Problém tím nevyřešíš.' }
           ]
         },
-        cta: 'Kam teda ísť?'
+        cta: 'Kam tedy jet?'
       },
       { type: 'fact', factId: 'poloniny' },
       {
         type: 'howto',
-        title: '🚗 AKO SI NÁJSŤ TMAVÉ MIESTO',
-        lead: 'Nemusíte ísť až do Polonín. Aj pár kilometrov za mesto je veľký rozdiel.',
+        title: '🚗 JAK SI NAJÍT TMAVÉ MÍSTO',
+        lead: 'Nemusíte jet až do Jizerských hor. I pár kilometrů za město je velký rozdíl.',
         steps: [
-          { icon: '🗺️', title: 'Pozri si mapu svetelného znečistenia',
-            text: 'Na internete sú mapy, kde je tma. Nájdi si najbližšie tmavé miesto od vás.' },
-          { icon: '🌑', title: 'Vyber noc bez Mesiaca',
-            text: 'Mesiac v splne rozsvieti oblohu takmer ako mesto. Najlepšie sú noci okolo novu.' },
-          { icon: '🔴', title: 'Nesvieť si bielou baterkou',
-            text: 'Oko si zvyká na tmu asi 20 minút a jedno bliknutie to zruší. Používaj červené svetlo.' },
-          { icon: '🧥', title: 'Obleč sa teplejšie, než si myslíš',
-            text: 'V noci sa stojí na jednom mieste a je zima aj v lete. Deka a čaj sú súčasť výbavy.' }
+          { icon: '🗺️', title: 'Podívej se na mapu světelného znečištění',
+            text: 'Na internetu jsou mapy, kde je tma. Najdi si nejbližší tmavé místo od vás.' },
+          { icon: '🌑', title: 'Vyber noc bez Měsíce',
+            text: 'Měsíc v úplňku rozsvítí oblohu téměř jako město. Nejlepší jsou noci okolo novu.' },
+          { icon: '🔴', title: 'Nesviť si bílou baterkou',
+            text: 'Oko si zvyká na tmu asi 20 minut a jedno bliknutí to zruší. Používej červené světlo.' },
+          { icon: '🧥', title: 'Obleč se tepleji, než si myslíš',
+            text: 'V noci se stojí na jednom místě a je zima i v létě. Deka a čaj jsou součást výbavy.' }
         ],
-        note: 'A ešte jedna vec: nechaj oči 20 minút privyknúť tme, než začneš hodnotiť, koľko hviezd vidíš.',
-        cta: 'Ideme na to',
+        note: 'A ještě jedna věc: nech oči 20 minut přivyknout tmě, než začneš hodnotit, kolik hvězd ' +
+              'vidíš.',
+        cta: 'Jdeme na to',
         xp: 20
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Väčšina ľudí na Zemi už nikdy v živote nevidela Mliečnu cestu. Nie preto, že by zmizla – ale preto, že žijú vo svetle.',
-          'Tvoj syn ju vidieť môže. Stačí odviezť sa pár kilometrov.'
+          'Většina lidí na Zemi už nikdy v životě neviděla Mléčnou dráhu. Ne proto, že by zmizela ' +
+          '– ale proto, že žijí ve světle.',
+          'Tvůj syn ji vidět může. Stačí odjet pár kilometrů.'
         ],
-        footnote: 'Svetelné znečistenie je jediný druh znečistenia, ktorý zmizne v tej sekunde, keď vypneš vypínač.',
-        cta: 'Chcem to vidieť'
+        footnote: 'Světelné znečištění je jediný druh znečištění, který zmizí v tu sekundu, kdy vypneš ' +
+                  'vypínač.',
+        cta: 'Chci to vidět'
       },
 
-      /* ---------------- INTERAKTÍVNA ÚLOHA (simulátor) ---------------- */
+      /* ---------------- INTERAKTIVNÍ ÚLOHA (simulátor) ---------------- */
       { type: 'sim', simId: 'svetelne-znecistenie', xp: 25, bonusXp: 15 },
       {
         type: 'mission',
-        title: '🔢 MISIA: SPOČÍTAJ HVIEZDY',
+        title: '🔢 MISE: SPOČÍTEJ HVĚZDY',
         image: 'milkyway',
-        subtitle: 'Rovnaký pokus na dvoch miestach',
-        lead: 'Toto je skutočné meranie, aké robia aj vedci pri sledovaní svetelného znečistenia.',
+        subtitle: 'Stejný pokus na dvou místech',
+        lead: 'Tohle je skutečné měření, jaké dělají i vědci při sledování světelného znečištění.',
         tasks: [
-          { icon: '🏠', text: 'Doma si vyber malú časť oblohy (napr. štvorec Veľkého voza) a spočítaj v ňom hviezdy.' },
-          { icon: '🚗', text: 'To isté zopakuj na tmavom mieste za mestom – v ten istý štvorec.' },
-          { icon: '📊', text: 'Porovnaj obe čísla. Rozdiel býva aj desaťnásobný.' },
-          { icon: '📸', text: 'A ten istý objekt odfoť z oboch miest, aby si videl rozdiel aj na fotke.' }
+          { icon: '🏠', text: 'Doma si vyber malou část oblohy (např. čtverec Velkého vozu) a spočítej v ní hvězdy.' },
+          { icon: '🚗', text: 'To samé zopakuj na tmavém místě za městem – v tom samém čtverci.' },
+          { icon: '📊', text: 'Porovnej obě čísla. Rozdíl bývá i desetinásobný.' },
+          { icon: '📸', text: 'A ten samý objekt vyfoť z obou míst, abys viděl rozdíl i na fotce.' }
         ],
-        note: 'Nechaj oči najprv 20 minút privyknúť tme – inak si podceníš tmavé miesto.',
-        button: '✅ MISIA SPLNENÁ',
+        note: 'Nech oči nejdřív 20 minut přivyknout tmě – jinak si tmavé místo podceníš.',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Práve si zmeral svetelné znečistenie tam, kde žijete. To je citizen science.',
-        cta: 'Posledná výzva: mini test'
+        doneText: 'Právě jsi změřil světelné znečištění tam, kde žijete. To je citizen science.',
+        cta: 'Poslední výzva: mini test'
       },
       {
         type: 'quiz',
@@ -3623,67 +3921,67 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo z mesta vidíme menej hviezd?',
+            question: 'Proč z města vidíme méně hvězd?',
             options: [
-              { label: 'Svetlo lámp sa rozptýli v atmosfére a rozsvieti oblohu', correct: true },
-              { label: 'Nad mestom sú naozaj menej hviezd' },
-              { label: 'Hviezdy sa svetla lámp boja' },
-              { label: 'Vzduch je nad mestom teplejší' }
+              { label: 'Světlo lamp se rozptýlí v atmosféře a rozsvítí oblohu', correct: true },
+              { label: 'Nad městem je opravdu méně hvězd' },
+              { label: 'Hvězdy se světla lamp bojí' },
+              { label: 'Vzduch je nad městem teplejší' }
             ],
-            explain: 'Hviezdy sú tam tie isté. Len sa stratia v žiare, ktorú sami vyrábame.'
+            explain: 'Hvězdy jsou tam ty samé. Jen se ztratí v záři, kterou sami vyrábíme.'
           },
           {
             kind: 'decide',
-            question: 'Chceš fotiť slabú galaxiu. Čo pomôže viac?',
+            question: 'Chceš fotit slabou galaxii. Co pomůže víc?',
             options: [
-              { icon: '🚗', label: 'Odviezť sa na tmavé miesto', correct: true },
-              { icon: '🎚️', label: 'Zvýšiť gain na maximum' }
+              { icon: '🚗', label: 'Odjet na tmavé místo', correct: true },
+              { icon: '🎚️', label: 'Zvýšit gain na maximum' }
             ],
-            explain: 'Tmavá obloha je najlacnejšie a najsilnejšie „vylepšenie“ ďalekohľadu, aké existuje.'
+            explain: 'Tmavá obloha je nejlevnější a nejsilnější „vylepšení“ dalekohledu, jaké existuje.'
           },
           {
             kind: 'truefalse',
-            question: 'Oko si na tmu zvyká asi 20 minút a jedno bliknutie bielou baterkou to zruší.',
+            question: 'Oko si na tmu zvyká asi 20 minut a jedno bliknutí bílou baterkou to zruší.',
             answer: true,
-            explain: 'Preto astronómovia používajú červené svetlo – to adaptáciu na tmu takmer nepokazí.'
+            explain: 'Proto astronomové používají červené světlo – to adaptaci na tmu téměř nepokazí.'
           },
           {
             kind: 'image',
-            question: 'Na ktorej oblohe uvidíš Mliečnu cestu?',
+            question: 'Na které obloze uvidíš Mléčnou dráhu?',
             options: [
               { image: 'milkyway', label: 'A', correct: true },
               { image: 'citysky', label: 'B' }
             ],
-            explain: 'B je obloha nad mestom – tam Mliečna cesta zmizne v žiare lámp.'
+            explain: 'B je obloha nad městem – tam Mléčná dráha zmizí v záři lamp.'
           },
           {
             kind: 'order',
-            question: 'Zoraď, ako si naplánujete výjazd za tmavou oblohou.',
-            hint: 'Klikaj v správnom poradí.',
+            question: 'Seřaď, jak si naplánujete výjezd za tmavou oblohou.',
+            hint: 'Klikej ve správném pořadí.',
             items: [
-              { label: 'Nájsť tmavé miesto na mape', order: 1, icon: '🗺️' },
-              { label: 'Vybrať noc bez Mesiaca', order: 2, icon: '🌑' },
-              { label: 'Zbaliť deku, čaj a červenú baterku', order: 3, icon: '🎒' },
-              { label: 'Na mieste dať očiam 20 minút na tmu', order: 4, icon: '👀' }
+              { label: 'Najít tmavé místo na mapě', order: 1, icon: '🗺️' },
+              { label: 'Vybrat noc bez Měsíce', order: 2, icon: '🌑' },
+              { label: 'Sbalit deku, čaj a červenou baterku', order: 3, icon: '🎒' },
+              { label: 'Na místě dát očím 20 minut na tmu', order: 4, icon: '👀' }
             ],
-            explain: 'Posledný krok ľudia najčastejšie vynechajú – a potom sa čudujú, že „nič nevidno“.'
+            explain: 'Poslední krok lidé nejčastěji vynechají – a pak se diví, že „nic není vidět“.'
           }
         ],
-        resultGood: '🌟 Ochránca tmy!',
-        resultOk: '🔭 Ešte raz – a potom rovno von z mesta.'
+        resultGood: '🌟 Ochránce tmy!',
+        resultOk: '🔭 Ještě jednou – a potom rovnou ven z města.'
       }
     ]
   },
 
   /* ==========================================================================
-     LEKCIA 22 – ĎALEKOHĽADY
+     LEKCE 22 – DALEKOHLEDY
      ========================================================================== */
   {
     id: 'telescopes',
     icon: '🏛️',
-    title: 'ĎALEKOHĽADY',
-    teaser: 'Od hvezdárenskej kupoly po Webb – a kde v tom je tvoj Dwarf.',
-    minutes: '7 minút',
+    title: 'DALEKOHLEDY',
+    teaser: 'Od hvězdářské kopule po Webb – a kde v tom je tvůj Dwarf.',
+    minutes: '7 minut',
     badge: 'telescope-expert',
     basics: [ 'objektiv-zrkadlo', 'kupola', 'senzor', 'infracervene-svetlo',
               'zorne-pole', 'seeing', 'falosne-farby' ],
@@ -3692,109 +3990,126 @@ const LESSONS = [
       {
         type: 'guess',
         image: 'dome',
-        question: '🔎 PREČO MAJÚ HVEZDÁRNE OKRÚHLE KUPOLY?',
+        question: '🔎 PROČ MAJÍ HVĚZDÁRNY KULATÉ KOPULE?',
         options: [
-          { id: 'turn',   icon: '🔄', label: 'Aby sa dali otočiť kamkoľvek na nebi' },
-          { id: 'pretty', icon: '🎨', label: 'Lebo sú krásne' },
-          { id: 'rain',   icon: '🌧️', label: 'Aby z nich stekal dážď' },
-          { id: 'hide',   icon: '🙈', label: 'Aby ich nebolo vidieť' }
+          { id: 'turn',   icon: '🔄', label: 'Aby se daly otočit kamkoli na nebi' },
+          { id: 'pretty', icon: '🎨', label: 'Protože jsou krásné' },
+          { id: 'rain',   icon: '🌧️', label: 'Aby z nich stékal déšť' },
+          { id: 'hide',   icon: '🙈', label: 'Aby nebyly vidět' }
         ],
         correct: 'turn',
-        successTitle: '🎉 SPRÁVNE!',
-        successText: 'Kupola sa otáča, takže úzku štrbinu môžeš namieriť kamkoľvek. A keďže je otvorená len tá štrbina, vietor ďalekohľadom netrasie.',
-        retryText: 'Skús ešte raz. Ďalekohľad sa musí pozrieť na každý kút oblohy. Čo teda musí kupola zvládnuť?',
+        successTitle: '🎉 SPRÁVNĚ!',
+        successText: 'Kopule se otáčí, takže úzkou štěrbinu můžeš namířit kamkoli. A protože je otevřená jen ' +
+                     'ta štěrbina, vítr dalekohledem netřese.',
+        retryText: 'Zkus to ještě jednou. Dalekohled se musí podívat do každého koutu oblohy. Co tedy musí ' +
+                   'kopule zvládnout?',
         xp: 10
       },
       {
         type: 'info',
-        title: '🏛️ ČÍM VÄČŠIE ZRKADLO, TÝM VIAC SVETLA',
+        title: '🏛️ ČÍM VĚTŠÍ ZRCADLO, TÍM VÍC SVĚTLA',
         image: 'dome',
         lines: [
-          'Ďalekohľad je v podstate vedro na svetlo. Čím väčšie, tým viac nazbiera.',
-          'Preto majú veľké ďalekohľady zrkadlá – veľké zrkadlo sa dá vyrobiť ľahšie než veľká čočka.',
-          'A stavajú sa na horách, kde je nad nimi menej vzduchu a menej svetla z miest.'
+          'Dalekohled je v podstatě kbelík na světlo. Čím větší, tím víc nasbírá.',
+          'Proto mají velké dalekohledy zrcadla – velké zrcadlo se dá vyrobit snadněji než velká ' +
+          'čočka.',
+          'A staví se na horách, kde je nad nimi méně vzduchu a méně světla z měst.'
         ],
         more: [
-          'Zväčšenie nie je to najdôležitejšie číslo ďalekohľadu, aj keď to tak na obaloch vyzerá. Podstatný je priemer zrkadla alebo čočky, pretože ten určuje, koľko svetla ďalekohľad nazbiera a aké slabé objekty teda vôbec uvidí.',
-          'Veľký priemer navyše lepšie rozlišuje detaily. Preto sa stavajú ďalekohľady s desaťmetrovými zrkadlami – a preto sa niekoľko menších dá spojiť tak, aby fungovali ako jeden obrovský.',
-          'Najväčším nepriateľom ostrosti je vzduch. Preto stoja veľké observatóriá na vysokých horách v púšti a preto sa niektoré ďalekohľady posielajú priamo do vesmíru, kde nad nimi nie je už žiadna atmosféra.'
+          'Zvětšení není to nejdůležitější číslo dalekohledu, i když to tak na obalech vypadá. ' +
+          'Podstatný je průměr zrcadla nebo čočky, protože ten určuje, kolik světla dalekohled ' +
+          'nasbírá a jak slabé objekty tedy vůbec uvidí.',
+          'Velký průměr navíc lépe rozlišuje detaily. Proto se staví dalekohledy s ' +
+          'desetimetrovými zrcadly – a proto se několik menších dá spojit tak, aby fungovaly jako ' +
+          'jeden obrovský.',
+          'Největším nepřítelem ostrosti je vzduch. Proto stojí velké observatoře na vysokých ' +
+          'horách v poušti a proto se některé dalekohledy posílají přímo do vesmíru, kde nad nimi ' +
+          'už není žádná atmosféra.'
         ],
-        cta: 'A tie vo vesmíre?'
+        cta: 'A ty ve vesmíru?'
       },
       { type: 'fact', factId: 'hubble-webb' },
       {
         type: 'cards',
-        title: 'TRI ĎALEKOHĽADY, TRI SVETY',
-        subtitle: 'Otoč všetky tri karty.',
+        title: 'TŘI DALEKOHLEDY, TŘI SVĚTY',
+        subtitle: 'Otoč všechny tři karty.',
         cards: [
           { icon: '🛰️', name: 'Hubble', short: 'Nad atmosférou.',
-            text: 'Zrkadlo 2,4 metra, obieha asi 560 km nad Zemou. Nad atmosférou nič nerozostruje obraz – preto sú jeho fotky také ostré.',
-            image: 'm31', exampleLabel: 'Vidí to, čo aj naše oko' },
-          { icon: '🔭', name: 'Webb', short: 'V infračervenom svetle.',
-            text: 'Odletel 25. decembra 2021 až 1,5 milióna kilometrov od Zeme. Vidí v infračervenom svetle, takže dovidí cez prach a hlbšie do minulosti.',
-            image: 'deepfield', exampleLabel: 'Vidí to, čo oko nevidí' },
-          { icon: '🏠', name: 'Tvoj Dwarf', short: 'Ten istý princíp.',
-            text: 'Objektív 30 mm, stojí na statíve v záhrade. Zbiera svetlo dlho a skladá snímky – presne ako tie veľké. Len v menšom.',
-            image: 'm42', exampleLabel: 'Vidí prekvapivo veľa' }
+            text: 'Zrcadlo 2,4 metru, obíhá asi 560 km nad Zemí. Nad atmosférou nic nerozostřuje obraz – ' +
+                  'proto jsou jeho fotky tak ostré.',
+            image: 'm31', exampleLabel: 'Vidí to, co i naše oko' },
+          { icon: '🔭', name: 'Webb', short: 'V infračerveném světle.',
+            text: 'Odletěl 25. prosince 2021 až 1,5 milionu kilometrů od Země. Vidí v infračerveném ' +
+                  'světle, takže dohlédne skrz prach a hlouběji do minulosti.',
+            image: 'deepfield', exampleLabel: 'Vidí to, co oko nevidí' },
+          { icon: '🏠', name: 'Tvůj Dwarf', short: 'Ten samý princip.',
+            text: 'Objektiv 30 mm, stojí na stativu v zahradě. Sbírá světlo dlouho a skládá snímky – ' +
+                  'přesně jako ty velké. Jen v menším.',
+            image: 'm42', exampleLabel: 'Vidí překvapivě mnoho' }
         ],
-        cta: 'Porovnajme to',
+        cta: 'Porovnejme to',
         xp: 15
       },
       {
         type: 'compare',
-        title: '🔍 TVOJA FOTKA vs. HUBBLE',
-        lead: 'Ten istý objekt, dva veľmi rozdielne prístroje – a napriek tomu prekvapivo veľa spoločného.',
+        title: '🔍 TVOJE FOTKA vs. HUBBLE',
+        lead: 'Ten samý objekt, dva velmi rozdílné přístroje – a přesto překvapivě mnoho společného.',
         eye: {
           icon: '🏠',
-          label: 'DWARF ZO ZÁHRADY',
+          label: 'DWARF ZE ZAHRADY',
           art: 'roundstars',
-          text: 'Objektív 30 mm, pod atmosférou, pár desiatok minút. Uvidíš tvar hmloviny, jej farby aj hviezdy v nej.'
+          text: 'Objektiv 30 mm, pod atmosférou, pár desítek minut. Uvidíš tvar mlhoviny, její barvy i ' +
+                'hvězdy v ní.'
         },
         camera: {
           icon: '🛰️',
           label: 'HUBBLE Z ORBITY',
           image: 'm42',
-          text: 'Zrkadlo 2,4 m, nad atmosférou, často desiatky hodín. Vidí detaily, ktoré sú pre malý ďalekohľad nedosiahnuteľné.'
+          text: 'Zrcadlo 2,4 m, nad atmosférou, často desítky hodin. Vidí detaily, které jsou pro malý ' +
+                'dalekohled nedosažitelné.'
         },
         check: {
-          question: 'Čím to hlavne je, že Hubble vidí viac?',
+          question: 'Čím to hlavně je, že Hubble vidí víc?',
           options: [
-            { label: 'Má oveľa väčšie zrkadlo a je nad atmosférou', correct: true,
-              explain: 'Áno – väčšie „vedro“ na svetlo a žiadny rozmazávajúci vzduch. Princíp je ale úplne rovnaký ako u tvojho Dwarfu.' },
-            { label: 'Je oveľa bližšie k hmlovine', correct: false,
-              explain: 'To nie. Oproti 1 300 svetelným rokom je 560 km nad Zemou úplne zanedbateľné.' }
+            { label: 'Má mnohem větší zrcadlo a je nad atmosférou', correct: true,
+              explain: 'Ano – větší „kbelík“ na světlo a žádný rozmazávající vzduch. Princip je ale úplně ' +
+                       'stejný jako u tvého Dwarfu.' },
+            { label: 'Je mnohem blíž k mlhovině', correct: false,
+              explain: 'To ne. Proti 1 300 světelným rokům je 560 km nad Zemí úplně zanedbatelné.' }
           ]
         },
-        cta: 'Ideme si to porovnať naozaj'
+        cta: 'Jdeme to porovnat doopravdy'
       },
       {
         type: 'wow',
-        title: '🤯 POČKAJ…',
+        title: '🤯 POČKEJ…',
         lines: [
-          'Zbierať svetlo dlho, skladať veľa snímok, presne sledovať oblohu – to isté robí Hubble, Webb aj tvoj Dwarf.',
-          'Rozdiel je vo veľkosti zrkadla a v cene. Nie v tom, ako to funguje.'
+          'Sbírat světlo dlouho, skládat mnoho snímků, přesně sledovat oblohu – to samé dělá ' +
+          'Hubble, Webb i tvůj Dwarf.',
+          'Rozdíl je ve velikosti zrcadla a v ceně. Ne v tom, jak to funguje.'
         ],
-        footnote: 'Takže keď fotíš hmlovinu zo záhrady, robíš presne to, čo najdrahšie prístroje ľudstva.',
+        footnote: 'Takže když fotíš mlhovinu ze zahrady, děláš přesně to, co nejdražší přístroje lidstva.',
         cta: 'To je paráda'
       },
       { type: 'fact', factId: 'dwarf-bratranec' },
       {
         type: 'mission',
-        title: '🔍 MISIA: MOJA FOTKA vs. HUBBLE',
+        title: '🔍 MISE: MOJE FOTKA vs. HUBBLE',
         image: 'm42',
-        subtitle: 'Porovnaj to najlepšie, čo máš, s tým najlepším na svete',
-        lead: 'Nie preto, aby si sa cítil malý – ale aby si videl, koľko z toho máš aj ty.',
+        subtitle: 'Porovnej to nejlepší, co máš, s tím nejlepším na světě',
+        lead: 'Ne proto, abys se cítil malý – ale abys viděl, kolik z toho máš i ty.',
         tasks: [
-          { icon: '🖼️', text: 'Otvor si svoju najlepšiu fotku M42 (alebo iného objektu).' },
-          { icon: '🛰️', text: 'Nájdi si tú istú hmlovinu na stránke ESA/Hubble (odkaz je na obrazovke Zdroje).' },
-          { icon: '🔎', text: 'Nájdi tri veci, ktoré vidno na oboch fotkách.' },
-          { icon: '💭', text: 'A jednu, ktorú vidí len Hubble. Skús povedať prečo.' }
+          { icon: '🖼️', text: 'Otevři si svou nejlepší fotku M42 (nebo jiného objektu).' },
+          { icon: '🛰️', text: 'Najdi si tu samou mlhovinu na stránce ESA/Hubble (odkaz je na obrazovce Zdroje).' },
+          { icon: '🔎', text: 'Najdi tři věci, které jsou vidět na obou fotkách.' },
+          { icon: '💭', text: 'A jednu, kterou vidí jen Hubble. Zkus říct proč.' }
         ],
-        note: 'Tri veci na oboch fotkách sú viac, než by väčšina ľudí čakala od 30-milimetrového objektívu.',
-        button: '✅ MISIA SPLNENÁ',
+        note: 'Tři věci na obou fotkách jsou víc, než by většina lidí čekala od 30milimetrového ' +
+              'objektivu.',
+        button: '✅ MISE SPLNĚNA',
         xp: 50,
-        doneText: 'Toto je najlepší koniec akadémie: vieš, čo máš v rukách – aj čo to dokáže.',
-        cta: 'Poslednýkrát: mini test'
+        doneText: 'Tohle je nejlepší konec akademie: víš, co máš v rukou – i co to dokáže.',
+        cta: 'Naposledy: mini test'
       },
       {
         type: 'quiz',
@@ -3802,205 +4117,207 @@ const LESSONS = [
         questions: [
           {
             kind: 'choice',
-            question: 'Prečo majú veľké ďalekohľady zrkadlá a nie čočky?',
+            question: 'Proč mají velké dalekohledy zrcadla, a ne čočky?',
             options: [
-              { label: 'Veľké zrkadlo sa dá vyrobiť ľahšie než veľká čočka', correct: true },
-              { label: 'Zrkadlá sú farebnejšie' },
-              { label: 'Čočky sa vo vesmíre rozbijú' },
-              { label: 'Zrkadlá sú lacnejšie na čistenie' }
+              { label: 'Velké zrcadlo se dá vyrobit snadněji než velká čočka', correct: true },
+              { label: 'Zrcadla jsou barevnější' },
+              { label: 'Čočky se ve vesmíru rozbijí' },
+              { label: 'Zrcadla jsou levnější na čištění' }
             ],
-            explain: 'Zrkadlo sa dá podoprieť zozadu a nemusí byť priehľadné – preto sa dá urobiť naozaj veľké.'
+            explain: 'Zrcadlo se dá podepřít zezadu a nemusí být průhledné – proto se dá udělat opravdu ' +
+                     'velké.'
           },
           {
             kind: 'decide',
-            question: 'Prečo sa hvezdárne stavajú na horách?',
+            question: 'Proč se hvězdárny staví na horách?',
             options: [
-              { icon: '⛰️', label: 'Je nad nimi menej vzduchu a menej svetla z miest', correct: true },
-              { icon: '🚠', label: 'Aby boli bližšie k hviezdam' }
+              { icon: '⛰️', label: 'Je nad nimi méně vzduchu a méně světla z měst', correct: true },
+              { icon: '🚠', label: 'Aby byly blíž k hvězdám' }
             ],
-            explain: 'Bližšie k hviezdam sa hora nepočíta. Ale čistý a nehybný vzduch áno.'
+            explain: 'Blíž k hvězdám se hora nepočítá. Ale čistý a nehybný vzduch ano.'
           },
           {
             kind: 'truefalse',
-            question: 'Webb obieha okolo Zeme podobne ako Hubble.',
+            question: 'Webb obíhá okolo Země podobně jako Hubble.',
             answer: false,
-            explain: 'Webb je 1,5 milióna kilometrov od Zeme – to je štyrikrát dalej než Mesiac. Hubble je len 560 km nad nami.'
+            explain: 'Webb je 1,5 milionu kilometrů od Země – to je čtyřikrát dál než Měsíc. Hubble je jen ' +
+                     '560 km nad námi.'
           },
           {
             kind: 'image',
-            question: 'Ktorý obrázok je hvezdáreň s kupolou?',
+            question: 'Který obrázek je hvězdárna s kopulí?',
             options: [
               { image: 'dome', label: 'A', correct: true },
               { image: 'citysky', label: 'B' }
             ],
-            explain: 'A: kupola s úzkou štrbinou pod hviezdnou oblohou. B je obloha nad mestom.'
+            explain: 'A: kopule s úzkou štěrbinou pod hvězdnou oblohou. B je obloha nad městem.'
           },
           {
             kind: 'order',
-            question: 'Zoraď ďalekohľady podľa veľkosti zrkadla či objektívu.',
-            hint: 'Klikaj od najmenšieho.',
+            question: 'Seřaď dalekohledy podle velikosti zrcadla či objektivu.',
+            hint: 'Klikej od nejmenšího.',
             items: [
-              { label: 'Dwarf mini (30 mm objektív)', order: 1, icon: '🏠' },
-              { label: 'Hubble (2,4 m zrkadlo)', order: 2, icon: '🛰️' },
-              { label: 'Webb (6,5 m zrkadlo)', order: 3, icon: '🔭' },
-              { label: 'ELT v Čile (39 m zrkadlo)', order: 4, icon: '🏛️' }
+              { label: 'Dwarf mini (objektiv 30 mm)', order: 1, icon: '🏠' },
+              { label: 'Hubble (zrcadlo 2,4 m)', order: 2, icon: '🛰️' },
+              { label: 'Webb (zrcadlo 6,5 m)', order: 3, icon: '🔭' },
+              { label: 'ELT v Chile (zrcadlo 39 m)', order: 4, icon: '🏛️' }
             ],
-            explain: 'Od 3 centimetrov po 39 metrov – a princíp je celý čas ten istý.'
+            explain: 'Od 3 centimetrů po 39 metrů – a princip je celou dobu ten samý.'
           }
         ],
-        resultGood: '🌟 Znalec ďalekohľadov – a koniec akadémie!',
-        resultOk: '🔭 Ešte raz – a máš celú akadémiu za sebou.'
+        resultGood: '🌟 Znalec dalekohledů – a konec akademie!',
+        resultOk: '🔭 Ještě jednou – a máš celou akademii za sebou.'
       }
     ]
   }
 
-  /* Ďalšie lekcie sa pridávajú sem – stačí dodržať rovnakú štruktúru. */
+  /* Další lekce se přidávají sem – stačí dodržet stejnou strukturu. */
 ];
 
 /* =============================================================================
-   PRIPRAVOVANÉ LEKCIE – zobrazujú sa vo Vesmírnej mape ako „už čoskoro“.
-   Keď lekciu naozaj vytvoríš v LESSONS, stačí ju odtiaľto vymazať.
+   PŘIPRAVOVANÉ LEKCE – zobrazují se ve Vesmírné mapě jako „už brzy“.
+   Když lekci opravdu vytvoříš v LESSONS, stačí ji odtud vymazat.
    ========================================================================== */
 const UPCOMING = [
-  { icon: '🌍', title: 'POLÁRNE ŽIARY',      teaser: 'Prečo obloha svieti zeleno – a kedy ich vidno aj u nás.' },
-  { icon: '🚀', title: 'SONDY A ROVERY',     teaser: 'Voyager, Perseverance – kam sme už doleteli.' },
-  { icon: '🪐', title: 'TRPASLIČIE PLANÉTY', teaser: 'Prečo Pluto prestalo byť planétou.' },
-  { icon: '🔊', title: 'ZVUKY VESMÍRU',      teaser: 'Rádiová astronómia a čo „slyšia“ ďalekohľady.' },
-  { icon: '👽', title: 'JE TAM NIEKTO?',     teaser: 'Ako ľudia hľadajú život vo vesmíre.' }
+  { icon: '🌍', title: 'POLÁRNÍ ZÁŘE',      teaser: 'Proč obloha svítí zeleně – a kdy je vidět i u nás.' },
+  { icon: '🚀', title: 'SONDY A ROVERY',     teaser: 'Voyager, Perseverance – kam jsme už dolétli.' },
+  { icon: '🪐', title: 'TRPASLIČÍ PLANETY', teaser: 'Proč Pluto přestalo být planetou.' },
+  { icon: '🔊', title: 'ZVUKY VESMÍRU',      teaser: 'Rádiová astronomie a co „slyší“ dalekohledy.' },
+  { icon: '👽', title: 'JE TAM NĚKDO?',     teaser: 'Jak lidé hledají život ve vesmíru.' }
 ];
 
 /* ---------------------------- ODZNAKY -------------------------------- */
 const BADGES = {
   'nebula-hunter': {
     icon: '☁️',
-    name: 'LOVEC HMLOVÍN',
-    text: 'Zvládol si celú lekciu o hmlovinách.'
+    name: 'LOVEC MLHOVIN',
+    text: 'Zvládl jsi celou lekci o mlhovinách.'
   },
   'sky-navigator': {
     icon: '🧭',
     name: 'NAVIGÁTOR OBLOHY',
-    text: 'Vieš, prečo sa obloha točí – a ako ju Dwarf dokáže sledovať.'
+    text: 'Víš, proč se obloha točí – a jak ji Dwarf dokáže sledovat.'
   },
   'cluster-collector': {
     icon: '✨',
-    name: 'ZBERATEĽ HVIEZDOKÔP',
-    text: 'Rozoznáš otvorenú hviezdokopu od guľovej.'
+    name: 'SBĚRATEL HVĚZDOKUP',
+    text: 'Rozeznáš otevřenou hvězdokupu od kulové.'
   },
   'milkyway-citizen': {
     icon: '🌌',
-    name: 'OBYVATEĽ MLIEČNEJ CESTY',
-    text: 'Vieš, kde v galaxii žiješ – a prečo ju vidíme ako pás.'
+    name: 'OBYVATEL MLÉČNÉ DRÁHY',
+    text: 'Víš, kde v galaxii žiješ – a proč ji vidíme jako pás.'
   },
   'galaxy-explorer': {
     icon: '🌀',
-    name: 'OBJAVITEĽ GALAXIÍ',
-    text: 'Poznáš tvary galaxií a vyfotil si tú v Andromede.'
+    name: 'OBJEVITEL GALAXIÍ',
+    text: 'Znáš tvary galaxií a vyfotil jsi tu v Andromedě.'
   },
   'planet-hunter': {
     icon: '🪐',
-    name: 'LOVEC PLANÉT',
-    text: 'Vieš, prečo planéty putujú – a ako ich správne fotiť.'
+    name: 'LOVEC PLANET',
+    text: 'Víš, proč planety putují – a jak je správně fotit.'
   },
   'star-expert': {
     icon: '⭐',
-    name: 'ZNALEC HVIEZD',
-    text: 'Z farby hviezdy vieš povedať, ako je horúca.'
+    name: 'ZNALEC HVĚZD',
+    text: 'Z barvy hvězdy umíš říct, jak je horká.'
   },
   'supernova-witness': {
     icon: '💥',
-    name: 'SVEDOK SUPERNOVY',
-    text: 'Vieš, ako umierajú veľké hviezdy – a čo po nich zostane.'
+    name: 'SVĚDEK SUPERNOVY',
+    text: 'Víš, jak umírají velké hvězdy – a co po nich zůstane.'
   },
   'darkness-scout': {
     icon: '⚫',
-    name: 'PRIESKUMNÍK TEMNOTY',
-    text: 'Vieš, čo je čierna diera a ako sa dá vyfotiť.'
+    name: 'PRŮZKUMNÍK TEMNOTY',
+    text: 'Víš, co je černá díra a jak se dá vyfotit.'
   },
   'dwarf-operator': {
     icon: '🔭',
     name: 'OPERÁTOR DWARFU',
-    text: 'Vieš, čo v Dwarfe nastaviť a na čo si dať pozor.'
+    text: 'Víš, co v Dwarfu nastavit a na co si dát pozor.'
   },
   'sun-watcher': {
     icon: '☀️',
-    name: 'SLNEČNÝ HLIADKAR',
-    text: 'Odfotil si vlastnú hviezdu – bezpečne, s filtrom.'
+    name: 'SLUNEČNÍ HLÍDKA',
+    text: 'Vyfotil jsi vlastní hvězdu – bezpečně, s filtrem.'
   },
   'phase-keeper': {
     icon: '🌗',
-    name: 'STRÁŽCA FÁZ',
-    text: 'Vieš, prečo Mesiac mení tvar, a zvládol si desaťdňový projekt.'
+    name: 'STRÁŽCE FÁZÍ',
+    text: 'Víš, proč Měsíc mění tvar, a zvládl jsi desetidenní projekt.'
   },
   'sky-cartographer': {
     icon: '🗺️',
     name: 'KARTOGRAF OBLOHY',
-    text: 'Nájdeš si na nebi objekt podľa jeho adresy.'
+    text: 'Najdeš si na nebi objekt podle jeho adresy.'
   },
   'sky-tracker': {
     icon: '🛰️',
     name: 'SLEDOVAČ OBLOHY',
-    text: 'Chytil si prelet vesmírnej stanice.'
+    text: 'Zachytil jsi přelet vesmírné stanice.'
   },
   'astrophoto-master': {
     icon: '📸',
-    name: 'ASTROFOTO MAJSTER',
-    text: 'Vieš, prečo sto snímok bije jednu.'
+    name: 'ASTROFOTO MISTR',
+    text: 'Víš, proč sto snímků bije jeden.'
   },
   'light-reader': {
     icon: '🔬',
-    name: 'ČÍTAČ SVETLA',
-    text: 'Rozložil si svetlo na farby a vieš, čo v ňom astronómi čítajú.'
+    name: 'ČTENÁŘ SVĚTLA',
+    text: 'Rozložil jsi světlo na barvy a víš, co v něm astronomové čtou.'
   },
   'distance-meter': {
     icon: '📏',
-    name: 'MERAČ VESMÍRU',
-    text: 'Odkráčal si Slnečnú soustavu a vieš, čo je svetelný rok.'
+    name: 'MĚŘIČ VESMÍRU',
+    text: 'Odkráčel jsi Sluneční soustavu a víš, co je světelný rok.'
   },
   'cosmic-address': {
     icon: '🌍',
-    name: 'VESMÍRNA ADRESA',
-    text: 'Vieš presne, kde vo vesmíre žiješ.'
+    name: 'VESMÍRNÁ ADRESA',
+    text: 'Víš přesně, kde ve vesmíru žiješ.'
   },
   'world-finder': {
     icon: '🪐',
-    name: 'HĽADAČ SVETOV',
-    text: 'Rozumieš, ako sa hľadajú planéty pri iných hviezdach.'
+    name: 'HLEDAČ SVĚTŮ',
+    text: 'Rozumíš tomu, jak se hledají planety u jiných hvězd.'
   },
   'comet-watcher': {
     icon: '☄️',
-    name: 'POZOROVATEĽ KOMÉTY',
-    text: 'Počítal si meteory a vieš rozdiel medzi meteorom a meteoritom.'
+    name: 'POZOROVATEL KOMETY',
+    text: 'Počítal jsi meteory a víš, jaký je rozdíl mezi meteorem a meteoritem.'
   },
   'dark-guardian': {
     icon: '🌑',
-    name: 'OCHRÁNCA TMY',
-    text: 'Zmeral si svetelné znečistenie tam, kde žiješ.'
+    name: 'OCHRÁNCE TMY',
+    text: 'Změřil jsi světelné znečištění tam, kde žiješ.'
   },
   'telescope-expert': {
     icon: '🏛️',
-    name: 'ZNALEC ĎALEKOHĽADOV',
-    text: 'Porovnal si vlastnú fotku s Hubblovou – a vieš, prečo sa líšia.'
+    name: 'ZNALEC DALEKOHLEDŮ',
+    text: 'Porovnal jsi vlastní fotku s Hubblovou – a víš, proč se liší.'
   }
 };
 
-/* ---------------------------- ÚROVNE --------------------------------- */
-/* Stačí pridať ďalší riadok a úroveň funguje. */
+/* ---------------------------- ÚROVNĚ --------------------------------- */
+/* Stačí přidat další řádek a úroveň funguje. */
 const LEVELS = [
-  { xp: 0,    name: 'Astronóm začiatočník' },
-  { xp: 150,  name: 'Pozorovateľ' },
-  { xp: 400,  name: 'Astronóm' },
+  { xp: 0,    name: 'Astronom začátečník' },
+  { xp: 150,  name: 'Pozorovatel' },
+  { xp: 400,  name: 'Astronom' },
   { xp: 700,  name: 'Deep-Sky Explorer' },
-  { xp: 1100, name: 'Majster oblohy' },
+  { xp: 1100, name: 'Mistr oblohy' },
   { xp: 1600, name: 'Kapitán vesmíru' },
-  { xp: 2200, name: 'Prieskumník galaxií' },
-  { xp: 2900, name: 'Vesmírny navigátor' },
-  { xp: 3700, name: 'Veľmajster oblohy' },
-  { xp: 4100, name: 'Legenda Vesmírnej akadémie' }
+  { xp: 2200, name: 'Průzkumník galaxií' },
+  { xp: 2900, name: 'Vesmírný navigátor' },
+  { xp: 3700, name: 'Velmistr oblohy' },
+  { xp: 4100, name: 'Legenda Vesmírné akademie' }
 ];
 
 /* ---------------------------- ZDROJE --------------------------------- */
 const SOURCES = [
-  { label: 'NASA – Messier 42 (Orionova hmlovina)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-42/' },
+  { label: 'NASA – Messier 42 (Orionova mlhovina)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-42/' },
   { label: 'NASA Space Place – What Is a Nebula?', url: 'https://spaceplace.nasa.gov/nebula/en' },
   { label: 'ESA/Hubble – Hubble’s sharpest view of the Orion Nebula', url: 'https://esahubble.org/images/heic0601a/' },
   { label: 'ESA/Hubble – Ring Nebula (Messier 57)', url: 'https://esahubble.org/images/heic1310a/' },
@@ -4010,26 +4327,26 @@ const SOURCES = [
   { label: 'ESO – The Carina Nebula', url: 'https://www.eso.org/public/images/eso0905a/' },
   { label: 'ESO – Messier 78, a reflection nebula in Orion', url: 'https://www.eso.org/public/images/eso1105b/' },
   { label: 'ESO – The Horsehead Nebula', url: 'https://www.eso.org/public/images/eso0202a/' },
-  { label: 'DwarfLab – oficiálna stránka ďalekohľadu', url: 'https://dwarflab.com/' },
-  { label: 'DwarfLab – DWARF mini (parametre, 90 s expozícia v EQ režime)', url: 'https://www.dwarflab.com/us/products/dwarf-mini-smart-telescope' },
+  { label: 'DwarfLab – oficiální stránka dalekohledu', url: 'https://dwarflab.com/' },
+  { label: 'DwarfLab – DWARF mini (parametry, 90 s expozice v režimu EQ)', url: 'https://www.dwarflab.com/us/products/dwarf-mini-smart-telescope' },
   { label: 'DwarfLab Help – DWARF mini EQ Mode Setup Guide', url: 'https://help.dwarflab.com/en/docs/dwarf-mini-equatorial-setup-guide' },
   { label: 'NASA – What Is the North Star and How Do You Find It?', url: 'https://science.nasa.gov/solar-system/skywatching/what-is-the-north-star-and-how-do-you-find-it/' },
   { label: 'NASA – There’s More to the North Star Than Meets the Eye', url: 'https://science.nasa.gov/missions/hubble/theres-more-to-the-north-star-than-meets-the-eye/' },
   { label: 'NASA Space Place – How Long Is One Day on Other Planets?', url: 'https://spaceplace.nasa.gov/days/en/' },
   { label: 'NASA – Milky Way (Imagine the Universe)', url: 'https://imagine.gsfc.nasa.gov/features/cosmic/milkyway_info.html' },
   { label: 'NASA – Messier 45 (Plejády)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-45/' },
-  { label: 'NASA – Messier 13 (guľová hviezdokopa v Herkulovi)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-13/' },
+  { label: 'NASA – Messier 13 (kulová hvězdokupa v Herkulovi)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-13/' },
   { label: 'NASA – Messier 31 (Andromeda)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/' },
-  { label: 'NASA – Messier 51 (galaxia Vír)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-51/' },
-  { label: 'NASA – Messier 1 (Krabia hmlovina)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/' },
-  { label: 'NASA – Saturn: fakty', url: 'https://science.nasa.gov/saturn/facts/' },
-  { label: 'NASA – Jupiter: mesiace', url: 'https://science.nasa.gov/jupiter/jupiter-moons/' },
-  { label: 'NASA – Mesiac: fakty', url: 'https://science.nasa.gov/moon/facts/' },
-  { label: 'NASA – Seeing Double (dvojhviezdy)', url: 'https://science.nasa.gov/solar-system/skywatching/night-sky-network/aug2024-night-sky-notes/' },
-  { label: 'NASA – farby a teploty hviezd', url: 'https://imagine.gsfc.nasa.gov/science/activities/try_l1/stars_solution.html' },
-  { label: 'ESO / EHT – prvá fotografia čiernej diery v našej galaxii', url: 'https://www.eso.org/public/news/eso2208-eht-mw/' },
-  { label: 'ESO – panoráma Mliečnej cesty', url: 'https://www.eso.org/public/images/eso0932a/' },
+  { label: 'NASA – Messier 51 (galaxie Vír)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-51/' },
+  { label: 'NASA – Messier 1 (Krabí mlhovina)', url: 'https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/' },
+  { label: 'NASA – Saturn: fakta', url: 'https://science.nasa.gov/saturn/facts/' },
+  { label: 'NASA – Jupiter: měsíce', url: 'https://science.nasa.gov/jupiter/jupiter-moons/' },
+  { label: 'NASA – Měsíc: fakta', url: 'https://science.nasa.gov/moon/facts/' },
+  { label: 'NASA – Seeing Double (dvojhvězdy)', url: 'https://science.nasa.gov/solar-system/skywatching/night-sky-network/aug2024-night-sky-notes/' },
+  { label: 'NASA – barvy a teploty hvězd', url: 'https://imagine.gsfc.nasa.gov/science/activities/try_l1/stars_solution.html' },
+  { label: 'ESO / EHT – první fotografie černé díry v naší galaxii', url: 'https://www.eso.org/public/news/eso2208-eht-mw/' },
+  { label: 'ESO – panoráma Mléčné dráhy', url: 'https://www.eso.org/public/images/eso0932a/' },
   { label: 'ESO – Plejády', url: 'https://www.eso.org/public/images/b11/' },
-  { label: 'ESA/Hubble – zrážka s Andromedou nie je istá (2025)', url: 'https://esahubble.org/news/heic2508/' },
-  { label: 'ESA/Hubble – Andromeda (M31), Krabia hmlovina (M1), M13', url: 'https://esahubble.org/images/' }
+  { label: 'ESA/Hubble – srážka s Andromedou není jistá (2025)', url: 'https://esahubble.org/news/heic2508/' },
+  { label: 'ESA/Hubble – Andromeda (M31), Krabí mlhovina (M1), M13', url: 'https://esahubble.org/images/' }
 ];

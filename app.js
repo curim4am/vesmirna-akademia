@@ -1,34 +1,37 @@
 /* =============================================================================
-   VESMÍRNA AKADÉMIA – app.js
+   VESMÍRNÁ AKADEMIE – app.js
    -----------------------------------------------------------------------------
-   V tomto súbore je LOGIKA. Obsah lekcií je v data/lessons.js,
+   V tomto souboru je LOGIKA. Obsah lekcí je v data/lessons.js,
    objekty v data/objects.js, obrázky v data/images.js.
 
    Obsah:
-     1) Stav a ukladanie (localStorage)
-     2) Hviezdne pozadie
-     3) SVG ilustrácie (fallback, keď nie je fotografia)
-     4) Malé UI pomôcky
-     5) Navigácia medzi obrazovkami
+     1) Stav a ukládání (localStorage)
+     2) Hvězdné pozadí
+     3) SVG ilustrace (fallback, když není fotografie)
+     4) Malé UI pomůcky
+     5) Navigace mezi obrazovkami
      6) Domovská obrazovka
-     7) Lekcia – jednotlivé typy krokov
-     8) Kvíz + výsledok
-     9) Zbierka, odznaky, zdroje
+     7) Lekce – jednotlivé typy kroků
+     8) Kvíz + výsledek
+     9) Sbírka, odznaky, zdroje
    ========================================================================== */
 
 /* =========================== 1) STAV A UKLADANIE ========================= */
 
 const STORAGE_KEY = 'vesmirna-akademia-v1';
+const STATE_VERSION = 2;
 
 const DEFAULT_STATE = {
+  v: STATE_VERSION,
   xp: 0,
   discovered: {},        // { m42: { date: '2026-09-10', photo: null } }
   badges: [],            // ['nebula-hunter']
   lessons: {},           // { nebulae: { completed: true, score: 4, total: 5 } }
-  facts: {},             // { 'svetlo-z-minulosti': '10. 9. 2026' }  – zbierka VIEŠ ŽE?
-  terms: {},             // { 'expozicia': '10. 9. 2026' }  – slovníček pojmov
-  missed: {},            // { 'nebulae:2': 1 }  – otázky na zopakovanie (rozcvička)
-  awarded: {}            // aby sa XP za ten istý krok nepripísalo dvakrát
+  facts: {},             // { 'svetlo-z-minulosti': '10. 9. 2026' }  – sbírka VÍŠ, ŽE?
+  terms: {},             // { 'expozicia': '10. 9. 2026' }  – slovníček pojmů
+  missed: {},            // { 'nebulae:2': 1 }  – otázky na zopakování (rozcvička)
+  awarded: {},           // aby se XP za tentýž krok nepřipsalo dvakrát
+  journal: []            // zápisy z nocí (i automatické o objevech)
 };
 
 let state = loadState();
@@ -37,12 +40,54 @@ function loadState() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return structuredCopy(DEFAULT_STATE);
-    return Object.assign(structuredCopy(DEFAULT_STATE), JSON.parse(raw));
+    const ulozeny = JSON.parse(raw);
+    const stav = Object.assign(structuredCopy(DEFAULT_STATE), ulozeny);
+    /* Verze musí přijít z uloženého stavu, ne z výchozích hodnot – jinak by
+       se starší uložení tvářilo jako nové a migrace by se nikdy nespustila. */
+    stav.v = ulozeny.v || 1;
+    return migrateState(stav);
   } catch (e) {
     return structuredCopy(DEFAULT_STATE);
   }
 }
-/** Uloží stav. Vráti false, keď sa to nepodarilo (napr. plný localStorage). */
+
+/* --------------------------- MIGRACE STAVU -------------------------------
+   Ukládání má číslo verze (state.v). Když aplikace najde starší stav,
+   dopočítá, co ve starší verzi chybělo – nikdy nic nemaže. Dítě, které už
+   má nasbíraných 2 000 XP, pokračuje přesně tam, kde skončilo.
+
+   v1 → v2: přidán pozorovací deník, kvalifikační dráhy (ty se počítají
+            z už uloženého postupu) a automatické zápisy o objevech.     */
+function migrateState(s) {
+  const from = s.v || 1;
+  if (from >= STATE_VERSION) { s.v = STATE_VERSION; return s; }
+
+  if (from < 2) {
+    if (!Array.isArray(s.journal)) s.journal = [];
+    /* Objekty objevené ve verzi 1 se do deníku zapíšou zpětně, aby deník
+       nezačínal prázdný a odpovídal tomu, co dítě skutečně dokázalo.   */
+    const zapsane = {};
+    s.journal.forEach(function (e) { if (e.objectId) zapsane[e.objectId] = true; });
+    Object.keys(s.discovered || {}).forEach(function (id) {
+      if (zapsane[id]) return;
+      const o = (typeof SPACE_OBJECTS !== 'undefined')
+        ? SPACE_OBJECTS.filter(function (x) { return x.id === id; })[0] : null;
+      s.journal.push({
+        kind: 'objev',
+        objectId: id,
+        what: o ? o.name : id,
+        date: (s.discovered[id] && s.discovered[id].date) || '—',
+        ts: 0,                       // starý objev – nemáme přesný čas
+        note: ''
+      });
+    });
+  }
+
+  s.v = STATE_VERSION;
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)); } catch (e) {}
+  return s;
+}
+/** Uloží stav. Vrátí false, když se to nepovedlo (např. plný localStorage). */
 function saveState() {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); return true; }
   catch (e) { return false; }
@@ -57,7 +102,7 @@ function currentLevel() {
   return { level: level, next: next };
 }
 
-/** Pripíše XP (raz za daný kľúč) a ukáže animovaný toast. */
+/** Připíše XP (jednou za daný klíč) a ukáže animovaný toast. */
 function addXp(amount, key) {
   if (key) {
     if (state.awarded[key]) return false;
@@ -71,14 +116,36 @@ function addXp(amount, key) {
   return true;
 }
 
+/* Objev se nezastaví u sbírky – projde celou aplikací:
+     1) objekt se rozsvítí na mapě oblohy
+     2) sám se zapíše do deníku (dá se k němu dopsat vlastní poznámka)
+     3) posune dráhu POZOROVATEL v postupu
+     4) může odemknout kvalifikaci
+   Kód níž dělá kroky 1 a 2, zbytek se z uloženého stavu dopočítá.        */
 function discoverObject(objectId) {
   if (state.discovered[objectId]) return false;
   state.discovered[objectId] = { date: todayText(), photo: null };
+
+  const o = getObject(objectId);
+  if (!state.journal) state.journal = [];
+  state.journal.push({
+    kind: 'objev',
+    objectId: objectId,
+    what: o ? o.name : objectId,
+    lessonId: (typeof lesson !== 'undefined' && lesson) ? lesson.id : null,
+    date: todayText(),
+    ts: Date.now(),
+    note: ''
+  });
   saveState();
+  pendingFlash = objectId;          // mapa oblohy ho při dalším zobrazení rozsvítí
   return true;
 }
 
-/** Odomkne zaujímavosť „VIEŠ ŽE?“ do zbierky. */
+/** Objekt, který se má na mapě rozsvítit, až se mapa zobrazí. */
+let pendingFlash = null;
+
+/** Odemkne zajímavost „VÍŠ, ŽE?“ do sbírky. */
 function unlockFact(factId) {
   if (!FACTS[factId] || state.facts[factId]) return false;
   state.facts[factId] = todayText();
@@ -86,7 +153,7 @@ function unlockFact(factId) {
   return true;
 }
 
-/** Odomkne pojem do slovníčka. */
+/** Odemkne pojem do slovníčku. */
 function unlockTerm(termId) {
   if (typeof TERMS === 'undefined' || !TERMS[termId] || state.terms[termId]) return false;
   state.terms[termId] = todayText();
@@ -107,8 +174,8 @@ function todayText() {
 }
 
 /* =========================== 2) HVIEZDNE POZADIE ========================= */
-/* Nakreslí sa raz na canvas (žiadna animačná smyčka = žiadna záťaž CPU).
-   Jemné „blikanie“ zabezpečí len CSS na pohybujúcej sa žiare pozadia.      */
+/* Nakreslí se jednou na canvas (žádná animační smyčka = žádná zátěž CPU).
+   Jemné „blikání“ zajistí jen CSS na pohybující se září pozadí.            */
 
 function drawStarfield() {
   const c = document.getElementById('starfield');
@@ -120,7 +187,7 @@ function drawStarfield() {
   ctx.scale(dpr, dpr);
   ctx.clearRect(0, 0, w, h);
 
-  const count = Math.round((w * h) / 5200);   // hustota hviezd podľa veľkosti okna
+  const count = Math.round((w * h) / 5200);   // hustota hvězd podle velikosti okna
   for (let i = 0; i < count; i++) {
     const x = Math.random() * w;
     const y = Math.random() * h;
@@ -131,14 +198,14 @@ function drawStarfield() {
     ctx.fillStyle = 'rgba(' + starTint() + ',' + a.toFixed(2) + ')';
     ctx.fill();
   }
-  // niekoľko väčších hviezd so žiarou
+  /* Několik jasnějších hvězd – jen ostré body, žádná rozmazaná záře.
+     Rozmazané kruhy na pozadí vypadaly jako špína na displeji.        */
   for (let i = 0; i < Math.max(6, count / 90); i++) {
     const x = Math.random() * w, y = Math.random() * h;
-    const g = ctx.createRadialGradient(x, y, 0, x, y, 9);
-    g.addColorStop(0, 'rgba(255,255,255,.85)');
-    g.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = g;
-    ctx.fillRect(x - 9, y - 9, 18, 18);
+    ctx.beginPath();
+    ctx.arc(x, y, 1.5 + Math.random(), 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(255,255,255,.9)';
+    ctx.fill();
   }
 }
 function starTint() {
@@ -153,9 +220,9 @@ function debounce(fn, ms) {
   let t; return function () { clearTimeout(t); t = setTimeout(fn, ms); };
 }
 
-/* =========================== 3) SVG ILUSTRÁCIE =========================== */
-/* Používajú sa vždy ako podklad a zároveň ako záloha, keby sa fotografia
-   nenačítala (offline režim). Generujú sa v kóde – žiadne externé súbory.  */
+/* =========================== 3) SVG ILUSTRACE ============================ */
+/* Používají se vždy jako podklad a zároveň jako záloha, kdyby se fotografie
+   nenačetla (offline režim). Generují se v kódu – žádné externí soubory.   */
 
 let artCounter = 0;
 
@@ -202,7 +269,7 @@ function spaceArt(kind) {
   const rand = seededRandom(kind.length * 977 + artCounter * 13);
   let defs = '', body = '';
 
-  /* mäkké farebné oblaky, ktoré filter rozvlní do tvaru hmloviny */
+  /* měkké barevné oblaky, které filtr rozvlní do tvaru mlhoviny */
   pal.blobs.forEach(function (b, i) {
     const gid = uid + 'g' + i;
     defs += '<radialGradient id="' + gid + '">' +
@@ -224,7 +291,7 @@ function spaceArt(kind) {
   let extra = '';
 
   if (kind === 'dark') {
-    /* tmavá silueta pred žiariacim pozadím */
+    /* tmavá silueta před svítícím pozadím */
     extra += '<path d="M120 250 L120 150 C120 120 140 104 168 100 C186 97 196 84 206 70 ' +
              'C214 58 232 56 240 68 C248 80 244 96 236 108 C252 116 262 132 262 152 L262 250 Z" ' +
              'fill="#05040a" opacity=".92"/>';
@@ -244,7 +311,7 @@ function spaceArt(kind) {
     defs += '<radialGradient id="' + uid + 'core"><stop offset="0%" stop-color="#fff8e0"/>' +
             '<stop offset="55%" stop-color="#ffd479" stop-opacity=".55"/>' +
             '<stop offset="100%" stop-color="#ffd479" stop-opacity="0"/></radialGradient>';
-    /* špirálové ramená z bodiek – vyzerá to ako naklonený disk galaxie */
+    /* spirální ramena z tečiček – vypadá to jako nakloněný disk galaxie */
     const rg = seededRandom(51515);
     extra += '<g transform="translate(200 125) rotate(-20) scale(1 0.58)">';
     for (let arm = 0; arm < 2; arm++) {
@@ -285,16 +352,16 @@ function spaceArt(kind) {
              'stroke-dasharray="240 400" stroke-dashoffset="-40"/></g>';
   }
 
-  /* --- porovnávacie dvojice pre slovníček ------------------------------ */
+  /* --- porovnávací dvojice pro slovníček ------------------------------- */
   if (kind === 'faintnebula' || kind === 'noisynebula' || kind === 'cleannebula') {
     const rn = seededRandom(4242);
-    // rovnaké hviezdy vo všetkých troch, aby bol rozdiel len v šume a jasnosti
+    // stejné hvězdy ve všech třech, aby byl rozdíl jen v šumu a jasnosti
     for (let i = 0; i < 70; i++) {
       extra += '<circle cx="' + (rn() * 400).toFixed(1) + '" cy="' + (rn() * 250).toFixed(1) +
                '" r="' + (0.5 + rn() * 1.2).toFixed(2) + '" fill="#fff" opacity="' +
                (kind === 'faintnebula' ? 0.15 + rn() * 0.25 : 0.4 + rn() * 0.5).toFixed(2) + '"/>';
     }
-    if (kind === 'noisynebula') {          // zrnitý šum ako pri vysokom gaine
+    if (kind === 'noisynebula') {          // zrnitý šum jako při vysokém gainu
       const rz = seededRandom(9001);
       for (let i = 0; i < 900; i++) {
         const g = Math.round(120 + rz() * 135);
@@ -329,7 +396,7 @@ function spaceArt(kind) {
              '<circle cx="200" cy="125" r="2" fill="#fff" opacity=".9"/>';
   }
 
-  /* --- Slnko so škvrnami ---------------------------------------------- */
+  /* --- Slunce se skvrnami --------------------------------------------- */
   if (kind === 'sun') {
     const rs = seededRandom(1610);
     defs += '<radialGradient id="' + uid + 'su" cx="46%" cy="42%">' +
@@ -351,7 +418,7 @@ function spaceArt(kind) {
     extra += '</g>';
   }
 
-  /* --- Mesiac vo fáze (osvetlený z jednej strany) ---------------------- */
+  /* --- Měsíc ve fázi (osvětlený z jedné strany) ------------------------ */
   if (kind === 'moonphase') {
     const rm = seededRandom(2707);
     defs += '<radialGradient id="' + uid + 'mp" cx="34%" cy="34%">' +
@@ -367,12 +434,12 @@ function spaceArt(kind) {
       extra += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + cr.toFixed(1) +
                '" fill="#8f8a7e" opacity=".5"/>';
     }
-    /* tmavá časť – terminátor */
+    /* tmavá část – terminátor */
     extra += '<ellipse cx="238" cy="125" rx="82" ry="92" fill="#05060d" opacity=".93"/>' +
              '</g>';
   }
 
-  /* --- spektrum: dúhový pruh s tmavými čiarami ------------------------- */
+  /* --- spektrum: duhový pruh s tmavými čárami -------------------------- */
   if (kind === 'spectrum') {
     defs += '<linearGradient id="' + uid + 'sp" x1="0" x2="1">' +
             '<stop offset="0%" stop-color="#7b2bff"/><stop offset="18%" stop-color="#2b6bff"/>' +
@@ -385,10 +452,10 @@ function spaceArt(kind) {
                '" height="94" fill="#0a0710" opacity=".8"/>';
     });
     extra += '<text x="200" y="208" text-anchor="middle" fill="#9fb0d4" font-size="14" ' +
-             'font-family="system-ui">tmavé čiary = odtlačky prvkov</text>';
+             'font-family="system-ui">tmavé čáry = odtisky prvků</text>';
   }
 
-  /* --- satelit / ISS: rovná čiara medzi hviezdami ---------------------- */
+  /* --- satelit / ISS: rovná čára mezi hvězdami ------------------------- */
   if (kind === 'satellite') {
     const rt = seededRandom(1998);
     for (let i = 0; i < 150; i++) {
@@ -407,7 +474,7 @@ function spaceArt(kind) {
              '<circle cx="300" cy="150" r="13" fill="#cfe4ff" opacity=".25"/>';
   }
 
-  /* --- tranzit: planéta pred hviezdou + graf jasnosti ------------------ */
+  /* --- tranzit: planeta před hvězdou + graf jasnosti ------------------- */
   if (kind === 'transit') {
     defs += '<radialGradient id="' + uid + 'tr"><stop offset="0%" stop-color="#fffdf0"/>' +
             '<stop offset="60%" stop-color="#ffd97a"/><stop offset="100%" stop-color="#ff9a2b"/></radialGradient>';
@@ -416,10 +483,10 @@ function spaceArt(kind) {
              '<path d="M250 175 L286 175 L296 196 L330 196 L340 175 L376 175" fill="none" ' +
              'stroke="#8fd7ff" stroke-width="2.6" stroke-linejoin="round"/>' +
              '<text x="313" y="216" text-anchor="middle" fill="#9fb0d4" font-size="12" ' +
-             'font-family="system-ui">hviezda na chvíľu stmavne</text>';
+             'font-family="system-ui">hvězda na chvíli ztmavne</text>';
   }
 
-  /* --- kométa s dvomi chvostmi ---------------------------------------- */
+  /* --- kometa se dvěma chvosty ---------------------------------------- */
   if (kind === 'comet') {
     defs += '<linearGradient id="' + uid + 'ct" x1="0" x2="1">' +
             '<stop offset="0%" stop-color="#bfe9ff" stop-opacity=".85"/>' +
@@ -436,7 +503,7 @@ function spaceArt(kind) {
              '<circle cx="112" cy="124" r="6" fill="#fff"/>';
   }
 
-  /* --- meteorický roj: čiary z jedného miesta -------------------------- */
+  /* --- meteorický roj: čáry z jednoho místa ---------------------------- */
   if (kind === 'meteors') {
     const rv = seededRandom(1200);
     for (let i = 0; i < 160; i++) {
@@ -460,7 +527,7 @@ function spaceArt(kind) {
     }
   }
 
-  /* --- obloha nad mestom: žiara a málo hviezd -------------------------- */
+  /* --- obloha nad městem: záře a málo hvězd ---------------------------- */
   if (kind === 'citysky') {
     const rc = seededRandom(404);
     for (let i = 0; i < 22; i++) {
@@ -486,7 +553,7 @@ function spaceArt(kind) {
     }
   }
 
-  /* --- hvezdárenská kupola -------------------------------------------- */
+  /* --- hvězdárenská kupole -------------------------------------------- */
   if (kind === 'dome') {
     const rd = seededRandom(1888);
     for (let i = 0; i < 190; i++) {
@@ -502,7 +569,7 @@ function spaceArt(kind) {
              '<path d="M198 178 L202 178 L202 230 L198 230 Z" fill="#4ad8ff" opacity=".28"/>';
   }
 
-  /* --- hlboký pohľad: pole galaxií ------------------------------------- */
+  /* --- hluboký pohled: pole galaxií ------------------------------------ */
   if (kind === 'deepfield') {
     const rf = seededRandom(1995);
     for (let i = 0; i < 120; i++) {
@@ -525,13 +592,13 @@ function spaceArt(kind) {
     }
   }
 
-  /* --- Mliečna cesta: pás hviezd cez celý obrázok --------------------- */
+  /* --- Mléčná dráha: pás hvězd přes celý obrázek ---------------------- */
   if (kind === 'milkyway') {
     const r4 = seededRandom(31415);
     extra += '<g transform="rotate(-14 200 125)">';
     for (let i = 0; i < 900; i++) {
       const x = r4() * 460 - 30;
-      const g = (r4() + r4() + r4()) / 3;                 // hustota pri strede pásu
+      const g = (r4() + r4() + r4()) / 3;                 // hustota u středu pásu
       const y = 125 + (g - 0.5) * 150;
       extra += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' +
                (0.35 + r4() * 0.9).toFixed(2) + '" fill="#fff5e6" opacity="' +
@@ -546,7 +613,7 @@ function spaceArt(kind) {
     extra += '</g>';
   }
 
-  /* --- Mesiac s krátermi ---------------------------------------------- */
+  /* --- Měsíc s krátery ------------------------------------------------ */
   if (kind === 'moon') {
     const r5 = seededRandom(1969);
     defs += '<radialGradient id="' + uid + 'm" cx="38%" cy="34%">' +
@@ -569,7 +636,7 @@ function spaceArt(kind) {
     extra += '</g>';
   }
 
-  /* --- dvojhviezda: modrá + žltá --------------------------------------- */
+  /* --- dvojhvězda: modrá + žlutá --------------------------------------- */
   if (kind === 'doublestar') {
     defs += '<radialGradient id="' + uid + 'b"><stop offset="0%" stop-color="#ffffff"/>' +
             '<stop offset="30%" stop-color="#9ec7ff" stop-opacity=".9"/>' +
@@ -585,15 +652,15 @@ function spaceArt(kind) {
              '<path d="M252 129 L252 163 M235 146 L269 146" stroke="#ffe3b8" stroke-opacity=".5" stroke-width="1"/>';
   }
 
-  /* --- supernova: vlákna letiace od stredu ----------------------------- */
+  /* --- supernova: vlákna letící od středu ------------------------------ */
   if (kind === 'supernova') {
-    /* rozpínajúci sa obal z vlákien – nie hviezdice, ale trhaná škrupina */
+    /* rozpínající se obal z vláken – ne hvězdice, ale trhaná skořápka */
     const r6 = seededRandom(1054);
     defs += '<filter id="' + uid + 'sn"><feGaussianBlur stdDeviation="1.2"/></filter>';
     extra += '<g filter="url(#' + uid + 'sn)">';
     for (let i = 0; i < 150; i++) {
       const ang = r6() * Math.PI * 2;
-      const shell = 62 + (r6() - 0.5) * 46;            // vlákna sedia v obale
+      const shell = 62 + (r6() - 0.5) * 46;            // vlákna sedí v obalu
       const len = 10 + r6() * 26;
       const wob = (r6() - 0.5) * 0.5;
       const x1 = 200 + Math.cos(ang) * shell, y1 = 125 + Math.sin(ang) * shell * 0.82;
@@ -610,7 +677,7 @@ function spaceArt(kind) {
              '<circle cx="200" cy="125" r="11" fill="#cfe4ff" opacity=".12"/>';
   }
 
-  /* --- čierna diera: svetelný prstenec okolo tmy ------------------------ */
+  /* --- černá díra: světelný prstenec okolo tmy -------------------------- */
   if (kind === 'blackhole') {
     defs += '<filter id="' + uid + 'bh"><feGaussianBlur stdDeviation="7"/></filter>';
     extra += '<g>' +
@@ -622,7 +689,7 @@ function spaceArt(kind) {
              '</g>';
   }
 
-  /* --- neutrónová hviezda / pulzar ------------------------------------- */
+  /* --- neutronová hvězda / pulzar -------------------------------------- */
   if (kind === 'neutron') {
     defs += '<radialGradient id="' + uid + 'n"><stop offset="0%" stop-color="#ffffff"/>' +
             '<stop offset="40%" stop-color="#bcd8ff" stop-opacity=".8"/>' +
@@ -634,7 +701,7 @@ function spaceArt(kind) {
              '<circle cx="200" cy="125" r="4" fill="#fff"/></g>';
   }
 
-  /* --- jedna veľká hviezda podľa farby (modrá / žltá / červená) -------- */
+  /* --- jedna velká hvězda podle barvy (modrá / žlutá / červená) -------- */
   if (kind.indexOf('star-') === 0) {
     const col = { 'star-blue': ['#dceaff', '#6aa8ff'], 'star-yellow': ['#fff8e0', '#ffc45c'],
                   'star-red': ['#ffdcd2', '#ff6a52'] }[kind];
@@ -646,11 +713,11 @@ function spaceArt(kind) {
              '<circle cx="200" cy="125" r="26" fill="#ffffff" opacity=".95"/>';
   }
 
-  /* --- rotácia oblohy: hviezdy roztočené do oblúčikov (bez EQ režimu) --- */
+  /* --- rotace oblohy: hvězdy roztočené do oblouků (bez EQ režimu) ------- */
   if (kind === 'trails' || kind === 'roundstars') {
-    // rovnaké rozloženie hviezd v oboch obrázkoch, aby bol rozdiel jasný
+    // stejné rozložení hvězd v obou obrázcích, aby byl rozdíl jasný
     const r2 = seededRandom(20260910);
-    const cx = 58, cy = 18;                       // stred otáčania (nebeský pól)
+    const cx = 58, cy = 18;                       // střed otáčení (nebeský pól)
     for (let i = 0; i < 120; i++) {
       const rad = 40 + r2() * 400;
       const ang = (-8 + r2() * 96) * Math.PI / 180;
@@ -663,7 +730,7 @@ function spaceArt(kind) {
                  '" fill="#ffffff" opacity="' + (0.55 + bright * 0.45).toFixed(2) + '"/>';
       } else {
         const circ = 2 * Math.PI * rad;
-        const arc = rad * 0.30;                   // ~17° oblúčik
+        const arc = rad * 0.30;                   // ~17° oblouček
         extra += '<circle cx="' + cx + '" cy="' + cy + '" r="' + rad.toFixed(1) +
                  '" fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="' + size.toFixed(2) +
                  '" opacity="' + (0.45 + bright * 0.4).toFixed(2) +
@@ -673,7 +740,7 @@ function spaceArt(kind) {
     }
   }
 
-  /* --- Polárka: všetko sa točí okolo nej, ona stojí ------------------- */
+  /* --- Polárka: všechno se točí okolo ní, ona stojí ------------------- */
   if (kind === 'polaris') {
     const r3 = seededRandom(777);
     for (let i = 1; i <= 5; i++) {
@@ -695,7 +762,7 @@ function spaceArt(kind) {
              '<path d="M200 100 L200 136 M182 118 L218 118" stroke="#ffffff" stroke-opacity=".35" stroke-width="1"/>';
   }
 
-  /* hviezdy v ilustrácii (tieto tri typy si kreslia hviezdy po svojom) */
+  /* hvězdy v ilustraci (tyto tři typy si kreslí hvězdy po svém) */
   let stars = '';
   const ownStars = (kind === 'trails' || kind === 'roundstars' || kind === 'polaris' ||
                     kind === 'milkyway' || kind === 'satellite' || kind === 'meteors' ||
@@ -713,7 +780,7 @@ function spaceArt(kind) {
          '<defs>' + defs + '</defs>' +
          '<rect width="400" height="250" fill="' + pal.bg + '"/>' +
          '<g filter="url(#' + uid + 'f)">' + body + '</g>' +
-         stars + extra + '</svg>';   /* hviezdy sú v pozadí, motív nad nimi */
+         stars + extra + '</svg>';   /* hvězdy jsou v pozadí, motiv nad nimi */
 }
 
 function seededRandom(seed) {
@@ -721,7 +788,20 @@ function seededRandom(seed) {
   return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; };
 }
 
-/* =========================== 4) UI POMÔCKY =============================== */
+/* =========================== 4) UI POMŮCKY =============================== */
+
+/**
+ * Text z dat často začíná emoji („🔎 CO MYSLÍŠ…“). V rozhraní místo něj
+ * kreslíme ikonu ze stejné sady jako všude jinde – emoji uvnitř vyprávění
+ * zůstávají, protože tam nesou význam, ne funkci.
+ */
+function textIcon(text, size) {
+  const t = String(text == null ? '' : text);
+  const m = t.match(/^([\u203C-\u3299\u{1F000}-\u{1FAFF}][\uFE0F\u200D]*)\s*([\s\S]*)$/u);
+  if (!m) return t;
+  const ico = iconEmoji(m[1], { size: size || 22, cls: 'ico--head' });
+  return ico + '<span>' + m[2] + '</span>';
+}
 
 function el(tag, className, html) {
   const n = document.createElement(tag);
@@ -731,7 +811,7 @@ function el(tag, className, html) {
 }
 
 /**
- * Vytvorí blok s obrázkom: SVG ilustrácia + fotografia (ak sa načíta) + credit.
+ * Vytvoří blok s obrázkem: SVG ilustrace + fotografie (pokud se načte) + credit.
  * opts: { className, credit:false, label:'…' }
  */
 function photoEl(imageId, opts) {
@@ -748,7 +828,7 @@ function photoEl(imageId, opts) {
   img.decoding = 'async';
   img.referrerPolicy = 'no-referrer';
 
-  // poradie zdrojov: lokálny súbor (ak je zapnutý) → oficiálny odkaz → ilustrácia
+  // pořadí zdrojů: lokální soubor (pokud je zapnutý) → oficiální odkaz → ilustrace
   const sources = [];
   if (IMAGE_CONFIG.preferLocal && meta.local) sources.push(meta.local);
   if (meta.remote) sources.push(meta.remote);
@@ -762,7 +842,7 @@ function photoEl(imageId, opts) {
   if (opts.label) fig.appendChild(el('div', 'photo__label', opts.label));
 
   if (opts.credit !== false) {
-    // credit sa zobrazí len vtedy, keď sa naozaj načítala fotografia
+    // credit se zobrazí jen tehdy, když se opravdu načetla fotografie
     if (meta.credit || meta.source) {
       const c = el('figcaption', 'photo__credit');
       c.innerHTML = (meta.source
@@ -770,8 +850,8 @@ function photoEl(imageId, opts) {
         : meta.credit) + (meta.license ? ' · ' + meta.license : '');
       fig.appendChild(c);
     }
-    // keď fotografia nie je dostupná, povieme na rovinu, že ide o ilustráciu
-    fig.appendChild(el('div', 'photo__illu', 'vlastná ilustrácia'));
+    // když fotografie není dostupná, řekneme na rovinu, že jde o ilustraci
+    fig.appendChild(el('div', 'photo__illu', 'vlastní ilustrace'));
   }
   return fig;
 }
@@ -787,9 +867,9 @@ function toast(text) {
 }
 
 /* -------------------------- JEMNÉ ZVUKY ---------------------------------
-   Žiadne zvukové súbory – tóny sa skladajú priamo vo Web Audio API, takže
-   appka zostáva jednosúborová a funguje aj offline. Zvuky sú VYPNUTÉ,
-   kým si ich dieťa samo nezapne (state.sound).                          */
+   Žádné zvukové soubory – tóny se skládají přímo ve Web Audio API, takže
+   aplikace zůstává jednosouborová a funguje i offline. Zvuky jsou VYPNUTÉ,
+   dokud si je dítě samo nezapne (state.sound).                          */
 let audioCtx = null;
 
 function sfx(kind) {
@@ -800,11 +880,11 @@ function sfx(kind) {
     if (!audioCtx) audioCtx = new AC();
     if (audioCtx.state === 'suspended') audioCtx.resume();
 
-    /* [frekvencia v Hz, kedy začne (s), ako dlho (s)] */
+    /* [frekvence v Hz, kdy začne (s), jak dlouho (s)] */
     const notes = {
-      xp:     [[880, 0, 0.10]],                                  // krátke cinknutie
-      ok:     [[660, 0, 0.09], [990, 0.08, 0.13]],               // dva tóny nahor
-      no:     [[300, 0, 0.16]],                                  // jeden nízky
+      xp:     [[880, 0, 0.10]],                                  // krátké cinknutí
+      ok:     [[660, 0, 0.09], [990, 0.08, 0.13]],               // dva tóny nahoru
+      no:     [[300, 0, 0.16]],                                  // jeden nízký
       badge:  [[523, 0, 0.12], [659, 0.10, 0.12], [784, 0.20, 0.22]],  // fanfára
       goal:   [[784, 0, 0.10], [1047, 0.09, 0.18]]
     }[kind];
@@ -822,17 +902,18 @@ function sfx(kind) {
       osc.connect(gain); gain.connect(audioCtx.destination);
       osc.start(t0); osc.stop(t0 + n[2] + 0.02);
     });
-  } catch (e) { /* zvuk je bonus – keď nefunguje, nič sa nedeje */ }
+  } catch (e) { /* zvuk je bonus – když nefunguje, nic se nedeje */ }
 }
 
 function soundToggle() {
-  const b = el('button', 'btn btn--ghost btn--small',
-    state.sound ? '🔔 Zvuky sú zapnuté' : '🔕 Zvuky sú vypnuté');
+  const b = el('button', 'btn btn--ghost btn--small');
+  b.innerHTML = icon(state.sound ? 'soundOn' : 'soundOff', { size: 17 }) +
+    '<span>' + (state.sound ? 'Zvuky jsou zapnuté' : 'Zvuky jsou vypnuté') + '</span>';
   b.addEventListener('click', function () {
     state.sound = !state.sound;
     saveState();
     if (state.sound) sfx('ok');
-    toast(state.sound ? '🔔 Zvuky zapnuté' : '🔕 Zvuky vypnuté');
+    toast(state.sound ? 'Zvuky zapnuté' : 'Zvuky vypnuté');
     go('home');
   });
   return b;
@@ -872,17 +953,18 @@ function setProgress(ratio) {
 
 function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
-/* Veľké tlačidlo "ďalej" */
+/* Velké tlačítko "dále" */
 /**
- * Rozbaliteľná krabička „Chcem vedieť viac“.
- * @param {string[]} lines – odstavce navyše
- * @param {string} label   – nadpis rozbalenia
+ * Rozbalovací krabička „Chci vědět víc“.
+ * @param {string[]} lines – odstavce navíc
+ * @param {string} label   – nadpis rozbalení
  */
 function moreBox(lines, label) {
   const det = document.createElement('details');
   det.className = 'more';
   det.innerHTML =
-    '<summary class="more__sum">🤔 ' + (label || 'Chcem vedieť viac') + '</summary>' +
+    '<summary class="more__sum">' + icon('info', { size: 15 }) +
+    (label || 'Chci vědět víc') + '</summary>' +
     '<div class="more__body">' + lines.map(function (t) {
       return '<p>' + t + '</p>';
     }).join('') + '</div>';
@@ -895,51 +977,146 @@ function nextButton(label, onClick, cls) {
   return b;
 }
 
-/* =========================== 5) NAVIGÁCIA ================================ */
+/* =========================== 5) NAVIGACE ================================= */
 
 const app = document.getElementById('app');
-let route = { name: 'home' };
-let lesson = null;        // aktuálna lekcia
-let stepIndex = 0;        // index kroku v lekcii
+let route = { name: 'sky' };
+let lesson = null;        // aktuální lekce
+let stepIndex = 0;        // index kroku v lekci
+
+/* ---------------------------- ADRESY (#/…) -------------------------------
+   Každá obrazovka má vlastní adresu, takže:
+     · tlačítko Zpět v prohlížeči funguje,
+     · obnovení stránky (F5) nechá dítě tam, kde bylo,
+     · odkaz na objekt se dá poslat sám sobě.
+
+   Tvar adres:  #/  #/vyprava/nebulae  #/dennik  #/postup  #/objekt/m42
+   Starý název obrazovky ('home') zůstává funkční, jen ukazuje na oblohu. */
+const ROUTE_PATHS = {
+  sky:         { path: function () { return '/'; },                  re: /^\/?$/ },
+  expeditions: { path: function () { return '/vypravy'; },           re: /^\/vypravy$/ },
+  journal:     { path: function () { return '/dennik'; },            re: /^\/dennik$/ },
+  progress:    { path: function () { return '/postup'; },            re: /^\/postup$/ },
+  lesson:      { path: function (r) { return '/vyprava/' + (lesson ? lesson.id : ''); },
+                 re: /^\/vyprava\/([\w-]+)$/, keys: ['lessonId'] },
+  object:      { path: function (r) { return '/objekt/' + r.objectId; },
+                 re: /^\/objekt\/([\w-]+)$/, keys: ['objectId'] },
+  terms:       { path: function () { return '/pojmy'; },             re: /^\/pojmy$/ },
+  facts:       { path: function () { return '/zajimavosti'; },       re: /^\/zajimavosti$/ },
+  collection:  { path: function () { return '/objevy'; },            re: /^\/objevy$/ },
+  training:    { path: function () { return '/trenink'; },           re: /^\/trenink$/ },
+  parent:      { path: function () { return '/rodic'; },             re: /^\/rodic$/ },
+  sources:     { path: function () { return '/zdroje'; },            re: /^\/zdroje$/ },
+  certificate: { path: function () { return '/diplom'; },            re: /^\/diplom$/ }
+};
+
+let routingSelf = false;     // aby vlastní změna adresy nespustila druhé vykreslení
 
 function go(name, data) {
+  if (name === 'home') name = 'sky';
   route = Object.assign({ name: name }, data || {});
+  const spec = ROUTE_PATHS[name];
+  const hash = '#' + (spec ? spec.path(route) : '/');
+  if (location.hash !== hash) {
+    routingSelf = true;
+    location.hash = hash;
+    routingSelf = false;
+  }
   render();
   scrollTop();
 }
 
+/** Přečte adresu a vrátí odpovídající obrazovku. */
+function routeFromHash() {
+  const raw = (location.hash || '').replace(/^#/, '') || '/';
+  const names = Object.keys(ROUTE_PATHS);
+  for (let i = 0; i < names.length; i++) {
+    const spec = ROUTE_PATHS[names[i]];
+    const m = raw.match(spec.re);
+    if (!m) continue;
+    const r = { name: names[i] };
+    (spec.keys || []).forEach(function (k, j) { r[k] = m[j + 1]; });
+    return r;
+  }
+  return { name: 'sky' };
+}
+
+/** Otevře obrazovku podle adresy (start aplikace, Zpět, F5). */
+function applyHash() {
+  const r = routeFromHash();
+
+  /* výprava se musí doopravdy nastartovat, ne jen vykreslit */
+  if (r.name === 'lesson') {
+    const exists = LESSONS.some(function (l) { return l.id === r.lessonId; });
+    if (!exists) { go('expeditions'); return; }
+    if (!lesson || lesson.id !== r.lessonId) { startLesson(r.lessonId, true); return; }
+    route = { name: 'lesson' };
+    render();
+    return;
+  }
+  if (r.name === 'object' && !getObject(r.objectId)) { go('collection'); return; }
+
+  route = r;
+  render();
+}
+
+window.addEventListener('hashchange', function () {
+  if (routingSelf) return;
+  applyHash();
+});
+
+/* Které obrazovky patří ke kterému místu v navigaci. */
+const NAV_SECTION = {
+  sky: 'sky',
+  expeditions: 'expeditions', lesson: 'expeditions', training: 'expeditions',
+  journal: 'journal', object: 'journal', collection: 'journal',
+  progress: 'progress', terms: 'progress', facts: 'progress',
+  parent: 'progress', certificate: 'progress', sources: 'progress'
+};
+
+/* Počítadlo vykreslení. Slouží k tomu, aby odložené okno (např. nová
+   kvalifikace) nevyskočilo nad obrazovkou, na kterou dítě mezitím odešlo. */
+let renderGen = 0;
+
 function render() {
+  renderGen++;
+  closeOverlay();
   app.innerHTML = '';
   const back = document.getElementById('btnBack');
   const title = document.getElementById('topbarTitle');
   renderXp(false);
+  markNav(NAV_SECTION[route.name] || 'sky');
 
-  if (route.name === 'home') {
-    back.hidden = true; title.textContent = 'VESMÍRNA AKADÉMIA';
+  if (route.name === 'sky' || route.name === 'home') {
+    back.hidden = true; title.textContent = 'TVOJE OBLOHA';
     setProgress(null);
-    app.appendChild(screenHome());
+    app.appendChild(screenSky());
+  } else if (route.name === 'expeditions') {
+    back.hidden = true; title.textContent = 'VÝPRAVY';
+    setProgress(null);
+    app.appendChild(screenExpeditions());
+  } else if (route.name === 'progress') {
+    back.hidden = true; title.textContent = 'POSTUP';
+    setProgress(null);
+    app.appendChild(screenProgress());
   } else if (route.name === 'lesson') {
-    back.hidden = false; title.textContent = lesson.icon + ' ' + lesson.title;
+    back.hidden = false; title.textContent = lesson.title;
     setProgress((stepIndex) / lesson.steps.length);
     app.appendChild(screenLessonStep());
-  } else if (route.name === 'map') {
-    back.hidden = false; title.textContent = 'VESMÍRNA MAPA';
-    setProgress(null);
-    app.appendChild(screenMap());
   } else if (route.name === 'terms') {
     back.hidden = false; title.textContent = 'SLOVNÍČEK';
     setProgress(null);
     app.appendChild(screenTerms());
   } else if (route.name === 'facts') {
-    back.hidden = false; title.textContent = 'VIEŠ ŽE?';
+    back.hidden = false; title.textContent = 'ZAJÍMAVOSTI';
     setProgress(null);
     app.appendChild(screenFacts());
   } else if (route.name === 'collection') {
-    back.hidden = false; title.textContent = 'MOJA VESMÍRNA ZBIERKA';
+    back.hidden = false; title.textContent = 'OBJEVY';
     setProgress(null);
     app.appendChild(screenCollection());
   } else if (route.name === 'object') {
-    back.hidden = false; title.textContent = 'OBJAVENÝ OBJEKT';
+    back.hidden = false; title.textContent = 'OBJEKT';
     setProgress(null);
     app.appendChild(screenObject(route.objectId));
   } else if (route.name === 'sources') {
@@ -947,15 +1124,15 @@ function render() {
     setProgress(null);
     app.appendChild(screenSources());
   } else if (route.name === 'journal') {
-    back.hidden = false; title.textContent = 'POZOROVACÍ DENNÍK';
+    back.hidden = false; title.textContent = 'DENÍK';
     setProgress(null);
     app.appendChild(screenJournal());
   } else if (route.name === 'training') {
-    back.hidden = false; title.textContent = 'HVIEZDNY TRÉNING';
+    back.hidden = false; title.textContent = 'TRÉNINK';
     setProgress(null);
     app.appendChild(screenTraining());
   } else if (route.name === 'parent') {
-    back.hidden = false; title.textContent = 'PRE RODIČA';
+    back.hidden = false; title.textContent = 'PRO RODIČE';
     setProgress(null);
     app.appendChild(screenParent());
   } else if (route.name === 'certificate') {
@@ -965,179 +1142,320 @@ function render() {
   }
 }
 
+/* Zpět = zpět v historii prohlížeče, aby se lišta a tlačítko v prohlížeči
+   chovaly stejně. Když historie není (např. otevřený odkaz), jde se na oblohu. */
 document.getElementById('btnBack').addEventListener('click', function () {
-  if (route.name === 'object') { go('collection'); return; }
-  go('home');
+  if (history.length > 1) { history.back(); return; }
+  go('sky');
 });
 
-/* =========================== 6) DOMOVSKÁ OBRAZOVKA ======================= */
+/* ------------------------ HLAVNÍ NAVIGACE --------------------------------
+   Čtyři místa. Nic víc. Všechno ostatní je dostupné z nich.              */
+const NAV_ITEMS = [
+  { id: 'sky',         label: 'Obloha',  icon: 'sky',     route: 'sky' },
+  { id: 'expeditions', label: 'Výprava', icon: 'route',   route: 'expeditions' },
+  { id: 'journal',     label: 'Deník',   icon: 'journal', route: 'journal' },
+  { id: 'progress',    label: 'Postup',  icon: 'chart',   route: 'progress' }
+];
 
-function screenHome() {
-  const s = el('div', 'screen stack');
+function buildNav() {
+  if (document.getElementById('nav')) return;
+  const nav = el('nav', 'nav');
+  nav.id = 'nav';
+  nav.setAttribute('aria-label', 'Hlavní navigace');
+  NAV_ITEMS.forEach(function (it) {
+    const b = el('button', 'nav__item');
+    b.dataset.nav = it.id;
+    b.innerHTML = icon(it.icon, { size: 22 }) + '<span>' + it.label + '</span>';
+    b.addEventListener('click', function () { go(it.route); });
+    nav.appendChild(b);
+  });
+  document.body.appendChild(nav);
+}
 
-  /* hlavička */
+function markNav(section) {
+  const nav = document.getElementById('nav');
+  if (!nav) return;
+  Array.prototype.forEach.call(nav.children, function (b) {
+    b.classList.toggle('is-on', b.dataset.nav === section);
+  });
+}
+
+/* ============================ 6) OBLOHA =================================
+   Domovská obrazovka není menu. Je to obloha nad Prahou, na které svítí
+   objekty, které dítě objevilo, a tiše čekají ty ostatní. Vedle mapy je
+   jen to, co má smysl udělat teď: pokračovat ve výpravě, zopakovat si,
+   co se nepovedlo, a podívat se, co je dnes vysoko.
+   ====================================================================== */
+
+let skyMap = null;      // instance mapy oblohy (kvůli rozsvícení objevu)
+
+function screenSky() {
+  const s = el('div', 'screen oblo');
+
+  /* uvítání – jeden řádek, ne titulní stránka */
   const hero = el('div', 'hero');
   hero.innerHTML =
-    '<div class="hero__rocket">🚀</div>' +
-    '<h1 class="h-hero">VESMÍRNA AKADÉMIA</h1>' +
-    '<p class="sub">' + (state.name
-      ? 'Vitaj späť, ' + state.name + '. Objavuj. Pozoruj. Fotografuj.'
-      : 'Objavuj. Pozoruj. Fotografuj.') + '</p>';
+    '<h1 class="h-hero">Tvoje obloha</h1>' +
+    '<p class="sub">' + (state.name ? 'Vítej zpátky, ' + state.name + '. ' : '') +
+    skyGreeting() + '</p>';
   s.appendChild(hero);
 
-  /* meno – zapíše sa raz a je len v tomto prehliadači */
   if (!state.name) s.appendChild(nameBox());
 
-  /* štatistiky */
-  const lv = currentLevel();
-  const discoveredCount = Object.keys(state.discovered).length;
-  const stats = el('div', 'stats');
-
-  const nextXp = lv.next ? lv.next.xp : lv.level.xp;
-  const prevXp = lv.level.xp;
-  const ratio = lv.next ? Math.min(1, (state.xp - prevXp) / Math.max(1, nextXp - prevXp)) : 1;
-
-  const s1 = el('div', 'panel stat');
-  s1.innerHTML =
-    '<div class="stat__label">⭐ Moja úroveň</div>' +
-    '<div class="stat__value">' + lv.level.name + '</div>' +
-    '<div class="stat__value" style="font-size:15px;color:var(--accent)">' + state.xp + ' XP</div>' +
-    '<div class="levelbar"><span style="width:' + (ratio * 100) + '%"></span></div>' +
-    '<div class="tile__meta" style="margin-top:8px">' +
-      (lv.next ? 'Ďalšia úroveň: ' + lv.next.name + ' (' + lv.next.xp + ' XP)' : 'Najvyššia úroveň! 🎉') +
-    '</div>';
-
-  const s2 = el('div', 'panel stat');
-  s2.innerHTML =
-    '<div class="stat__label">🔭 Objavené objekty</div>' +
-    '<div class="stat__value" style="font-size:40px">' + discoveredCount + '</div>' +
-    '<div class="tile__meta">' + (state.badges.length ? 'Odznaky: ' + state.badges.length : 'Zatiaľ žiadny odznak') + '</div>';
-
-  stats.appendChild(s1); stats.appendChild(s2);
-  s.appendChild(stats);
-
-  /* hlavné tlačidlo – vždy nasledujúca nedokončená lekcia */
+  /* mapa oblohy + pás „co teď“ */
+  const top = el('div', 'oblo__top');
+  const mapHost = el('div');
   const L = nextLesson();
-  const done = isLessonDone(L.id);
-  s.appendChild(nextButton(
-    allLessonsDone() ? '🔁 ZOPAKOVAŤ VÝPRAVU' : '🚀 POKRAČOVAŤ V OBJAVOVANÍ',
-    function () { startLesson(L.id); }));
+  const missionObj = lessonMissionObject(L);
+  skyMap = createSkyMap(mapHost, {
+    current: missionObj,
+    onPick: function (id) { openObject(id); }
+  });
+  if (pendingFlash) { skyMap.flash(pendingFlash); pendingFlash = null; }
+  top.appendChild(mapHost);
+  top.appendChild(skyRail(L, missionObj));
+  s.appendChild(top);
 
-  /* dnešná výprava */
-  const card = el('div', 'panel mission-card' + (done ? ' is-done' : ''));
-  card.innerHTML =
-    '<span class="mission-card__badge">' + (done ? '✅ Splnené' : '🔓 Dnešná výprava') + '</span>' +
-    '<div class="mission-card__title">' + L.icon + ' ' + L.title + '</div>' +
-    '<p class="lead">„' + L.teaser + '“</p>' +
-    '<p class="tile__meta">⏱️ ' + L.minutes + ' · 🧠 mini test na konci' +
-      (done && state.lessons[L.id].score != null
-        ? ' · posledný výsledok ' + state.lessons[L.id].score + '/' + state.lessons[L.id].total : '') +
-    '</p>';
-  const cardBtn = el('button', 'btn btn--ghost btn--small', done ? 'Otvoriť znova' : 'Začať výpravu →');
-  cardBtn.style.marginTop = '14px';
-  cardBtn.addEventListener('click', function () { startLesson(L.id); });
-  card.appendChild(cardBtn);
-  s.appendChild(card);
+  /* tři dráhy postupu – tichý pruh pod mapou */
+  s.appendChild(trackStrip());
 
-  /* čo je práve teraz na oblohe */
-  const tonight = tonightCard();
-  if (tonight) s.appendChild(tonight);
+  /* druhořadé odkazy a přepínače */
+  const extra = el('div', 'stack stack--tight');
+  const row = el('div', 'homeswitches');
+  row.appendChild(nightToggle());
+  row.appendChild(soundToggle());
+  extra.appendChild(row);
+  s.appendChild(extra);
 
-  /* dlaždice */
-  const factCount = Object.keys(state.facts).length;
-  const factTotal = Object.keys(FACTS).length;
-  const doneCount = LESSONS.filter(function (l) { return isLessonDone(l.id); }).length;
-
-  const tiles = el('div', 'tiles');
-  tiles.appendChild(tile('🌌', 'Vesmírna mapa',
-    doneCount + ' z ' + LESSONS.length + ' lekcií hotových', function () { go('map'); }));
-  tiles.appendChild(tile('💡', 'Vieš že?',
-    factCount + ' z ' + factTotal + ' zaujímavostí', function () { go('facts'); }));
-  if (typeof TERMS !== 'undefined') {
-    tiles.appendChild(tile('📖', 'Slovníček',
-      Object.keys(state.terms).length + ' z ' + Object.keys(TERMS).length + ' pojmov',
-      function () { go('terms'); }));
-  }
-  tiles.appendChild(tile('📚', 'Moja vesmírna zbierka',
-    discoveredCount + ' objavených objektov', function () { go('collection'); }));
-  const journalCount = journalEntries().length;
-  tiles.appendChild(tile('📓', 'Pozorovací denník',
-    journalCount ? journalCount + ' zápisov z nocí' : 'zapíš si, čo si videl',
-    function () { go('journal'); }));
-  if (doneCount >= 3) {
-    tiles.appendChild(tile('🎯', 'Hviezdny tréning',
-      state.bestTraining ? 'najlepší výsledok ' + state.bestTraining + '/10' : 'zmiešaný test zo všetkého',
-      function () { go('training'); }));
-  }
-  if (allLessonsDone()) {
-    tiles.appendChild(tile('🏆', 'Môj diplom', 'všetkých ' + LESSONS.length + ' lekcií hotových',
-      function () { go('certificate'); }));
-  }
-  tiles.appendChild(tile('🔗', 'Zdroje', 'NASA · ESA · ESO · DwarfLab', function () { go('sources'); }));
-  tiles.appendChild(tile('📊', 'Pre rodiča', 'prehľad pokroku', function () { go('parent'); }));
-  s.appendChild(tiles);
-
-  const switches = el('div', 'homeswitches');
-  switches.appendChild(nightToggle());
-  switches.appendChild(soundToggle());
-  s.appendChild(switches);
   return s;
 }
 
-/* --------------------- 6a) ČO JE DNES V NOCI NA OBLOHE -------------------
-   Odporúčanie podľa mesiaca (data/objects.js → SEASON_TIPS). Nie je to
-   výpočet polohy – presné časy je vždy treba overiť v Stellariu.        */
-function tonightCard() {
-  if (typeof SEASON_TIPS === 'undefined') return null;
-  const now = new Date();
-  const tip = SEASON_TIPS[now.getMonth()];
-  if (!tip) return null;
-  const months = ['januári', 'februári', 'marci', 'apríli', 'máji', 'júni',
-                  'júli', 'auguste', 'septembri', 'októbri', 'novembri', 'decembri'];
-
-  const card = el('div', 'panel tonight');
-  card.appendChild(el('div', 'stat__label', '🌠 ČO JE V ' + months[now.getMonth()].toUpperCase() + ' NA OBLOHE'));
-  card.appendChild(el('p', 'lead', tip.note));
-
-  const row = el('div', 'tonight__row');
-  tip.objects.forEach(function (id) {
-    const o = getObject(id);
-    if (!o) return;
-    const found = !!state.discovered[id];
-    const b = el('button', 'tonight__obj' + (found ? ' is-found' : ''));
-    b.innerHTML =
-      '<span class="tonight__icon">' + OBJECT_TYPES[o.type].icon + '</span>' +
-      '<span class="tonight__name">' + o.name + '</span>' +
-      '<span class="tonight__meta">' + (found ? '✅ už máš' : o.designation) + '</span>';
-    b.addEventListener('click', function () {
-      if (found) { go('object', { objectId: id }); }
-      else { toast('🔭 ' + o.stellarium); }
-    });
-    row.appendChild(b);
-  });
-  card.appendChild(row);
-  card.appendChild(el('p', 'tile__meta',
-    'Odporúčanie pre Slovensko (48° s. š.), večerná obloha. Presný čas si vždy over v Stellariu.'));
-  return card;
+/** Krátká věta podle toho, kde dítě je. Žádné pobízení, žádné hlídání. */
+function skyGreeting() {
+  const found = Object.keys(state.discovered).length;
+  const total = SPACE_OBJECTS.length;
+  if (!found) return 'Zatím je tmavá. Po první výpravě se na ní rozsvítí první objekt.';
+  if (found >= total) return 'Všech ' + total + ' objektů svítí. Tohle je tvoje kompletní obloha.';
+  return 'Svítí ' + found + ' z ' + total + ' objektů. Zbytek na tebe čeká.';
 }
 
-/* -------------------- 6b) MENO MLADÉHO ASTRONAUTA ----------------------- */
+/** Objekt, který je cílem misie v dané výpravě (nebo null). */
+function lessonMissionObject(l) {
+  if (!l) return null;
+  const m = l.steps.filter(function (st) { return st.type === 'mission' && st.objectId; })[0];
+  return m ? m.objectId : null;
+}
+
+/** Otevře objekt – objevený má vlastní stránku, neobjevený napoví, kde ho hledat. */
+function openObject(id) {
+  if (state.discovered[id]) { go('object', { objectId: id }); return; }
+  const o = getObject(id);
+  if (!o) return;
+  toast(o.designation + ' · ' + (o.coordsNote ? o.coordsNote : 'najdeš ho ve výpravě'));
+}
+
+/* ---------------------- pás vedle mapy: co teď -------------------------- */
+function skyRail(L, missionObj) {
+  const rail = el('div', 'rail');
+
+  /* 1) aktuální výprava */
+  const done = isLessonDone(L.id);
+  const b1 = el('div', 'rail__block');
+  b1.appendChild(el('div', 'rail__label',
+    allLessonsDone() ? 'Všechny výpravy hotové' : (done ? 'Výprava' : 'Právě teď')));
+  b1.appendChild(el('div', 'rail__title', L.title));
+  b1.appendChild(el('p', 'sub', '„' + L.teaser + '“'));
+  const cil = missionObj ? getObject(missionObj) : null;
+  b1.appendChild(el('div', 'rail__meta', L.minutes +
+    (cil ? ' · cíl ' + (/^(M\d|NGC|IC|α|β|γ|Sgr|\d)/.test(cil.designation)
+                        ? cil.designation : cil.name) : '')));
+  const go1 = nextButton(
+    (allLessonsDone() ? 'Zopakovat výpravu' : (done ? 'Otevřít znovu' : 'Pokračovat ve výpravě')),
+    function () { startLesson(L.id); });
+  go1.innerHTML = icon('play', { size: 18 }) + '<span>' + go1.textContent + '</span>';
+  b1.appendChild(go1);
+  rail.appendChild(b1);
+
+  /* 2) rozcvička – jen když je co opakovat */
+  const warm = warmupQuestions(null, 3);
+  if (warm.length >= 2) {
+    const b2 = el('div', 'rail__block');
+    b2.appendChild(el('div', 'rail__label', 'Vrátí se ti'));
+    b2.appendChild(el('p', 'sub', warm.length + ' otázky, které ti minule nevyšly, se objeví ' +
+      'jako rozcvička na začátku další výpravy.'));
+    const names = {};
+    warm.forEach(function (w) { names[w.lessonTitle] = true; });
+    b2.appendChild(el('div', 'rail__meta', Object.keys(names).join(' · ')));
+    rail.appendChild(b2);
+  }
+
+  /* 3) dnes vysoko nad obzorem */
+  const month = new Date().getMonth();
+  const tip = (typeof SEASON_TIPS !== 'undefined') ? SEASON_TIPS[month] : null;
+  if (tip) {
+    const b3 = el('div', 'rail__block');
+    b3.appendChild(el('div', 'rail__label', 'Dnes vysoko'));
+    b3.appendChild(el('p', 'sub', tip.note));
+    const list = el('div', 'rail__list');
+    tip.objects.forEach(function (id) {
+      const o = getObject(id);
+      if (!o) return;
+      const found = !!state.discovered[id];
+      const item = el('button', 'rail__item' + (found ? ' is-found' : ''));
+      item.innerHTML =
+        iconType(o.type, { size: 18 }) +
+        '<span>' + o.name +
+          '<span class="rail__sub">' + (found ? 'objeveno ' + state.discovered[id].date
+                                              : o.designation + ' · ' + coordsShort(o)) + '</span>' +
+        '</span>' +
+        '<span class="rail__go">' + icon('next', { size: 16 }) + '</span>';
+      item.addEventListener('click', function () { openObject(id); });
+      list.appendChild(item);
+    });
+    b3.appendChild(list);
+    b3.appendChild(el('div', 'rail__meta',
+      SKY_PLACE.name + ' · přesný čas si ověř ve Stellariu'));
+    rail.appendChild(b3);
+  }
+
+  /* 4) poslední objev – propojení s deníkem */
+  const last = journalEntries()[0];
+  if (last) {
+    const b4 = el('div', 'rail__block');
+    b4.appendChild(el('div', 'rail__label', 'Naposledy'));
+    const item = el('button', 'rail__item');
+    item.innerHTML =
+      icon(last.kind === 'objev' ? 'star' : 'journal', { size: 18 }) +
+      '<span>' + last.what + '<span class="rail__sub">' + last.date + '</span></span>' +
+      '<span class="rail__go">' + icon('next', { size: 16 }) + '</span>';
+    item.addEventListener('click', function () { go('journal'); });
+    b4.appendChild(item);
+    rail.appendChild(b4);
+  }
+
+  return rail;
+}
+
+/** Souřadnice v krátkém zápisu, nebo poznámka u pohyblivých objektů. */
+function coordsShort(o) {
+  if (o.moving) return 'poloha se mění';
+  if (o.coordsNote) return o.coordsNote;
+  if (typeof o.ra !== 'number') return o.constellation;
+  return raText(o.ra) + ' ' + decText(o.dec);
+}
+
+/* ---------------------- 6a) TŘI DRÁHY POSTUPU ---------------------------
+   XP zůstávají, protože na nich stojí úrovně a odznaky z verze 1. Nad nimi
+   ale běží tři dráhy, které říkají něco konkrétního: kolik jsi viděl,
+   kolik jsi vyfotil a kolik už chápeš.                                   */
+
+const TRACK_RANKS = ['Začátečník', 'Hledač', 'Znalec', 'Průzkumník', 'Mistr'];
+
+const TRACKS = [
+  {
+    id: 'observer', name: 'Pozorovatel', icon: 'telescope',
+    unit: 'objektů',
+    value: function () { return Object.keys(state.discovered).length; },
+    max: function () { return SPACE_OBJECTS.length; },
+    note: function (v, m) {
+      return v === 0 ? 'Objev první objekt na výpravě.'
+                     : 'Objevil jsi ' + v + ' z ' + m + ' objektů oblohy.';
+    }
+  },
+  {
+    id: 'photographer', name: 'Fotograf', icon: 'camera',
+    unit: 'snímků a výzev',
+    value: function () {
+      let photos = 0;
+      Object.keys(state.discovered).forEach(function (id) {
+        if (state.discovered[id].photo) photos++;
+      });
+      let goals = 0;
+      Object.keys(state.awarded || {}).forEach(function (k) {
+        if (k.indexOf(':simgoal:') !== -1) goals++;
+      });
+      return photos + goals;
+    },
+    max: function () {
+      return SPACE_OBJECTS.length + (typeof SIMS !== 'undefined' ? Object.keys(SIMS).length : 0);
+    },
+    note: function () {
+      let photos = 0;
+      Object.keys(state.discovered).forEach(function (id) {
+        if (state.discovered[id].photo) photos++;
+      });
+      let goals = 0;
+      Object.keys(state.awarded || {}).forEach(function (k) {
+        if (k.indexOf(':simgoal:') !== -1) goals++;
+      });
+      if (!photos && !goals) return 'Splň výzvu ve fotolabu nebo nahraj vlastní snímek.';
+      return photos + (photos === 1 ? ' vlastní snímek' : ' vlastních snímků') +
+             ' · ' + goals + (goals === 1 ? ' splněná výzva' : ' splněných výzev');
+    }
+  },
+  {
+    id: 'theorist', name: 'Teoretik', icon: 'book',
+    unit: 'pojmů a faktů',
+    value: function () {
+      return Object.keys(state.terms).length + Object.keys(state.facts).length;
+    },
+    max: function () {
+      return (typeof TERMS !== 'undefined' ? Object.keys(TERMS).length : 0) +
+             Object.keys(FACTS).length;
+    },
+    note: function () {
+      const t = Object.keys(state.terms).length, f = Object.keys(state.facts).length;
+      if (!t && !f) return 'Pojmy a zajímavosti se odemykají ve výpravách.';
+      return t + ' pojmů · ' + f + ' zajímavostí';
+    }
+  }
+];
+
+function trackRank(ratio) {
+  if (ratio >= 0.85) return TRACK_RANKS[4];
+  if (ratio >= 0.6) return TRACK_RANKS[3];
+  if (ratio >= 0.35) return TRACK_RANKS[2];
+  if (ratio > 0) return TRACK_RANKS[1];
+  return TRACK_RANKS[0];
+}
+
+/** Tři dráhy jako tichý pruh (na Obloze). */
+function trackStrip() {
+  const box = el('div', 'tracks');
+  TRACKS.forEach(function (t) {
+    const v = t.value(), m = t.max();
+    const ratio = m ? Math.min(1, v / m) : 0;
+    const row = el('div', 'track');
+    row.innerHTML =
+      '<div class="track__head">' +
+        '<span class="track__name">' + icon(t.icon, { size: 15 }) + t.name + '</span>' +
+        '<span class="track__val">' + v + ' / ' + m + '</span>' +
+      '</div>' +
+      '<div class="track__bar"><span style="width:' + (ratio * 100).toFixed(1) + '%"></span></div>' +
+      '<div class="track__note">' + trackRank(ratio) + ' · ' + t.note(v, m) + '</div>';
+    box.appendChild(row);
+  });
+  return box;
+}
+
+/* -------------------- 6b) JMÉNO MLADÉHO ASTRONAUTA ---------------------- */
 function nameBox() {
   const box = el('div', 'panel stack panel--tight');
-  box.appendChild(el('div', 'stat__label', '👋 Ako ti máme hovoriť?'));
+  box.appendChild(el('div', 'stat__label', icon('people', { size: 15 }) + 'Jak ti máme říkat?'));
   const row = el('div', 'namerow');
   const input = document.createElement('input');
   input.type = 'text';
   input.className = 'nameinput';
-  input.placeholder = 'tvoje meno';
+  input.placeholder = 'tvoje jméno';
   input.maxLength = 20;
-  const ok = el('button', 'btn btn--small', 'ULOŽIŤ');
+  const ok = el('button', 'btn btn--small', 'Uložit');
   function save() {
     const v = input.value.trim();
     if (!v) return;
     state.name = v;
     saveState();
-    toast('Vitaj v akadémii, ' + v + '!');
+    toast('Vítej v akademii, ' + v + '!');
     go('home');
   }
   ok.addEventListener('click', save);
@@ -1147,20 +1465,21 @@ function nameBox() {
   return box;
 }
 
-/* ---------------------- 6c) NOČNÝ (ČERVENÝ) REŽIM ----------------------- */
-/* Pri pozorovaní sa oči prispôsobia tme asi po 20 minútach. Biele svetlo
-   z displeja to zničí za sekundu, červené takmer nie – preto nočný režim. */
+/* ---------------------- 6c) NOČNÍ (ČERVENÝ) REŽIM ----------------------- */
+/* Při pozorování se oči přizpůsobí tmě asi po 20 minutách. Bílé světlo
+   z displeje to zničí za sekundu, červené téměř ne – proto noční režim.   */
 function applyNightMode() {
   document.body.classList.toggle('night', !!state.night);
 }
 function nightToggle() {
-  const b = el('button', 'btn btn--ghost btn--small',
-    state.night ? '☀️ Vypnúť nočný režim' : '🔴 Nočný režim (pri ďalekohľade)');
+  const b = el('button', 'btn btn--ghost btn--small');
+  b.innerHTML = icon(state.night ? 'day' : 'night', { size: 17 }) +
+    '<span>' + (state.night ? 'Vypnout noční režim' : 'Noční režim (u dalekohledu)') + '</span>';
   b.addEventListener('click', function () {
     state.night = !state.night;
     saveState();
     applyNightMode();
-    toast(state.night ? '🔴 Nočný režim zapnutý' : 'Nočný režim vypnutý');
+    toast(state.night ? 'Noční režim zapnutý' : 'Noční režim vypnutý');
     go('home');
   });
   return b;
@@ -1182,73 +1501,204 @@ function nextLesson() {
   return LESSONS[LESSONS.length - 1];
 }
 
-/* ------------------------- VESMÍRNA MAPA -------------------------------- */
-function screenMap() {
+/* ------------------------------ VÝPRAVY ---------------------------------
+   Cesta akademií: co už je za tebou, co je právě teď a co tě čeká.
+   Žádné karty – jen řádky, linky a jedno zvýrazněné místo.              */
+function screenExpeditions() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '🌌 VESMÍRNA MAPA'));
-  s.appendChild(el('p', 'sub', 'Tvoja cesta akadémiou. Hore to, čo už vieš – dole to, čo ťa ešte čaká.'));
+  const doneCount = LESSONS.filter(function (l) { return isLessonDone(l.id); }).length;
+  const nextL = nextLesson();
 
-  const lv = currentLevel();
-  s.appendChild(el('div', 'panel panel--tight',
-    '⭐ <strong>' + lv.level.name + '</strong> · ' + state.xp + ' XP' +
-    (lv.next ? ' · do úrovne <strong>' + lv.next.name + '</strong> ti chýba ' +
-      (lv.next.xp - state.xp) + ' XP' : ' · najvyššia úroveň 🎉')));
+  const head = el('div', 'stack stack--tight');
+  head.appendChild(el('h1', 'h-hero', 'Výpravy'));
+  head.appendChild(el('p', 'lead',
+    'Dvaadvacet výprav. Každá má hádanku, vysvětlení, úlohu s Dwarfem a na konci ' +
+    'krátký test. Hotovo: ' + doneCount + ' z ' + LESSONS.length + '.'));
+  s.appendChild(head);
 
   const path = el('div', 'path');
   LESSONS.forEach(function (l, i) {
     const done = isLessonDone(l.id);
-    const b = el('button', 'path__item' + (done ? ' is-done' : ' is-open'));
+    const isNow = !done && l.id === nextL.id;
+    const b = el('button', 'path__item' + (done ? ' is-done' : '') + (isNow ? ' is-now' : ''));
     const badge = BADGES[l.badge];
+    const r = state.lessons[l.id];
     b.innerHTML =
-      '<div class="path__dot">' + (done ? '✅' : l.icon) + '</div>' +
-      '<div class="path__body">' +
-        '<div class="path__title">' + (i + 1) + '. ' + l.title + '</div>' +
-        '<div class="path__teaser">' + l.teaser + '</div>' +
-        '<div class="path__meta">' + (done
-          ? '✅ hotové · test ' + state.lessons[l.id].score + '/' + state.lessons[l.id].total +
-            (badge ? ' · odznak ' + badge.icon + ' ' + badge.name : '')
-          : '⏱️ ' + l.minutes + (badge ? ' · získaš odznak ' + badge.icon + ' ' + badge.name : '')) +
-        '</div>' +
-      '</div>' +
-      '<div class="path__go">' + (done ? '🔁' : '▶') + '</div>';
+      '<span class="path__dot">' + (done ? icon('check', { size: 16 }) : (i + 1)) + '</span>' +
+      '<span class="path__body">' +
+        '<span class="path__title">' + l.title + '</span>' +
+        '<span class="path__teaser">' + l.teaser + '</span>' +
+        '<span class="path__meta">' +
+          (done ? 'hotovo · test ' + r.score + '/' + r.total +
+                  (badge ? ' · ' + badge.name : '')
+                : l.minutes + (isNow ? ' · právě teď' : '') +
+                  (badge ? ' · kvalifikace ' + badge.name : '')) +
+        '</span>' +
+      '</span>' +
+      '<span class="path__go">' + icon(done ? 'reset' : 'next', { size: 18 }) + '</span>';
     b.addEventListener('click', function () { startLesson(l.id); });
     path.appendChild(b);
   });
   s.appendChild(path);
 
-  if (typeof UPCOMING !== 'undefined' && UPCOMING.length) {
-    s.appendChild(el('h3', null, '🔜 ČO SA CHYSTÁ'));
-    const grid = el('div', 'tiles');
-    UPCOMING.forEach(function (u) {
-      const t = el('div', 'tile tile--locked');
-      t.innerHTML = '<span class="tile__icon">' + u.icon + '</span>' +
-                    '<span class="tile__name">' + u.title + '</span>' +
-                    '<span class="tile__meta">' + u.teaser + '</span>';
-      grid.appendChild(t);
-    });
-    s.appendChild(grid);
+  /* trénink – dostupný, až když má z čeho vybírat */
+  if (doneCount >= 3) {
+    const t = el('div', 'stack stack--tight');
+    t.appendChild(el('div', 'sechead',
+      '<span class="sechead__t">' + icon('target', { size: 15 }) + 'Hvězdný trénink</span>'));
+    t.appendChild(el('p', 'sub',
+      'Deset otázek zamíchaných ze všech hotových výprav.' +
+      (state.bestTraining ? ' Tvůj rekord: ' + state.bestTraining + '/10.' : '')));
+    const b = el('button', 'btn btn--ghost btn--small', 'Spustit trénink');
+    b.addEventListener('click', function () { training = null; go('training'); });
+    t.appendChild(b);
+    s.appendChild(t);
   }
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
+  /* co se chystá – bez falešných slibů, jen výhled */
+  if (typeof UPCOMING !== 'undefined' && UPCOMING.length) {
+    const u = el('div', 'stack stack--tight');
+    u.appendChild(el('div', 'sechead',
+      '<span class="sechead__t">' + icon('hourglass', { size: 15 }) + 'Co se chystá</span>' +
+      '<span class="sechead__n">' + UPCOMING.length + '</span>'));
+    const grid = el('div', 'tiles');
+    UPCOMING.forEach(function (x) {
+      const t = el('div', 'tile tile--locked');
+      t.innerHTML = '<span class="tile__icon">' + iconEmoji(x.icon, { size: 18 }) + '</span>' +
+                    '<span><span class="tile__name">' + x.title + '</span>' +
+                    '<span class="tile__meta">' + x.teaser + '</span></span>';
+      grid.appendChild(t);
+    });
+    u.appendChild(grid);
+    s.appendChild(u);
+  }
+
+  return s;
+}
+
+/* ------------------------------ POSTUP ----------------------------------
+   Ne body za body, ale tři dráhy, které říkají něco konkrétního, a
+   kvalifikace, které se dají získat jen tím, že něco doopravdy umíš.
+   XP a úrovně zůstávají (jsou z verze 1 a dítě na nich už něco má).     */
+function screenProgress() {
+  const s = el('div', 'screen stack');
+  const lv = currentLevel();
+
+  const head = el('div', 'stack stack--tight');
+  head.appendChild(el('h1', 'h-hero', 'Postup'));
+  head.appendChild(el('p', 'lead',
+    'Tři dráhy. Pozorovatel je o tom, co jsi viděl, fotograf o tom, co jsi vyfotil, ' +
+    'a teoretik o tom, co už chápeš.'));
+  s.appendChild(head);
+
+  /* tři dráhy – podrobně */
+  const box = el('div', 'tracks');
+  TRACKS.forEach(function (t) {
+    const v = t.value(), m = t.max();
+    const ratio = m ? Math.min(1, v / m) : 0;
+    const row = el('div', 'track');
+    row.innerHTML =
+      '<div class="track__head">' +
+        '<span class="track__name">' + icon(t.icon, { size: 16 }) + t.name + '</span>' +
+        '<span class="track__val">' + v + ' / ' + m + ' ' + t.unit + '</span>' +
+      '</div>' +
+      '<div class="track__bar"><span style="width:' + (ratio * 100).toFixed(1) + '%"></span></div>' +
+      '<div class="track__rank">' + trackRank(ratio) + '</div>' +
+      '<div class="track__note">' + t.note(v, m) + '</div>';
+    box.appendChild(row);
+  });
+  s.appendChild(box);
+
+  /* úroveň a XP – pořád tu jsou, jen už nejsou to hlavní */
+  const lvl = el('div', 'stack stack--tight');
+  lvl.appendChild(el('div', 'sechead',
+    '<span class="sechead__t">' + icon('star', { size: 15 }) + 'Úroveň</span>' +
+    '<span class="sechead__n">' + state.xp + ' XP</span>'));
+  const ratio = lv.next
+    ? Math.min(1, (state.xp - lv.level.xp) / Math.max(1, lv.next.xp - lv.level.xp)) : 1;
+  const st = el('div', 'stat');
+  st.innerHTML =
+    '<div class="stat__value">' + lv.level.name + '</div>' +
+    '<div class="levelbar"><span style="width:' + (ratio * 100) + '%"></span></div>' +
+    '<div class="track__note">' + (lv.next
+      ? 'Do úrovně ' + lv.next.name + ' ti chybí ' + (lv.next.xp - state.xp) + ' XP.'
+      : 'Nejvyšší úroveň akademie.') + '</div>';
+  lvl.appendChild(st);
+  s.appendChild(lvl);
+
+  /* kvalifikace (dřív odznaky) */
+  const badgeIds = Object.keys(BADGES);
+  const got = badgeIds.filter(function (id) { return state.badges.indexOf(id) !== -1; });
+  const q = el('div', 'stack stack--tight');
+  q.appendChild(el('div', 'sechead',
+    '<span class="sechead__t">' + icon('medal', { size: 15 }) + 'Kvalifikace</span>' +
+    '<span class="sechead__n">' + got.length + ' / ' + badgeIds.length + '</span>'));
+  q.appendChild(el('p', 'sub',
+    'Každá kvalifikace znamená jednu dokončenou výpravu včetně testu a úlohy venku.'));
+  const row = el('div', 'badge-row');
+  badgeIds.forEach(function (id) {
+    const b = BADGES[id];
+    const has = state.badges.indexOf(id) !== -1;
+    const l = LESSONS.filter(function (x) { return x.badge === id; })[0];
+    row.appendChild(el('div', 'badge-chip' + (has ? '' : ' badge-chip--locked'),
+      icon(has ? 'medal' : 'lock', { size: 17 }) +
+      '<span>' + b.name + '<small>' + (has ? (b.text || 'získáno') : (l ? 'výprava ' + l.title : 'zamčeno')) +
+      '</small></span>'));
+  });
+  q.appendChild(row);
+  s.appendChild(q);
+
+  /* co všechno se dá prohlížet – tiché odkazy, ne dlaždicové menu */
+  const more = el('div', 'stack stack--tight');
+  more.appendChild(el('div', 'sechead',
+    '<span class="sechead__t">' + icon('layers', { size: 15 }) + 'Co už máš nasbírané</span>'));
+  const list = el('div', 'rail__list');
+  [
+    { icon: 'book', name: 'Slovníček pojmů',
+      meta: Object.keys(state.terms).length + ' z ' +
+            (typeof TERMS !== 'undefined' ? Object.keys(TERMS).length : 0) + ' vysvětlených',
+      go: function () { go('terms'); } },
+    { icon: 'bulb', name: 'Zajímavosti',
+      meta: Object.keys(state.facts).length + ' z ' + Object.keys(FACTS).length + ' nasbíraných',
+      go: function () { go('facts'); } },
+    { icon: 'star', name: 'Objevené objekty',
+      meta: Object.keys(state.discovered).length + ' z ' + SPACE_OBJECTS.length + ' objektů',
+      go: function () { go('collection'); } },
+    { icon: 'link', name: 'Zdroje',
+      meta: 'NASA · ESA · ESO · DwarfLab', go: function () { go('sources'); } },
+    { icon: 'shield', name: 'Pro rodiče',
+      meta: 'přehled a vynulování', go: function () { go('parent'); } }
+  ].concat(allLessonsDone() ? [{
+    icon: 'trophy', name: 'Diplom', meta: 'všech ' + LESSONS.length + ' výprav hotových',
+    go: function () { go('certificate'); }
+  }] : []).forEach(function (it) {
+    const b = el('button', 'rail__item');
+    b.innerHTML = icon(it.icon, { size: 18 }) +
+      '<span>' + it.name + '<span class="rail__sub">' + it.meta + '</span></span>' +
+      '<span class="rail__go">' + icon('next', { size: 16 }) + '</span>';
+    b.addEventListener('click', it.go);
+    list.appendChild(b);
+  });
+  more.appendChild(list);
+  s.appendChild(more);
+
   return s;
 }
 
 /* --------------------------- SLOVNÍČEK ---------------------------------- */
 function screenTerms() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '📖 SLOVNÍČEK'));
+  s.appendChild(el('h1', 'h-hero', 'Slovníček'));
   const ids = Object.keys(TERMS);
   const got = ids.filter(function (id) { return state.terms[id]; });
-  s.appendChild(el('p', 'sub', 'Všetky pojmy z akadémie na jednom mieste. Zatiaľ vysvetlených: ' +
-    got.length + ' z ' + ids.length + '. Ostatné sa odomknú v lekciách.'));
+  s.appendChild(el('p', 'sub', 'Všechny pojmy z akademie na jednom místě. Zatím vysvětlených: ' +
+    got.length + ' z ' + ids.length + '. Ostatní se odemknou v lekcích.'));
 
-  /* filtrovanie podľa skupiny */
+  /* filtrování podle skupiny */
   const groups = {};
-  ids.forEach(function (id) { groups[TERMS[id].group || 'ostatné'] = true; });
+  ids.forEach(function (id) { groups[TERMS[id].group || 'ostatní'] = true; });
   const groupNames = Object.keys(groups);
-  let active = 'všetko';
+  let active = 'vše';
   const bar = el('div', 'chips');
   const body = el('div');
 
@@ -1257,22 +1707,23 @@ function screenTerms() {
     const list = el('div', 'terms terms--grid');
     ids.forEach(function (id) {
       const t = TERMS[id];
-      if (active !== 'všetko' && (t.group || 'ostatné') !== active) return;
+      if (active !== 'vše' && (t.group || 'ostatní') !== active) return;
       if (state.terms[id]) {
         list.appendChild(termCard(id));
       } else {
         const c = el('div', 'panel term term--locked');
         c.appendChild(el('div', 'term__head',
-          '<span class="term__icon">🔒</span><span><span class="term__name">' + t.name +
-          '</span><span class="term__short">odomkneš v lekcii</span></span>'));
+          '<span class="term__icon">' + icon('lock', { size: 16 }) + '</span>' +
+          '<span><span class="term__name">' + t.name +
+          '</span><span class="term__short">odemkneš ve výpravě</span></span>'));
         list.appendChild(c);
       }
     });
     body.appendChild(list);
   }
 
-  ['všetko'].concat(groupNames).forEach(function (g) {
-    const b = el('button', 'chip' + (g === 'všetko' ? ' is-on' : ''), g);
+  ['vše'].concat(groupNames).forEach(function (g) {
+    const b = el('button', 'chip' + (g === 'vše' ? ' is-on' : ''), g);
     b.addEventListener('click', function () {
       active = g;
       Array.prototype.forEach.call(bar.children, function (n) { n.classList.remove('is-on'); });
@@ -1285,20 +1736,17 @@ function screenTerms() {
   render();
   s.appendChild(body);
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
   return s;
 }
 
-/* ---------------------- ZBIERKA ZAUJÍMAVOSTÍ ---------------------------- */
+/* ---------------------- SBÍRKA ZAJÍMAVOSTÍ ------------------------------ */
 function screenFacts() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '💡 VIEŠ ŽE?'));
+  s.appendChild(el('h1', 'h-hero', 'Zajímavosti'));
   const ids = Object.keys(FACTS);
   const got = ids.filter(function (id) { return state.facts[id]; });
-  s.appendChild(el('p', 'sub', 'Zozbierané: ' + got.length + ' z ' + ids.length +
-    '. Ďalšie sa odomknú v lekciách.'));
+  s.appendChild(el('p', 'sub', 'Nasbíráno: ' + got.length + ' z ' + ids.length +
+    '. Další se odemknou v lekcích.'));
 
   const grid = el('div', 'factgrid');
   ids.forEach(function (id, i) {
@@ -1306,43 +1754,39 @@ function screenFacts() {
     const has = !!state.facts[id];
     const c = el('div', 'panel factmini' + (has ? '' : ' is-locked') + ' screen delay-' + Math.min(4, i + 1));
     c.innerHTML = has
-      ? '<div class="factmini__icon">' + f.icon + '</div>' +
+      ? '<div class="factmini__icon">' + iconEmoji(f.icon, { size: 16 }) + '</div>' +
         '<div class="factmini__title">' + f.title + '</div>' +
         '<p class="factmini__text">' + f.text + '</p>' +
         (f.source ? '<a class="factcard__src" href="' + f.source + '" target="_blank" rel="noopener">' +
           (f.sourceLabel || 'zdroj') + ' ↗</a>' : '')
-      : '<div class="factmini__icon">🔒</div>' +
-        '<div class="factmini__title">Ešte neodomknuté</div>' +
-        '<p class="factmini__text">Nájdeš to v jednej z lekcií.</p>';
+      : '<div class="factmini__title">' + icon('lock', { size: 14 }) + ' Ještě neodemčené</div>' +
+        '<p class="factmini__text">Najdeš to v jedné z výprav.</p>';
     grid.appendChild(c);
   });
   s.appendChild(grid);
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
   return s;
 }
 
 /* =========================== 7) LEKCIA ================================== */
 
-function startLesson(id) {
+function startLesson(id, fromHash) {
   lesson = LESSONS.filter(function (l) { return l.id === id; })[0];
 
-  /* Automaticky vkladané kroky odstránime, aby sa pri opakovanom spustení
-     lekcie nezdvojovali. Všetko ostatné zostáva presne tak, ako je v dátach. */
+  /* Automaticky vkládané kroky odstraníme, aby se při opakovaném spuštění
+     lekce nezdvojovaly. Všechno ostatní zůstává přesně tak, jak je v datech. */
   lesson.steps = lesson.steps.filter(function (s) {
     return s.type !== 'basics' && s.type !== 'result' && s.type !== 'warmup';
   });
 
-  /* Krok „📖 ZÁKLADY“ sa vkladá automaticky hneď za hádanku – v dátach lekcie
-     stačí uviesť pole basics: ['expozicia', 'gain', …] (viď data/terms.js). */
+  /* Krok „📖 ZÁKLADY“ se vkládá automaticky hned za hádanku – v datech lekce
+     stačí uvést pole basics: ['expozicia', 'gain', …] (viz data/terms.js). */
   if (lesson.basics && lesson.basics.length && typeof TERMS !== 'undefined') {
     const after = (lesson.steps[0] && lesson.steps[0].type === 'guess') ? 1 : 0;
     lesson.steps.splice(after, 0, { type: 'basics', terms: lesson.basics, xp: 10 });
   }
 
-  /* Krok „🔁 ROZCVIČKA“ – len ak má dieťa čo opakovať z iných lekcií. */
+  /* Krok „🔁 ROZCVIČKA“ – jen když má dítě co opakovat z jiných lekcí. */
   const warmItems = warmupQuestions(id, 3);
   if (warmItems.length >= 2) {
     lesson.steps.unshift({ type: 'warmup', items: warmItems, xp: 15 });
@@ -1351,7 +1795,8 @@ function startLesson(id) {
   stepIndex = 0;
   quiz = null;
   warm = null;
-  go('lesson');
+  if (fromHash) { route = { name: 'lesson' }; render(); scrollTop(); }
+  else { go('lesson'); }
 }
 
 function nextStep() {
@@ -1363,7 +1808,7 @@ function nextStep() {
   }
 }
 
-/* Register vykresľovačov krokov – nový typ kroku = nová funkcia tu. */
+/* Registr vykreslovačů kroků – nový typ kroku = nová funkce tady. */
 const STEP_RENDERERS = {
   guess: stepGuess,
   basics: stepBasics,
@@ -1381,19 +1826,50 @@ const STEP_RENDERERS = {
   result: stepResult
 };
 
+/* Kroky, u kterých má na širokém monitoru smysl dát obrázek vedle textu.
+   U ostatních (simulátor, kvíz, karty) si rozvržení řídí krok sám.      */
+const SPLIT_STEPS = { guess: 1, info: 1, fact: 1, mission: 1, wow: 1 };
+
 function screenLessonStep() {
   const step = lesson.steps[stepIndex];
   const fn = STEP_RENDERERS[step.type];
-  const wrap = el('div', 'screen stack');
-  if (!fn) { wrap.appendChild(el('p', null, 'Neznámy typ kroku: ' + step.type)); return wrap; }
+  const screen = el('div', 'screen lesson');
+
+  /* tichá hlavička: kde v výpravě jsme */
+  screen.appendChild(el('div', 'lesson__step',
+    'Krok ' + (stepIndex + 1) + ' z ' + lesson.steps.length + ' · ' + lesson.title));
+
+  const wrap = el('div', 'lesson__body step-in');
+  if (!fn) {
+    wrap.appendChild(el('p', null, 'Neznámý typ kroku: ' + step.type));
+    screen.appendChild(wrap);
+    return screen;
+  }
   fn(step, wrap);
-  return wrap;
+
+  /* Obrázek doleva, text a odpovědi doprava – bez zásahu do vykreslovačů:
+     přeskládáme až hotový obsah kroku.                                   */
+  if (SPLIT_STEPS[step.type]) {
+    const media = wrap.firstChild;
+    if (media && media.classList && media.classList.contains('photo')) {
+      const left = el('div', 'lesson__media');
+      const right = el('div', 'lesson__text stack');
+      wrap.removeChild(media);
+      left.appendChild(media);
+      while (wrap.firstChild) right.appendChild(wrap.firstChild);
+      wrap.classList.add('lesson__body--split');
+      wrap.appendChild(left);
+      wrap.appendChild(right);
+    }
+  }
+  screen.appendChild(wrap);
+  return screen;
 }
 
 /* --------------------------- 7a) HÁDANKA -------------------------------- */
 function stepGuess(step, wrap) {
   wrap.appendChild(photoEl(step.image, { className: 'photo--tall' }));
-  wrap.appendChild(el('h2', 'h-step center', step.question));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.question)));
 
   const answers = el('div', 'answers answers--2');
   const feedback = el('div');
@@ -1401,7 +1877,8 @@ function stepGuess(step, wrap) {
 
   step.options.forEach(function (opt) {
     const b = el('button', 'answer');
-    b.innerHTML = '<span class="answer__icon">' + opt.icon + '</span><span>' + opt.label + '</span>';
+    b.innerHTML = '<span class="answer__icon">' + iconEmoji(opt.icon, { size: 18 }) +
+                  '</span><span>' + opt.label + '</span>';
     b.addEventListener('click', function () {
       if (solved) return;
       if (opt.id === step.correct) {
@@ -1416,12 +1893,12 @@ function stepGuess(step, wrap) {
         const f = el('div', 'feedback feedback--ok');
         f.innerHTML = '<div class="feedback__title">' + step.successTitle + '</div><div>' + step.successText + '</div>';
         feedback.appendChild(f);
-        feedback.appendChild(nextButton('POKRAČOVAŤ →', nextStep));
+        feedback.appendChild(nextButton('Pokračovat', nextStep));
       } else {
         b.classList.remove('is-wrong'); void b.offsetWidth; b.classList.add('is-wrong');
         feedback.innerHTML = '';
         const f = el('div', 'feedback feedback--no');
-        f.innerHTML = '<div class="feedback__title">🤔 Skús ešte raz</div><div>' + step.retryText + '</div>';
+        f.innerHTML = '<div class="feedback__title">Zkus to ještě jednou</div><div>' + step.retryText + '</div>';
         feedback.appendChild(f);
       }
     });
@@ -1433,15 +1910,15 @@ function stepGuess(step, wrap) {
 }
 
 /* ------------------------- 7a2) ZÁKLADY (slovníček) --------------------- */
-/* Karta pojmu: ikona + názov + jedna veta. Ak má pojem "compare",
-   zobrazia sa dva obrázky vedľa seba (napr. málo vs. veľa).            */
+/* Karta pojmu: ikona + název + jedna věta. Pokud má pojem "compare",
+   zobrazí se dva obrázky vedle sebe (např. málo vs. hodně).            */
 function termCard(id, opts) {
   opts = opts || {};
   const t = TERMS[id];
   if (!t) return el('div');
   const card = el('div', 'panel term' + (opts.className ? ' ' + opts.className : ''));
   card.appendChild(el('div', 'term__head',
-    '<span class="term__icon">' + t.icon + '</span>' +
+    '<span class="term__icon">' + iconEmoji(t.icon, { size: 17 }) + '</span>' +
     '<span><span class="term__name">' + t.name + '</span>' +
     (t.short ? '<span class="term__short">' + t.short + '</span>' : '') + '</span>'));
 
@@ -1460,16 +1937,17 @@ function termCard(id, opts) {
   }
 
   card.appendChild(el('p', 'term__text', t.text));
-  if (t.warn) card.appendChild(el('p', 'term__warn', '⚠️ ' + t.warn));
-  /* Nepovinné hlbšie vysvetlenie – pre toho, kto chce vedieť presne prečo. */
-  if (t.deep) card.appendChild(moreBox([t.deep], 'Prečo to tak je'));
+  if (t.warn) card.appendChild(el('p', 'term__warn', t.warn));
+  /* Nepovinné hlubší vysvětlení – pro toho, kdo chce vědět přesně proč. */
+  if (t.deep) card.appendChild(moreBox([t.deep], 'Proč to tak je'));
   return card;
 }
 
 function stepBasics(step, wrap) {
-  wrap.appendChild(el('h2', 'h-step center', '📖 ZÁKLADY'));
-  wrap.appendChild(el('p', 'sub center',
-    'Slová, ktoré budeš v tejto lekcii potrebovať. Prečítaj si ich – potom už bude všetko jasné.'));
+  wrap.appendChild(el('h2', 'h-step', icon('book', { size: 22, cls: 'ico--head' }) + '<span>Základy</span>'));
+  wrap.appendChild(el('p', 'sub',
+    'Slova, která budeš v této lekci potřebovat. Přečti si je – potom už bude všechno ' +
+    'jasné.'));
 
   let noveNove = 0;
   const list = el('div', 'terms');
@@ -1481,11 +1959,11 @@ function stepBasics(step, wrap) {
   wrap.appendChild(list);
 
   if (noveNove) {
-    wrap.appendChild(el('p', 'sub center',
-      '📖 ' + noveNove + ' ' + (noveNove === 1 ? 'nový pojem sa uložil' : 'nových pojmov sa uložilo') +
-      ' do tvojho slovníčka.'));
+    wrap.appendChild(el('p', 'sub',
+      noveNove + ' ' + (noveNove === 1 ? 'nový pojem se uložil' : 'nových pojmů se uložilo') +
+      ' do tvého slovníčku.'));
   }
-  wrap.appendChild(nextButton('ROZUMIEM, IDEME →', function () {
+  wrap.appendChild(nextButton('Rozumím, jdeme dál', function () {
     addXp(step.xp || 10, lesson.id + ':basics');
     nextStep();
   }));
@@ -1493,7 +1971,7 @@ function stepBasics(step, wrap) {
 
 /* --------------------------- 7b) INFO ----------------------------------- */
 function stepInfo(step, wrap) {
-  wrap.appendChild(el('h2', 'h-step center', step.title));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.title)));
   wrap.appendChild(photoEl(step.image, { className: 'photo--tall' }));
 
   const box = el('div', 'panel stack');
@@ -1506,33 +1984,37 @@ function stepInfo(step, wrap) {
   if (step.diagram === 'sky-rotation') box.appendChild(skyRotationDiagram());
   wrap.appendChild(box);
 
-  /* Nepovinné rozšírenie: „Chcem vedieť viac“ – kto chce, dozvie sa detail;
-     kto nechce, nie je zaťažený dlhým textom. */
+  /* Nepovinné rozšíření: „Chci vědět víc“ – kdo chce, dozví se detail;
+     kdo nechce, není zatížen dlouhým textem. */
   if (step.more && step.more.length) wrap.appendChild(moreBox(step.more));
 
-  wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', nextStep));
+  wrap.appendChild(nextButton(step.cta || 'Pokračovat', nextStep));
 }
 
-/* Jednoduchá animovaná ilustrácia kolobehu: oblak → hviezda → hmlovina */
+/* Jednoduchá animovaná ilustrace koloběhu: oblak → hvězda → mlhovina */
 function nebulaCycleDiagram() {
   const d = el('div', 'cycle');
   d.innerHTML =
-    '<div class="cycle__node"><span>☁️</span><small>oblak plynu<br>a prachu</small></div>' +
+    '<div class="cycle__node"><span>' + icon('nebula', { size: 24 }) +
+    '</span><small>oblak plynu<br>a prachu</small></div>' +
     '<div class="cycle__arrow"></div>' +
-    '<div class="cycle__node"><span>⭐</span><small>rodí sa<br>hviezda</small></div>' +
+    '<div class="cycle__node"><span>' + icon('star', { size: 24 }) +
+    '</span><small>rodí se<br>hvězda</small></div>' +
     '<div class="cycle__arrow"></div>' +
-    '<div class="cycle__node"><span>💀</span><small>hviezda zomrie<br>a vznikne hmlovina</small></div>';
+    '<div class="cycle__node"><span>' + icon('supernova', { size: 24 }) +
+    '</span><small>hvězda zemře<br>a vznikne ' +
+    'mlhovina</small></div>';
   return d;
 }
 
-/* Animovaná ilustrácia: celá obloha sa točí okolo nebeského pólu */
+/* Animovaná ilustrace: celá obloha se točí okolo nebeského pólu */
 function skyRotationDiagram() {
   const d = el('div', 'skyrot');
   const r = seededRandom(2026);
   let dots = '';
   for (let i = 0; i < 46; i++) {
     const ang = r() * Math.PI * 2;
-    const rad = 12 + r() * 46;                    // v procentách polomeru
+    const rad = 12 + r() * 46;                    // v procentech poloměru
     const x = 50 + Math.cos(ang) * rad;
     const y = 50 + Math.sin(ang) * rad;
     dots += '<span class="skyrot__star" style="left:' + x.toFixed(1) + '%;top:' + y.toFixed(1) +
@@ -1544,19 +2026,20 @@ function skyRotationDiagram() {
       '<div class="skyrot__spin">' + dots + '</div>' +
       '<div class="skyrot__pole">⭐</div>' +
     '</div>' +
-    '<p class="skyrot__caption">Obloha sa točí okolo jedného bodu – <strong>nebeského pólu</strong>. ' +
-    'Hneď pri ňom stojí Polárka. Rýchlosť: 15° za hodinu.</p>';
+    '<p class="skyrot__caption">Obloha se točí okolo jednoho bodu – <strong>nebeského ' +
+    'pólu</strong>. ' +
+    'Hned u něj stojí Polárka. Rychlost: 15° za hodinu.</p>';
   return d;
 }
 
 /* --------------------------- 7c) KARTY TYPOV ---------------------------- */
 function stepCards(step, wrap) {
-  wrap.appendChild(el('h2', 'h-step center', step.title));
-  wrap.appendChild(el('p', 'sub center', step.subtitle));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.title)));
+  wrap.appendChild(el('p', 'sub', step.subtitle));
 
-  /* karty sa dajú zadať dvomi spôsobmi:
-     kinds: ['emission', …]  → vezmú sa z NEBULA_KINDS
-     cards: [{icon,name,short,text,image,exampleLabel}, …] → priamo v lekcii   */
+  /* karty se dají zadat dvěma způsoby:
+     kinds: ['emission', …]  → vezmou se z NEBULA_KINDS
+     cards: [{icon,name,short,text,image,exampleLabel}, …] → přímo v lekci     */
   const items = step.cards
     ? step.cards
     : step.kinds.map(function (id) { return NEBULA_KINDS[id]; });
@@ -1564,10 +2047,10 @@ function stepCards(step, wrap) {
   const grid = el('div', 'kinds' + (items.length <= 2 ? ' kinds--wide' : ''));
   let seen = 0;
   const total = items.length;
-  const cta = nextButton(step.cta || 'POKRAČOVAŤ →', nextStep);
+  const cta = nextButton(step.cta || 'Pokračovat', nextStep);
   cta.disabled = true;
   cta.style.opacity = '.45';
-  const hintText = 'Otvor všetky karty 👆 ';
+  const hintText = 'Otevři všechny karty · ';
   const hint = el('p', 'sub center pulse', hintText + '(0/' + total + ')');
 
   items.forEach(function (k, idx) {
@@ -1577,19 +2060,19 @@ function stepCards(step, wrap) {
     const front = el('div', 'kind__face kind__face--front');
     front.appendChild(photoEl(k.image, { credit: false, className: 'photo--fill' }));
     front.appendChild(el('div', 'kind__caption',
-      '<div class="kind__icon">' + k.icon + '</div>' +
+      '<div class="kind__icon">' + iconEmoji(k.icon, { size: 20 }) + '</div>' +
       '<div class="kind__name">' + k.name + '</div>' +
       '<div class="kind__short">' + k.short + '</div>' +
-      '<div class="kind__flip">Klikni pre viac</div>'));
+      '<div class="kind__flip">Klikni pro víc</div>'));
 
     const back = el('div', 'kind__face kind__face--back');
     back.innerHTML =
-      '<div class="kind__icon">' + k.icon + '</div>' +
+      '<div class="kind__icon">' + iconEmoji(k.icon, { size: 20 }) + '</div>' +
       '<div class="kind__name" style="margin:6px 0 10px">' + k.name + '</div>' +
       '<div class="kind__text">' + k.text + '</div>' +
       '<div class="kind__flip">' + (k.exampleLabel
         ? k.exampleLabel
-        : 'Príklad: ' + (IMAGES[k.image] ? IMAGES[k.image].title : '')) + '</div>';
+        : 'Příklad: ' + (IMAGES[k.image] ? IMAGES[k.image].title : '')) + '</div>';
 
     inner.appendChild(front); inner.appendChild(back);
     card.appendChild(inner);
@@ -1601,7 +2084,7 @@ function stepCards(step, wrap) {
         seen++;
         hint.textContent = hintText + '(' + seen + '/' + total + ')';
         if (seen === total) {
-          hint.textContent = '✅ Máš to! Ideme ďalej.';
+          hint.textContent = 'Máš to! Jdeme dál.';
           hint.classList.remove('pulse');
           cta.disabled = false;
           cta.style.opacity = '1';
@@ -1618,10 +2101,10 @@ function stepCards(step, wrap) {
   wrap.appendChild(cta);
 }
 
-/* --------------------------- 7d) VYBER OBRÁZOK -------------------------- */
+/* --------------------------- 7d) VYBER OBRÁZEK -------------------------- */
 function stepPick(step, wrap) {
-  wrap.appendChild(el('h2', 'h-step center', step.title));
-  wrap.appendChild(el('p', 'lead center', step.prompt));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.title)));
+  wrap.appendChild(el('p', 'lead', step.prompt));
 
   const grid = el('div', 'picks');
   const feedback = el('div');
@@ -1644,14 +2127,14 @@ function stepPick(step, wrap) {
         addXp(step.xp || 20, lesson.id + ':pick');
         feedback.innerHTML = '';
         const f = el('div', 'feedback feedback--ok');
-        f.innerHTML = '<div class="feedback__title">🎉 Správne!</div><div>' + opt.explain + '</div>';
+        f.innerHTML = '<div class="feedback__title">' + icon('check', { size: 15 }) + 'Správně</div><div>' + opt.explain + '</div>';
         feedback.appendChild(f);
-        feedback.appendChild(nextButton('POKRAČOVAŤ →', nextStep));
+        feedback.appendChild(nextButton('Pokračovat', nextStep));
       } else {
         b.classList.remove('is-wrong'); void b.offsetWidth; b.classList.add('is-wrong');
         feedback.innerHTML = '';
         const f = el('div', 'feedback feedback--no');
-        f.innerHTML = '<div class="feedback__title">Ešte nie 🙂</div><div>' + opt.explain + '</div>';
+        f.innerHTML = '<div class="feedback__title">Ještě ne</div><div>' + opt.explain + '</div>';
         feedback.appendChild(f);
       }
     });
@@ -1674,30 +2157,31 @@ function stepWow(step, wrap) {
     box.appendChild(p);
   });
   if (step.footnote) {
-    const f = el('p', 'sub', '💡 ' + step.footnote);
+    const f = el('p', 'sub', step.footnote);
     f.style.marginTop = '22px';
     box.appendChild(f);
   }
   wrap.appendChild(box);
-  wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', nextStep));
+  wrap.appendChild(nextButton(step.cta || 'Pokračovat', nextStep));
 }
 
 /* --------------------------- 7f) OKO vs. DWARF -------------------------- */
 function stepCompare(step, wrap) {
-  wrap.appendChild(el('h2', 'h-step center', step.title));
-  wrap.appendChild(el('p', 'lead center', step.lead));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.title)));
+  wrap.appendChild(el('p', 'lead', step.lead));
 
   const grid = el('div', 'compare');
 
-  /* ľavý stĺpec – oko */
+  /* levý sloupec – oko */
   const c1 = el('div', 'compare__col');
-  c1.appendChild(el('div', 'compare__head', '<span>' + step.eye.icon + '</span><span>' + step.eye.label + '</span>'));
+  c1.appendChild(el('div', 'compare__head', iconEmoji(step.eye.icon, { size: 16 }) +
+    '<span>' + step.eye.label + '</span>'));
   if (step.eye.art) {
-    // ľavá strana je tiež obrázok (napr. roztočené hviezdy bez EQ režimu)
+    // levá strana je taky obrázek (např. roztočené hvězdy bez EQ režimu)
     c1.appendChild(photoEl(step.eye.art, { credit: false }));
   } else {
     const eye = el('div', 'eye-view');
-    // pár slabých bodiek + takmer neviditeľná šmuha = to, čo naozaj vidí oko
+    // pár slabých tečiček + téměř neviditelná šmouha = to, co opravdu vidí oko
     let dots = '';
     const r = seededRandom(42);
     for (let i = 0; i < 40; i++) {
@@ -1710,16 +2194,17 @@ function stepCompare(step, wrap) {
   c1.appendChild(el('p', 'compare__note', step.eye.text));
   grid.appendChild(c1);
 
-  /* pravý stĺpec – fotografia */
+  /* pravý sloupec – fotografie */
   const c2 = el('div', 'compare__col');
-  c2.appendChild(el('div', 'compare__head', '<span>' + step.camera.icon + '</span><span>' + step.camera.label + '</span>'));
+  c2.appendChild(el('div', 'compare__head', iconEmoji(step.camera.icon, { size: 16 }) +
+    '<span>' + step.camera.label + '</span>'));
   c2.appendChild(photoEl(step.camera.image, { credit: false }));
   c2.appendChild(el('p', 'compare__note', step.camera.text));
   grid.appendChild(c2);
 
   wrap.appendChild(grid);
 
-  /* mini kontrolná otázka */
+  /* mini kontrolní otázka */
   const box = el('div', 'panel stack');
   box.appendChild(el('p', 'lead', step.check.question));
   const answers = el('div', 'answers');
@@ -1734,7 +2219,7 @@ function stepCompare(step, wrap) {
         solved = true;
         b.classList.add('is-correct', 'is-locked');
         feedback.innerHTML = '<div class="feedback feedback--ok">' + opt.explain + '</div>';
-        wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', nextStep));
+        wrap.appendChild(nextButton(step.cta || 'Pokračovat', nextStep));
       } else {
         b.classList.remove('is-wrong'); void b.offsetWidth; b.classList.add('is-wrong');
         feedback.innerHTML = '<div class="feedback feedback--no">' + opt.explain + '</div>';
@@ -1749,15 +2234,15 @@ function stepCompare(step, wrap) {
 
 /* --------------------------- 7g) POSTUP (HOWTO) ------------------------- */
 function stepHowto(step, wrap) {
-  wrap.appendChild(el('h2', 'h-step center', step.title));
-  if (step.lead) wrap.appendChild(el('p', 'lead center', step.lead));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.title)));
+  if (step.lead) wrap.appendChild(el('p', 'lead', step.lead));
 
   const list = el('div', 'howto');
   step.steps.forEach(function (s, i) {
     const row = el('div', 'howto__row screen delay-' + Math.min(2, i + 1));
     row.innerHTML =
       '<div class="howto__num">' + (i + 1) + '</div>' +
-      '<div class="howto__icon">' + s.icon + '</div>' +
+      '<div class="howto__icon">' + iconEmoji(s.icon, { size: 18 }) + '</div>' +
       '<div><div class="howto__title">' + s.title + '</div>' +
       '<div class="howto__text">' + s.text + '</div></div>';
     list.appendChild(row);
@@ -1765,44 +2250,54 @@ function stepHowto(step, wrap) {
   wrap.appendChild(list);
   if (step.note) wrap.appendChild(el('p', 'sub', 'ℹ️ ' + step.note));
 
-  wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', function () {
+  wrap.appendChild(nextButton(step.cta || 'Pokračovat', function () {
     addXp(step.xp || 15, lesson.id + ':howto');
     nextStep();
   }));
 }
 
-/* ------------------- 7g2) INTERAKTÍVNA ÚLOHA (SIMULÁCIA) ----------------
-   Obsah je v data/sims.js, kreslenie v sim-engine.js. Tento krok len
-   postaví ovládače, canvas a hodnotenie – nič o konkrétnej úlohe nevie.   */
+/* ------------------- 7g2) INTERAKTIVNÍ ÚLOHA (SIMULACE) -----------------
+   Obsah je v data/sims.js, kreslení v sim-engine.js. Tento krok jen
+   postaví ovladače, canvas a hodnocení – nic o konkrétní úloze neví.      */
 function stepSim(step, wrap) {
   const sim = (typeof SIMS !== 'undefined') ? SIMS[step.simId] : null;
   const eng = (typeof SIM_ENGINE !== 'undefined') ? SIM_ENGINE[step.simId] : null;
   if (!sim || !eng) { nextStep(); return; }
 
-  /* aktuálne hodnoty ovládačov */
+  /* aktuální hodnoty ovladačů */
   const v = {};
   sim.controls.forEach(function (c) { v[c.id] = c.start; });
 
-  wrap.appendChild(el('h2', 'h-step center', sim.title));
-  if (sim.lead) wrap.appendChild(el('p', 'lead center', sim.lead));
+  const head = el('div', 'stack stack--tight');
+  head.appendChild(el('h2', 'h-step', textIcon(sim.title)));
+  if (sim.lead) head.appendChild(el('p', 'lead', sim.lead));
+  wrap.appendChild(head);
 
-  /* ---- náhľad ---- */
+  /* Rozvržení: vlevo ovládám, vpravo vidím a hned pod tím, co to znamená. */
+  const layout = el('div', 'sim-layout');
+  const colCtrl = el('div', 'sim-layout__ctrl');
+  const colView = el('div', 'sim-layout__view');
+  layout.appendChild(colCtrl);
+  layout.appendChild(colView);
+  wrap.appendChild(layout);
+
+  /* ---- náhled ---- */
   const stage = el('div', 'sim');
   const canvas = document.createElement('canvas');
   canvas.className = 'sim__canvas';
   stage.appendChild(canvas);
   if (sim.target) stage.appendChild(el('div', 'sim__target', sim.target));
-  wrap.appendChild(stage);
+  colView.appendChild(stage);
 
-  /* ---- čísla pod náhľadom ---- */
+  /* ---- čísla pod náhledem ---- */
   const statsRow = el('div', 'simstats');
-  if (eng.stats) wrap.appendChild(statsRow);
+  if (eng.stats) colView.appendChild(statsRow);
 
-  /* ---- hodnotenie ---- */
+  /* ---- hodnocení ---- */
   const verdictBox = el('div', 'simverdict');
-  wrap.appendChild(verdictBox);
+  colView.appendChild(verdictBox);
 
-  /* ---- ovládače ---- */
+  /* ---- ovladače ---- */
   const ctrls = el('div', 'simctrls');
   sim.controls.forEach(function (c) {
     const row = el('div', 'simctrl');
@@ -1817,7 +2312,7 @@ function stepSim(step, wrap) {
     }
 
     if (c.options) {
-      /* prepínač (napr. AZ / EQ) */
+      /* přepínač (např. AZ / EQ) */
       val.textContent = '';
       const sw = el('div', 'simswitch');
       c.options.forEach(function (o) {
@@ -1862,31 +2357,32 @@ function stepSim(step, wrap) {
     }
     ctrls.appendChild(row);
   });
-  wrap.appendChild(ctrls);
+  colCtrl.appendChild(ctrls);
 
   /* ---- výzva ---- */
   let challengeBox = null;
   if (sim.challenge) {
     challengeBox = el('div', 'simgoal');
     challengeBox.innerHTML =
-      '<div class="simgoal__label">🎯 Výzva</div>' +
+      '<div class="simgoal__label">' + icon('target', { size: 14 }) + 'Výzva</div>' +
       '<div class="simgoal__text">' + sim.challenge.text + '</div>';
-    wrap.appendChild(challengeBox);
+    colCtrl.appendChild(challengeBox);
   }
 
-  /* ---- rady (rozbaliteľné, aby neprezradili riešenie hneď) ---- */
+  /* ---- rady (rozbalovací, aby neprozradily řešení hned) ------- */
   if (sim.tips && sim.tips.length) {
     const det = document.createElement('details');
     det.className = 'more';
-    det.innerHTML = '<summary class="more__sum">💡 Potrebujem radu</summary>' +
+    det.innerHTML = '<summary class="more__sum">' + icon('bulb', { size: 15 }) +
+      'Potřebuji radu</summary>' +
       '<ul class="more__list">' + sim.tips.map(function (t) {
         return '<li>' + t + '</li>';
       }).join('') + '</ul>';
-    wrap.appendChild(det);
+    colCtrl.appendChild(det);
   }
 
-  /* ---- pokračovanie ---- */
-  wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', function () {
+  /* ---- pokračování ---- */
+  colCtrl.appendChild(nextButton(step.cta || 'Pokračovat', function () {
     addXp(step.xp || 25, lesson.id + ':sim:' + step.simId);
     nextStep();
   }));
@@ -1921,31 +2417,32 @@ function stepSim(step, wrap) {
     if (eng.verdict) {
       const r = eng.verdict(v);
       verdictBox.className = 'simverdict' + (r.ok ? ' is-ok' : ' is-warn');
-      verdictBox.innerHTML = '<span class="simverdict__icon">' + r.icon + '</span>' +
+      verdictBox.innerHTML = '<span class="simverdict__icon">' +
+                             iconEmoji(r.icon, { size: 18 }) + '</span>' +
                              '<span>' + r.text + '</span>';
     }
-    /* výzva splnená – bonusové XP raz */
+    /* výzva splněna – bonusové XP jednou */
     if (challengeBox && eng.goal && !goalDone && eng.goal(v)) {
       goalDone = true;
       challengeBox.classList.add('is-done');
       challengeBox.innerHTML =
-        '<div class="simgoal__label">🏆 Výzva splnená</div>' +
-        '<div class="simgoal__text">' + (sim.challenge.done || 'Presne takto to funguje aj naozaj.') + '</div>';
+        '<div class="simgoal__label">' + icon('trophy', { size: 14 }) + 'Výzva splněna</div>' +
+        '<div class="simgoal__text">' + (sim.challenge.done || 'Přesně takhle to funguje i doopravdy.') + '</div>';
       sfx('goal');
       addXp(step.bonusXp || 15, lesson.id + ':simgoal:' + step.simId);
     }
   }
 
-  /* prvé vykreslenie až keď canvas pozná svoju šírku */
+  /* první vykreslení až když canvas zná svou šířku */
   requestAnimationFrame(function () { paint(); });
   update();
 
-  /* pri zmene veľkosti okna prekresli */
+  /* při změně velikosti okna překresli */
   const onResize = function () { if (document.body.contains(canvas)) paint(); };
   window.addEventListener('resize', onResize);
 }
 
-/* --------------------------- 7h) VIEŠ ŽE? ------------------------------- */
+/* --------------------------- 7h) VÍŠ, ŽE? ------------------------------- */
 function stepFact(step, wrap) {
   const f = FACTS[step.factId];
   if (!f) { nextStep(); return; }
@@ -1953,30 +2450,30 @@ function stepFact(step, wrap) {
 
   const box = el('div', 'panel factcard');
   box.innerHTML =
-    '<div class="factcard__label">💡 Vieš že?</div>' +
-    '<div class="factcard__icon">' + f.icon + '</div>' +
+    '<div class="factcard__label">' + icon('bulb', { size: 14 }) + 'Víš, že?</div>' +
+    '<div class="factcard__icon">' + iconEmoji(f.icon, { size: 20 }) + '</div>' +
     '<div class="factcard__title">' + f.title + '</div>' +
     '<p class="factcard__text">' + f.text + '</p>' +
     (f.source ? '<a class="factcard__src" href="' + f.source + '" target="_blank" rel="noopener">Zdroj: ' +
-      (f.sourceLabel || 'oficiálny zdroj') + ' ↗</a>' : '');
+      (f.sourceLabel || 'oficiální zdroj') + ' ↗</a>' : '');
   wrap.appendChild(box);
 
   if (isNew) {
-    wrap.appendChild(el('p', 'sub center', '📥 Pridané do tvojej zbierky zaujímavostí.'));
-    toast('💡 Nová zaujímavosť');
+    wrap.appendChild(el('p', 'sub', 'Přidáno do tvé sbírky zajímavostí.'));
+    toast('Nová zajímavost');
   }
-  wrap.appendChild(nextButton('POKRAČOVAŤ →', nextStep));
+  wrap.appendChild(nextButton('Pokračovat', nextStep));
 }
 
 /* --------------------------- 7i) MISIA ---------------------------------- */
 function stepMission(step, wrap) {
-  /* misia môže byť s objektom (uloží sa do zbierky) alebo bez objektu
-     (napr. „odfoť ten istý objekt dvakrát“) – vtedy stačí step.image a step.lead */
+  /* misie může být s objektem (uloží se do sbírky) nebo bez objektu
+     (např. „vyfoť tentýž objekt dvakrát“) – tehdy stačí step.image a step.lead */
   const obj = step.objectId ? getObject(step.objectId) : null;
-  wrap.appendChild(el('h2', 'h-step center', step.title));
+  wrap.appendChild(el('h2', 'h-step', textIcon(step.title)));
 
   const grid = el('div', 'mission__grid');
-  grid.appendChild(photoEl(obj ? obj.image : step.image, { label: '📸 MISIA' }));
+  grid.appendChild(photoEl(obj ? obj.image : step.image, { label: 'Misie' }));
 
   const info = el('div', 'panel stack');
   if (obj) {
@@ -1985,14 +2482,14 @@ function stepMission(step, wrap) {
     const facts = el('dl', 'factlist');
     facts.innerHTML =
       '<div><dt>Typ</dt><dd>' + obj.subtypeLabel + '</dd></div>' +
-      '<div><dt>Súhvezdie</dt><dd>' + obj.constellation + '</dd></div>' +
-      '<div><dt>Vzdialenosť</dt><dd>' + obj.distanceText + '</dd></div>' +
-      '<div><dt>Jasnosť</dt><dd>' + obj.magnitude + '</dd></div>';
+      '<div><dt>Souhvězdí</dt><dd>' + obj.constellation + '</dd></div>' +
+      '<div><dt>Vzdálenost</dt><dd>' + obj.distanceText + '</dd></div>' +
+      '<div><dt>Jasnost</dt><dd>' + obj.magnitude + '</dd></div>';
     info.appendChild(facts);
-    info.appendChild(el('p', 'compare__note', '💡 ' + obj.fact));
+    info.appendChild(el('p', 'compare__note', obj.fact));
   } else {
     info.appendChild(el('div', 'eyebrow', 'ÚLOHA NA VONKU'));
-    info.appendChild(el('h3', null, step.subtitle || 'Skús to naozaj'));
+    info.appendChild(el('h3', null, step.subtitle || 'Zkus to doopravdy'));
     info.appendChild(el('p', 'compare__note', step.lead || ''));
   }
   grid.appendChild(info);
@@ -2000,12 +2497,13 @@ function stepMission(step, wrap) {
 
   step.tasks.forEach(function (t, i) {
     wrap.appendChild(el('div', 'task screen delay-' + (i + 1),
-      '<span class="task__icon">' + t.icon + '</span><span>' + t.text + '</span>'));
+      '<span class="task__icon">' + iconEmoji(t.icon, { size: 17 }) + '</span>' +
+      '<span>' + t.text + '</span>'));
   });
   if (obj) {
-    wrap.appendChild(el('p', 'sub', '🔭 ' + obj.stellarium + '<br>📸 ' + obj.dwarfTip));
+    wrap.appendChild(el('p', 'sub', obj.stellarium + '<br>' + obj.dwarfTip));
   } else if (step.note) {
-    wrap.appendChild(el('p', 'sub', '💡 ' + step.note));
+    wrap.appendChild(el('p', 'sub', step.note));
   }
 
   const done = step.objectId
@@ -2013,41 +2511,42 @@ function stepMission(step, wrap) {
     : !!state.awarded[lesson.id + ':mission'];
   const feedback = el('div');
 
-  /* Po splnení misie sa ponúkne krátky zápis do pozorovacieho denníka. */
+  /* Po splnění misie se nabídne krátký zápis do pozorovacího deníku. */
   const jslot = el('div');
   function offerJournal() {
     jslot.innerHTML = '';
     const det = document.createElement('details');
     det.className = 'more';
-    det.innerHTML = '<summary class="more__sum">📓 Zapísať si to do denníka</summary>';
+    det.innerHTML = '<summary class="more__sum">' + icon('pencil', { size: 15 }) + 'Zapsat si to do deníku</summary>';
     const holder = el('div');
     holder.style.padding = '0 12px 12px';
     holder.appendChild(journalForm(
       { what: obj ? obj.name + ' (' + obj.designation + ')' : lesson.title, objectId: step.objectId },
       function () { det.open = false; jslot.innerHTML = ''; jslot.appendChild(
-        el('div', 'feedback feedback--ok', '<div class="feedback__title">📓 Zapísané</div>' +
-          '<div>Nájdeš to v pozorovacom denníku na domovskej obrazovke.</div>')); }
+        el('div', 'feedback feedback--ok', '<div class="feedback__title">' + icon('check', { size: 15 }) + 'Zapsáno</div>' +
+          '<div>Najdeš to v pozorovacím deníku na domovské obrazovce.</div>')); }
     ));
     det.appendChild(holder);
     jslot.appendChild(det);
   }
 
   if (done) {
-    feedback.innerHTML = '<div class="feedback feedback--ok"><div class="feedback__title">✅ Misia splnená</div>' +
+    feedback.innerHTML = '<div class="feedback feedback--ok"><div class="feedback__title">' + icon('check', { size: 15 }) + 'Misie splněna</div>' +
       '<div>' + step.doneText + '</div></div>';
     wrap.appendChild(feedback);
     offerJournal();
     wrap.appendChild(jslot);
-    wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', nextStep));
+    wrap.appendChild(nextButton(step.cta || 'Pokračovat', nextStep));
   } else {
     const b = nextButton(step.button, function () {
       if (step.objectId) discoverObject(step.objectId);
       addXp(step.xp || 50, lesson.id + ':mission');
       b.remove();
-      feedback.innerHTML = '<div class="feedback feedback--ok"><div class="feedback__title">🎉 Objav zapísaný!</div>' +
+      feedback.innerHTML = '<div class="feedback feedback--ok done-in"><div class="feedback__title">' +
+        icon('star', { size: 15 }) + 'Objev zapsán</div>' +
         '<div>' + step.doneText + '</div></div>';
       offerJournal();
-      wrap.appendChild(nextButton(step.cta || 'POKRAČOVAŤ →', nextStep));
+      wrap.appendChild(nextButton(step.cta || 'Pokračovat', nextStep));
     });
     wrap.appendChild(b);
     wrap.appendChild(feedback);
@@ -2066,14 +2565,24 @@ function stepQuiz(step, wrap) {
   const q = qs[quiz.i];
   const last = quiz.i === qs.length - 1;
 
-  wrap.appendChild(el('div', 'quiz__count center', 'Otázka ' + (quiz.i + 1) + ' z ' + qs.length));
+  /* Postup kvízu jako řádka čárek, ne „Otázka 3 z 5“ v tabulce. */
+  const head = el('div', 'row');
+  const dots = el('div', 'quiz__dots');
+  for (let i = 0; i < qs.length; i++) {
+    dots.appendChild(el('i', i < quiz.i ? 'is-ok' : (i === quiz.i ? 'is-on' : null)));
+  }
+  head.appendChild(dots);
+  head.appendChild(el('span', 'quiz__count',
+    'otázka ' + (quiz.i + 1) + ' z ' + qs.length +
+    (quiz.i ? ' · zatím ' + quiz.score + ' správně' : '')));
+  wrap.appendChild(head);
   setProgress((stepIndex + quiz.i / qs.length) / lesson.steps.length);
 
   renderQuestion(q, wrap, {
-    nextLabel: last ? 'ZOBRAZIŤ VÝSLEDOK 🏆' : 'ĎALŠIA OTÁZKA →',
+    nextLabel: last ? 'Zobrazit výsledek' : 'Další otázka',
     onAnswer: function (ok) {
       if (ok) quiz.score++;
-      rememberMiss(lesson.id, quiz.i, ok);      // pre neskoršiu rozcvičku
+      rememberMiss(lesson.id, quiz.i, ok);      // pro pozdější rozcvičku
     },
     onNext: function () {
       if (last) { finishQuiz(step); } else { quiz.i++; go('lesson'); }
@@ -2081,12 +2590,12 @@ function stepQuiz(step, wrap) {
   });
 }
 
-/* ------------------- 8b) JEDNA OTÁZKA (spoločný vykresľovač) -------------
-   Používa ho aj mini test na konci lekcie, aj rozcvička na jej začiatku.
+/* ------------------- 8b) JEDNA OTÁZKA (společný vykreslovač) -------------
+   Používá ho jak mini test na konci lekce, tak rozcvička na jejím začátku.
    opts = { nextLabel, onAnswer(ok), onNext() }                            */
 function renderQuestion(q, wrap, opts) {
-  wrap.appendChild(el('h2', 'h-step center', q.question));
-  if (q.hint) wrap.appendChild(el('p', 'sub center', q.hint));
+  wrap.appendChild(el('h2', 'h-step', textIcon(q.question)));
+  if (q.hint) wrap.appendChild(el('p', 'sub', q.hint));
 
   const feedback = el('div');
   let answered = false;
@@ -2097,25 +2606,28 @@ function renderQuestion(q, wrap, opts) {
     if (opts.onAnswer) opts.onAnswer(ok);
     sfx(ok ? 'ok' : 'no');
     const f = el('div', 'feedback ' + (ok ? 'feedback--ok' : 'feedback--no'));
-    f.innerHTML = '<div class="feedback__title">' + (ok ? '✅ Správne!' : '❌ Nie úplne') + '</div>' +
+    f.innerHTML = '<div class="feedback__title">' +
+                  icon(ok ? 'check' : 'cross', { size: 15 }) +
+                  (ok ? 'Správně' : 'Ne úplně') + '</div>' +
                   '<div>' + (extraText || q.explain || '') + '</div>';
     feedback.appendChild(f);
-    feedback.appendChild(nextButton(opts.nextLabel || 'POKRAČOVAŤ →', opts.onNext));
+    feedback.appendChild(nextButton(opts.nextLabel || 'Pokračovat', opts.onNext));
   }
 
-  /* --- podľa typu otázky --- */
+  /* --- podle typu otázky --- */
   if (q.kind === 'choice' || q.kind === 'decide') {
     const answers = el('div', 'answers' + (q.kind === 'decide' ? ' answers--2' : ''));
     q.options.forEach(function (opt) {
       const b = el('button', 'answer');
-      b.innerHTML = (opt.icon ? '<span class="answer__icon">' + opt.icon + '</span>' : '') +
+      b.innerHTML = (opt.icon ? '<span class="answer__icon">' +
+                     iconEmoji(opt.icon, { size: 18 }) + '</span>' : '') +
                     '<span>' + opt.label + '</span>';
       b.addEventListener('click', function () {
         if (answered) return;
         Array.prototype.forEach.call(answers.children, function (n) { n.classList.add('is-locked'); });
         b.classList.add(opt.correct ? 'is-correct' : 'is-wrong');
         if (!opt.correct) {
-          // ukáž aj správnu možnosť
+          // ukaž i správnou možnost
           q.options.forEach(function (o, idx) {
             if (o.correct) answers.children[idx].classList.add('is-correct');
           });
@@ -2128,9 +2640,11 @@ function renderQuestion(q, wrap, opts) {
 
   } else if (q.kind === 'truefalse') {
     const answers = el('div', 'answers answers--2');
-    [{ label: '👍 PRAVDA', v: true }, { label: '👎 NEPRAVDA', v: false }].forEach(function (o) {
+    [{ label: 'Pravda', ico: 'check', v: true },
+     { label: 'Nepravda', ico: 'cross', v: false }].forEach(function (o) {
       const b = el('button', 'answer');
-      b.innerHTML = '<span>' + o.label + '</span>';
+      b.innerHTML = '<span class="answer__icon">' + icon(o.ico, { size: 18 }) + '</span>' +
+                    '<span>' + o.label + '</span>';
       b.addEventListener('click', function () {
         if (answered) return;
         Array.prototype.forEach.call(answers.children, function (n) { n.classList.add('is-locked'); });
@@ -2169,21 +2683,22 @@ function renderQuestion(q, wrap, opts) {
     const shuffled = q.items.slice().sort(function () { return Math.random() - 0.5; });
     shuffled.forEach(function (item) {
       const b = el('button', 'answer');
-      b.innerHTML = '<span class="answer__icon">' + item.icon + '</span><span>' + item.label + '</span>';
+      b.innerHTML = '<span class="answer__icon">' + iconEmoji(item.icon, { size: 18 }) +
+                    '</span><span>' + item.label + '</span>';
       b.addEventListener('click', function () {
         if (answered || b.classList.contains('is-dim')) return;
         b.classList.add('is-dim', 'is-locked');
         chosen.push(item);
         const slot = el('div', 'order__slot');
         slot.innerHTML = '<span class="order__num">' + chosen.length + '</span>' +
-                         '<span>' + item.icon + ' ' + item.label + '</span>';
+                         '<span>' + iconEmoji(item.icon, { size: 16 }) + ' ' + item.label + '</span>';
         slots.appendChild(slot);
         if (chosen.length === q.items.length) {
           const ok = chosen.every(function (it, i) { return it.order === i + 1; });
           if (!ok) {
             const right = q.items.slice().sort(function (a, b2) { return a.order - b2.order; })
-              .map(function (it, i) { return (i + 1) + '. ' + it.icon + ' ' + it.label; }).join('<br>');
-            finishQuestion(false, 'Správne poradie je:<br>' + right + '<br><br>' + (q.explain || ''));
+              .map(function (it, i) { return (i + 1) + '. ' + it.label; }).join('<br>');
+            finishQuestion(false, 'Správné pořadí je:<br>' + right + '<br><br>' + (q.explain || ''));
           } else {
             finishQuestion(true);
           }
@@ -2200,12 +2715,12 @@ function renderQuestion(q, wrap, opts) {
   wrap.appendChild(feedback);
 }
 
-/* ---------------------- 8c) ROZCVIČKA (adaptívne opakovanie) -------------
-   Otázky, ktoré dieťa v minulosti netrafilo, sa mu vrátia na začiatku
-   ďalšej lekcie. Keď ich zvládne, zo zoznamu zmiznú. Žiadne trestanie –
-   len tichá druhá šanca.                                                  */
+/* ---------------------- 8c) ROZCVIČKA (adaptivní opakování) --------------
+   Otázky, které dítě v minulosti netrefilo, se mu vrátí na začátku
+   další lekce. Když je zvládne, ze seznamu zmizí. Žádné trestání –
+   jen tichá druhá šance.                                                  */
 
-/** Zapamätá si chybu (alebo ju odpustí po správnej odpovedi). */
+/** Zapamatuje si chybu (nebo ji odpustí po správné odpovědi). */
 function rememberMiss(lessonId, qIndex, ok) {
   const key = lessonId + ':' + qIndex;
   if (!state.missed) state.missed = {};
@@ -2217,7 +2732,7 @@ function rememberMiss(lessonId, qIndex, ok) {
   saveState();
 }
 
-/** Vyberie až `limit` otázok na zopakovanie – nikdy z práve otvorenej lekcie. */
+/** Vybere až `limit` otázek na zopakování – nikdy z právě otevřené lekce. */
 function warmupQuestions(skipLessonId, limit) {
   const out = [];
   const keys = Object.keys(state.missed || {});
@@ -2241,15 +2756,15 @@ function stepWarmup(step, wrap) {
   const item = warm.items[warm.i];
   const last = warm.i === warm.items.length - 1;
 
-  wrap.appendChild(el('h2', 'h-step center', '🔁 ROZCVIČKA'));
-  wrap.appendChild(el('p', 'sub center',
-    'Krátke zopakovanie toho, čo ti naposledy ušlo. ' +
+  wrap.appendChild(el('h2', 'h-step', icon('reset', { size: 22, cls: 'ico--head' }) + '<span>Rozcvička</span>'));
+  wrap.appendChild(el('p', 'sub',
+    'Krátké zopakování toho, co ti naposledy uniklo. ' +
     (warm.items.length > 1 ? 'Otázka ' + (warm.i + 1) + ' z ' + warm.items.length + '.' : '')));
-  wrap.appendChild(el('div', 'warm__from center',
-    item.lessonIcon + ' z lekcie „' + item.lessonTitle + '“'));
+  wrap.appendChild(el('div', 'warm__from',
+    'z výpravy „' + item.lessonTitle + '“'));
 
   renderQuestion(item.q, wrap, {
-    nextLabel: last ? 'IDEME NA NOVÚ LEKCIU →' : 'ĎALŠIA →',
+    nextLabel: last ? 'Jdeme na novou výpravu' : 'Další',
     onAnswer: function (ok) {
       if (ok) {
         delete state.missed[item.key];
@@ -2273,7 +2788,7 @@ function finishQuiz(step) {
   const total = step.questions.length;
   const score = quiz.score;
 
-  /* zapíš výsledok */
+  /* zapiš výsledek */
   state.lessons[lesson.id] = { completed: true, score: score, total: total };
   saveState();
   addXp(lesson.quizXp || 100, lesson.id + ':quiz');
@@ -2281,14 +2796,20 @@ function finishQuiz(step) {
   /* odznak */
   const newBadge = unlockBadge(lesson.badge);
 
-  /* vlož pseudo-krok „result“ na koniec lekcie a zobraz ho */
+  /* vlož pseudo-krok „result“ na konec lekce a zobraz ho */
   const resultStep = { type: 'result', score: score, total: total, step: step, newBadge: newBadge };
   lesson.steps = lesson.steps.filter(function (s) { return s.type !== 'result'; });
   lesson.steps.push(resultStep);
   stepIndex = lesson.steps.length - 1;
   go('lesson');
 
-  if (newBadge) setTimeout(function () { showBadgeOverlay(lesson.badge); }, 900);
+  /* Okno s novou kvalifikací se ukáže, jen když je dítě pořád na výsledku. */
+  if (newBadge) {
+    const gen = renderGen;
+    setTimeout(function () {
+      if (gen === renderGen) showBadgeOverlay(lesson.badge);
+    }, 900);
+  }
 }
 
 function stepResult(step, wrap) {
@@ -2296,7 +2817,7 @@ function stepResult(step, wrap) {
   const good = step.score >= Math.ceil(step.total * 0.8);
   const box = el('div', 'panel result stack');
   box.innerHTML =
-    '<div class="eyebrow">🏆 Misia dokončená!</div>' +
+    '<div class="eyebrow">Misie dokončena</div>' +
     '<div class="result__score">' + step.score + '<small>/' + step.total + '</small></div>' +
     '<div class="lead">' + (good ? step.step.resultGood : step.step.resultOk) + '</div>' +
     '<div class="badge-chip" style="justify-self:center">+' + (lesson.quizXp || 100) + ' XP</div>';
@@ -2305,35 +2826,41 @@ function stepResult(step, wrap) {
   const b = BADGES[lesson.badge];
   if (b) {
     const bd = el('div', 'panel center stack');
-    bd.innerHTML = '<div style="font-size:52px">' + b.icon + '</div>' +
-      '<div class="eyebrow">🔓 Odomknutý odznak</div>' +
+    bd.innerHTML = '<div class="unlock__icon">' + icon('medal', { size: 34 }) + '</div>' +
+      '<div class="eyebrow">Nová kvalifikace</div>' +
       '<div style="font-size:24px;font-weight:900">' + b.name + '</div>' +
       '<div class="sub">' + b.text + '</div>';
     wrap.appendChild(bd);
   }
 
-  /* ak ostáva ďalšia lekcia, pošli ho rovno tam */
+  /* pokud zbývá další lekce, pošli ho rovnou tam */
   const upcoming = LESSONS.filter(function (l) { return !isLessonDone(l.id); })[0];
   if (upcoming) {
-    wrap.appendChild(nextButton('▶ ĎALŠIA LEKCIA: ' + upcoming.icon + ' ' + upcoming.title,
+    wrap.appendChild(nextButton('Další výprava: ' + upcoming.title,
       function () { startLesson(upcoming.id); }));
   } else {
-    wrap.appendChild(nextButton('🌌 OTVORIŤ VESMÍRNU MAPU', function () { go('map'); }));
+    wrap.appendChild(nextButton('Otevřít výpravy', function () { go('expeditions'); }));
   }
 
-  const coll = el('button', 'btn btn--ghost', '📚 Moja zbierka');
+  const coll = el('button', 'btn btn--ghost', 'Moje objevy');
   coll.addEventListener('click', function () { go('collection'); });
   wrap.appendChild(coll);
-  const again = el('button', 'btn btn--ghost', '🔁 Skúsiť test znova');
+  const again = el('button', 'btn btn--ghost');
+  again.innerHTML = icon('reset', { size: 17 }) + '<span>Zkusit test znovu</span>';
   again.addEventListener('click', function () {
     quiz = null;
     stepIndex = lesson.steps.findIndex(function (s) { return s.type === 'quiz'; });
     go('lesson');
   });
   wrap.appendChild(again);
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  wrap.appendChild(home);
+}
+
+/** Zavře překryvné okno, pokud je otevřené. */
+function closeOverlay() {
+  const ov = document.getElementById('overlay');
+  if (!ov || ov.hidden) return;
+  ov.hidden = true;
+  ov.innerHTML = '';
 }
 
 function showBadgeOverlay(badgeId) {
@@ -2345,11 +2872,11 @@ function showBadgeOverlay(badgeId) {
   ov.innerHTML = '';
   const card = el('div', 'unlock');
   card.innerHTML =
-    '<div class="unlock__icon">' + b.icon + '</div>' +
-    '<div class="unlock__label">🔓 Nový odznak</div>' +
+    '<div class="unlock__icon">' + icon('medal', { size: 38 }) + '</div>' +
+    '<div class="unlock__label">Nová kvalifikace</div>' +
     '<div class="unlock__name">' + b.name + '</div>' +
     '<div class="sub">' + b.text + '</div>';
-  const close = el('button', 'btn', 'PARÁDA! 🎉');
+  const close = el('button', 'btn', 'Paráda!');
   close.style.marginTop = '22px';
   close.addEventListener('click', function () { ov.hidden = true; ov.innerHTML = ''; });
   card.appendChild(close);
@@ -2360,12 +2887,12 @@ function showBadgeOverlay(badgeId) {
 
 function screenCollection() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '📚 MOJE OBJAVY'));
+  s.appendChild(el('h1', 'h-hero', 'Objevené objekty'));
 
   const ids = Object.keys(state.discovered);
   if (!ids.length) {
-    s.appendChild(el('div', 'panel empty',
-      '🔭 Zatiaľ nič.<br>Dokonči výpravu a objav svoj prvý objekt!'));
+    s.appendChild(el('div', 'empty',
+      'Zatím nic. Dokonči výpravu a objev svůj první objekt – rozsvítí se ti na mapě oblohy.'));
   } else {
     const grid = el('div', 'collection');
     ids.forEach(function (id, i) {
@@ -2373,30 +2900,17 @@ function screenCollection() {
       if (!obj) return;
       const rec = state.discovered[id];
       const b = el('button', 'card-obj screen delay-' + Math.min(4, i + 1));
-      b.appendChild(photoEl(obj.image, { credit: false, label: OBJECT_TYPES[obj.type].icon + ' ' + obj.designation }));
+      b.appendChild(photoEl(obj.image, { credit: false, label: obj.designation }));
       b.appendChild(el('div', 'card-obj__body',
         '<div class="card-obj__name">' + obj.name + '</div>' +
-        '<div class="card-obj__meta">' + obj.subtypeLabel + ' · objavené ' + rec.date + '</div>'));
+        '<div class="card-obj__meta">' + obj.subtypeLabel + ' · objeveno ' + rec.date + '</div>'));
       b.addEventListener('click', function () { go('object', { objectId: id }); });
       grid.appendChild(b);
     });
     s.appendChild(grid);
   }
 
-  /* odznaky */
-  s.appendChild(el('h2', 'h-step', '🏆 ODZNAKY'));
-  const row = el('div', 'badge-row');
-  Object.keys(BADGES).forEach(function (id) {
-    const b = BADGES[id];
-    const has = state.badges.indexOf(id) !== -1;
-    row.appendChild(el('div', 'badge-chip' + (has ? '' : ' badge-chip--locked'),
-      (has ? b.icon : '🔒') + ' ' + b.name));
-  });
-  s.appendChild(row);
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
   return s;
 }
 
@@ -2405,41 +2919,82 @@ function screenObject(id) {
   const rec = state.discovered[id] || { date: '—' };
   const s = el('div', 'screen stack');
 
-  s.appendChild(photoEl(obj.image, { label: OBJECT_TYPES[obj.type].icon + ' ' + obj.designation }));
-  s.appendChild(el('h2', 'h-step', obj.name));
+  s.appendChild(photoEl(obj.image, { label: obj.designation }));
 
-  const facts = el('dl', 'panel factlist');
-  facts.innerHTML =
-    '<div><dt>Označenie</dt><dd>' + obj.designation + '</dd></div>' +
+  const head = el('div', 'stack stack--tight');
+  head.appendChild(el('h1', 'h-hero', obj.name));
+  head.appendChild(el('p', 'lead', obj.fact));
+  s.appendChild(head);
+
+  /* údaje – včetně souřadnic, podle kterých je objekt na mapě oblohy */
+  const facts = el('dl', 'factlist');
+  let rows =
+    '<div><dt>Označení</dt><dd>' + obj.designation + '</dd></div>' +
     '<div><dt>Typ</dt><dd>' + obj.subtypeLabel + '</dd></div>' +
-    '<div><dt>Súhvezdie</dt><dd>' + obj.constellation + '</dd></div>' +
-    '<div><dt>Vzdialenosť</dt><dd>' + obj.distanceText + '</dd></div>' +
-    '<div><dt>Jasnosť</dt><dd>' + obj.magnitude + '</dd></div>' +
-    '<div><dt>Dátum objavenia</dt><dd>' + rec.date + '</dd></div>';
+    '<div><dt>Souhvězdí</dt><dd>' + obj.constellation + '</dd></div>';
+  if (typeof obj.ra === 'number') {
+    rows += '<div><dt>Rektascenze</dt><dd>' + raText(obj.ra) + '</dd></div>' +
+            '<div><dt>Deklinace</dt><dd>' + decText(obj.dec) + '</dd></div>';
+  } else if (obj.moving) {
+    rows += '<div><dt>Poloha na obloze</dt><dd>mění se – hledej ve Stellariu</dd></div>';
+  }
+  if (obj.sizeArcmin) {
+    rows += '<div><dt>Velikost na nebi</dt><dd>' + String(obj.sizeArcmin).replace('.', ',') +
+            '′</dd></div>';
+  }
+  rows += '<div><dt>Vzdálenost</dt><dd>' + obj.distanceText + '</dd></div>' +
+          '<div><dt>Jasnost</dt><dd>' + obj.magnitude + '</dd></div>' +
+          '<div><dt>Objeveno</dt><dd>' + rec.date + '</dd></div>';
+  facts.innerHTML = rows;
   s.appendChild(facts);
 
-  s.appendChild(el('div', 'panel', '💡 <strong>Zaujímavosť:</strong> ' + obj.fact));
+  /* jak ho najít a jak ho vyfotit */
+  const how = el('div', 'stack stack--tight');
+  how.appendChild(el('div', 'sechead',
+    '<span class="sechead__t">' + icon('search', { size: 15 }) + 'Jak ho najít</span>'));
+  how.appendChild(el('p', 'sub', obj.stellarium));
+  how.appendChild(el('p', 'sub', obj.dwarfTip));
+  s.appendChild(how);
 
-  /* vlastná fotka z Dwarfu – dá sa priamo nahrať z disku */
-  s.appendChild(el('h3', null, '📸 MOJA FOTOGRAFIA'));
-  s.appendChild(myPhotoBox(obj, rec));
+  /* vlastní fotka z Dwarfu */
+  const ph = el('div', 'stack stack--tight');
+  ph.appendChild(el('div', 'sechead',
+    '<span class="sechead__t">' + icon('camera', { size: 15 }) + 'Moje fotografie</span>'));
+  ph.appendChild(myPhotoBox(obj, rec));
+  s.appendChild(ph);
 
-  if (obj.source) {
-    s.appendChild(el('p', 'sources',
-      'Zdroj údajov: <a href="' + obj.source + '" target="_blank" rel="noopener">NASA</a>'));
+  /* zápisy v deníku, které se tohoto objektu týkají */
+  const mine = journalEntries().filter(function (e) { return e.objectId === obj.id; });
+  if (mine.length) {
+    const j = el('div', 'stack stack--tight');
+    j.appendChild(el('div', 'sechead',
+      '<span class="sechead__t">' + icon('journal', { size: 15 }) + 'Z mého deníku</span>' +
+      '<span class="sechead__n">' + mine.length + '</span>'));
+    mine.forEach(function (e) {
+      j.appendChild(el('div', 'jentry',
+        '<div class="jentry__head"><span class="jentry__date">' + e.date + '</span>' +
+        (e.sky ? '<span class="jentry__sky">' + e.sky + '</span>' : '') + '</div>' +
+        (e.note ? '<p class="jentry__note">' + e.note + '</p>' : '')));
+    });
+    s.appendChild(j);
   }
 
-  const back = el('button', 'btn btn--ghost', '← Späť do zbierky');
-  back.addEventListener('click', function () { go('collection'); });
-  s.appendChild(back);
+  const src = el('div', 'stack stack--tight');
+  const zdroje = [];
+  if (obj.source) zdroje.push('<a href="' + obj.source + '" target="_blank" rel="noopener">údaje o objektu</a>');
+  if (obj.coordsSource) zdroje.push('<a href="' + obj.coordsSource + '" target="_blank" rel="noopener">souřadnice</a>');
+  if (zdroje.length) {
+    src.appendChild(el('p', 'sub', 'Zdroje: ' + zdroje.join(' · ')));
+    s.appendChild(src);
+  }
   return s;
 }
 
-/* -------------------- VLASTNÁ FOTKA Z DWARFU ----------------------------
-   Fotka sa pred uložením zmenší na 900 px a prekonvertuje na JPEG, inak by
-   sa do localStorage nezmestila (limit je zvyčajne okolo 5 MB na doménu).
-   Fotku nikam neposielame – zostáva len v tomto prehliadači.               */
-const MY_PHOTO_MAX = 900;      // px na dlhšej strane
+/* -------------------- VLASTNÍ FOTKA Z DWARFU ----------------------------
+   Fotka se před uložením zmenší na 900 px a překonvertuje na JPEG, jinak by
+   se do localStorage nevešla (limit je obvykle okolo 5 MB na doménu).
+   Fotku nikam neposíláme – zůstává jen v tomto prohlížeči.                 */
+const MY_PHOTO_MAX = 900;      // px na delší straně
 const MY_PHOTO_QUALITY = 0.72; // kvalita JPEG
 
 function myPhotoBox(obj, rec) {
@@ -2450,20 +3005,21 @@ function myPhotoBox(obj, rec) {
     const fig = el('figure', 'photo has-photo');
     const img = el('img');
     img.src = myPhoto;
-    img.alt = 'Moja fotografia ' + obj.name;
+    img.alt = 'Moje fotografie ' + obj.name;
     fig.appendChild(img);
     if (rec.photoDate) {
-      fig.appendChild(el('figcaption', 'photo__credit', '📅 Odfotené ' + rec.photoDate));
+      fig.appendChild(el('figcaption', 'photo__credit', 'Vyfoceno ' + rec.photoDate));
     }
     box.appendChild(fig);
   } else {
     box.appendChild(el('div', 'photo-slot',
-      '<div style="font-size:30px">📸</div>' +
-      '<div>Tu bude tvoja fotka z Dwarfu.</div>' +
-      '<div style="font-size:12.5px">Nahraj ju z disku – zostane len v tomto prehliadači.</div>'));
+      icon('camera', { size: 26 }) +
+      '<div>Tady bude tvoje fotka z Dwarfu.</div>' +
+      '<div style="font-size:12.5px">Nahraj ji z disku – zůstane jen v tomto ' +
+      'prohlížeči.</div>'));
   }
 
-  /* skryté pole na výber súboru + veľké tlačidlo */
+  /* skryté pole na výběr souboru + velké tlačítko */
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/*';
@@ -2471,17 +3027,17 @@ function myPhotoBox(obj, rec) {
   box.appendChild(input);
 
   const pick = el('button', 'btn btn--ghost',
-    myPhoto ? '🔄 Nahradiť inou fotkou' : '📤 NAHRAŤ MOJU FOTKU');
+    myPhoto ? 'Nahradit jinou fotkou' : 'Nahrát moji fotku');
   pick.addEventListener('click', function () { input.click(); });
   box.appendChild(pick);
 
   if (rec.photo) {
-    const del = el('button', 'btn btn--ghost btn--small', '🗑️ Odstrániť fotku');
+    const del = el('button', 'btn btn--ghost btn--small', 'Odstranit fotku');
     del.addEventListener('click', function () {
       delete state.discovered[obj.id].photo;
       delete state.discovered[obj.id].photoDate;
       saveState();
-      toast('Fotka odstránená');
+      toast('Fotka odstraněna');
       go('object', { objectId: obj.id });
     });
     box.appendChild(del);
@@ -2490,24 +3046,24 @@ function myPhotoBox(obj, rec) {
   input.addEventListener('change', function () {
     const file = input.files && input.files[0];
     if (!file) return;
-    if (!/^image\//.test(file.type)) { toast('Toto nie je obrázok'); return; }
-    toast('Spracúvam fotku…');
+    if (!/^image\//.test(file.type)) { toast('Toto není obrázek'); return; }
+    toast('Zpracovávám fotku…');
     shrinkImage(file, function (dataUrl, err) {
-      if (err) { toast('Fotku sa nepodarilo načítať'); return; }
+      if (err) { toast('Fotku se nepodařilo načíst'); return; }
       if (!state.discovered[obj.id]) discoverObject(obj.id);
       const before = state.discovered[obj.id].photo;
       state.discovered[obj.id].photo = dataUrl;
       state.discovered[obj.id].photoDate = todayText();
       if (!saveState()) {
-        /* localStorage je plný – vrátime pôvodný stav a povieme to jasne */
+        /* localStorage je plný – vrátíme původní stav a řekneme to jasně */
         if (before) state.discovered[obj.id].photo = before;
         else delete state.discovered[obj.id].photo;
         saveState();
-        toast('⚠️ Nie je miesto na ďalšiu fotku');
+        toast('Není místo na další fotku');
         return;
       }
       addXp(20, 'photo:' + obj.id);
-      toast('📸 Fotka uložená');
+      toast('Fotka uložena');
       go('object', { objectId: obj.id });
     });
   });
@@ -2516,7 +3072,7 @@ function myPhotoBox(obj, rec) {
 }
 
 /**
- * Zmenší obrázok na MY_PHOTO_MAX px a vráti ho ako JPEG data URL.
+ * Zmenší obrázek na MY_PHOTO_MAX px a vrátí ho jako JPEG data URL.
  * @param {File} file
  * @param {function(string,Error=)} done
  */
@@ -2543,9 +3099,9 @@ function shrinkImage(file, done) {
   reader.readAsDataURL(file);
 }
 
-/* ======================= 10) POZOROVACÍ DENNÍK ===========================
-   Po každej misii sa dá zapísať, ako to vonku naozaj vyšlo. Nič sa nikam
-   neposiela – zápisy sú len v tomto prehliadači, v state.journal.        */
+/* ======================= 10) POZOROVACÍ DENÍK ============================
+   Po každé misi se dá zapsat, jak to venku opravdu vyšlo. Nic se nikam
+   neposílá – zápisy jsou jen v tomto prohlížeči, v state.journal.        */
 
 function journalEntries() {
   return (state.journal || []).slice().sort(function (a, b) {
@@ -2559,48 +3115,55 @@ function addJournalEntry(entry) {
   return saveState();
 }
 
-/** Formulár na zápis do denníka – vracia hotový panel. */
+/** Formulář na zápis do deníku – vrací hotový panel. */
 function journalForm(preset, onSaved) {
   const box = el('div', 'panel stack panel--tight');
-  box.appendChild(el('div', 'stat__label', '📓 ZÁPIS DO DENNÍKA'));
-  box.appendChild(el('p', 'sub', 'Napíš pár slov, ako to vonku vyšlo. Za rok si to prečítaš a budeš sa čudovať.'));
+  box.appendChild(el('div', 'stat__label', icon('pencil', { size: 15 }) + 'Nový zápis'));
+  box.appendChild(el('p', 'sub', 'Napiš pár slov, jak to venku vyšlo. Za rok si to přečteš a budeš se divit.'));
 
   const what = document.createElement('input');
   what.type = 'text'; what.className = 'nameinput';
-  what.placeholder = 'čo si pozoroval'; what.maxLength = 60;
+  what.placeholder = 'co jsi pozoroval'; what.maxLength = 60;
   what.value = preset && preset.what ? preset.what : '';
 
   const note = document.createElement('textarea');
   note.className = 'nameinput journal__area';
   note.rows = 3;
-  note.placeholder = 'Aká bola obloha? Čo bolo vidieť? Čo by si nabudúce nastavil inak?';
+  note.placeholder = 'Jaká byla obloha? Co bylo vidět? Co bys příště nastavil jinak?';
   note.maxLength = 500;
 
   const chips = el('div', 'chips');
-  const skyOptions = ['🌟 jasno', '🌤️ trochu oblakov', '☁️ zamračené', '🌕 svietil Mesiac', '🏙️ svetlo z mesta'];
+  const skyOptions = [
+    { ico: 'star',  t: 'jasno' },
+    { ico: 'cloud', t: 'trochu oblaků' },
+    { ico: 'cloud', t: 'zamračeno' },
+    { ico: 'moon',  t: 'svítil Měsíc' },
+    { ico: 'city',  t: 'světlo z města' }
+  ];
   let sky = '';
   skyOptions.forEach(function (o) {
-    const c = el('button', 'chip', o);
+    const c = el('button', 'chip');
+    c.innerHTML = icon(o.ico, { size: 14 }) + '<span>' + o.t + '</span>';
     c.addEventListener('click', function () {
-      sky = (sky === o) ? '' : o;
+      sky = (sky === o.t) ? '' : o.t;
       Array.prototype.forEach.call(chips.children, function (n) { n.classList.remove('is-on'); });
       if (sky) c.classList.add('is-on');
     });
     chips.appendChild(c);
   });
 
-  const save = el('button', 'btn btn--small', '💾 ULOŽIŤ ZÁPIS');
+  const save = el('button', 'btn btn--small', 'Uložit zápis');
   save.addEventListener('click', function () {
-    if (!what.value.trim() && !note.value.trim()) { toast('Napíš aspoň jedno slovo'); return; }
+    if (!what.value.trim() && !note.value.trim()) { toast('Napiš aspoň jedno slovo'); return; }
     const okSave = addJournalEntry({
-      what: what.value.trim() || (preset && preset.what) || 'pozorovanie',
+      what: what.value.trim() || (preset && preset.what) || 'pozorování',
       sky: sky,
       note: note.value.trim(),
       objectId: preset && preset.objectId
     });
-    if (!okSave) { toast('⚠️ Nie je miesto na uloženie'); return; }
+    if (!okSave) { toast('Není místo na uložení'); return; }
     addXp(15, 'journal:' + Date.now());
-    toast('📓 Zapísané do denníka');
+    toast('Zapsáno do deníku');
     if (onSaved) onSaved();
   });
 
@@ -2611,47 +3174,137 @@ function journalForm(preset, onSaved) {
   return box;
 }
 
+/* Deník není databáze zápisů. Je to živý záznam toho, co dítě dokázalo:
+   u každého objevu je datum, vlastní fotka, poznámka, pojem, který k tomu
+   patří, a výprava, ze které to vzešlo. Odtud se dá dostat všude dál.    */
 function screenJournal() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '📓 POZOROVACÍ DENNÍK'));
-  s.appendChild(el('p', 'sub', 'Skutoční astronómi si píšu denník celý život. Toto je ten tvoj.'));
-
-  s.appendChild(journalForm(null, function () { go('journal'); }));
-
   const list = journalEntries();
-  if (!list.length) {
-    s.appendChild(el('div', 'panel', 'Denník je zatiaľ prázdny. Prvý zápis pridaj po najbližšej noci vonku.'));
-  } else {
-    s.appendChild(el('h3', null, '📅 ' + list.length + (list.length === 1 ? ' ZÁPIS' : ' ZÁPISOV')));
-    list.forEach(function (e, i) {
-      const card = el('div', 'panel jentry');
-      card.innerHTML =
-        '<div class="jentry__head"><span class="jentry__date">' + e.date + '</span>' +
-        (e.sky ? '<span class="jentry__sky">' + e.sky + '</span>' : '') + '</div>' +
-        '<div class="jentry__what">' + e.what + '</div>' +
-        (e.note ? '<p class="jentry__note">' + e.note + '</p>' : '');
-      const del = el('button', 'btn btn--ghost btn--small', '🗑️ Vymazať');
-      del.addEventListener('click', function () {
-        const idx = state.journal.indexOf(e);
-        if (idx >= 0) state.journal.splice(idx, 1);
-        saveState();
-        go('journal');
-      });
-      card.appendChild(del);
-      list[i] = e;
-      s.appendChild(card);
-    });
-  }
+  const withPhoto = Object.keys(state.discovered).filter(function (id) {
+    return state.discovered[id].photo;
+  }).length;
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
+  const head = el('div', 'stack stack--tight');
+  head.appendChild(el('h1', 'h-hero', 'Deník'));
+  head.appendChild(el('p', 'lead',
+    'Skuteční astronomové si deník píšou celý život. Tohle je ten tvůj – ' +
+    list.length + (list.length === 1 ? ' zápis' : (list.length >= 2 && list.length <= 4 ? ' zápisy' : ' zápisů')) +
+    ', ' + Object.keys(state.discovered).length + ' objevených objektů, ' +
+    withPhoto + ' vlastních snímků.'));
+  s.appendChild(head);
+
+  const layout = el('div', 'stack journal__layout');
+  layout.appendChild(journalForm(null, function () { go('journal'); }));
+
+  const timeline = el('div');
+  if (!list.length) {
+    timeline.appendChild(el('div', 'empty',
+      'Deník je zatím prázdný. První zápis se do něj napíše sám, až na výpravě ' +
+      'objevíš první objekt.'));
+  } else {
+    timeline.appendChild(el('div', 'sechead',
+      '<span class="sechead__t">' + icon('calendar', { size: 15 }) + 'Co už máš za sebou</span>' +
+      '<span class="sechead__n">' + list.length + '</span>'));
+    list.forEach(function (e) { timeline.appendChild(journalEntry(e)); });
+  }
+  layout.appendChild(timeline);
+  s.appendChild(layout);
   return s;
 }
 
-/* ======================= 11) HVIEZDNY TRÉNING ============================
-   Zmiešaný test z otázok všetkých dokončených lekcií. Bez trestov, bez
-   časomiery – len osobný rekord, ktorý sa dá prekonať.                   */
+/** Jeden zápis v deníku – včetně všeho, co s ním souvisí. */
+function journalEntry(e) {
+  const card = el('article', 'jentry');
+  const obj = e.objectId ? getObject(e.objectId) : null;
+  const rec = e.objectId ? state.discovered[e.objectId] : null;
+
+  const head = el('div', 'jentry__head');
+  head.innerHTML =
+    '<span class="jentry__date">' +
+      (e.kind === 'objev' ? icon('star', { size: 13 }) + ' objev · ' : '') + e.date +
+    '</span>' +
+    (e.sky ? '<span class="jentry__sky">' + e.sky + '</span>' : '');
+  card.appendChild(head);
+  card.appendChild(el('div', 'jentry__what', e.what));
+  if (e.note) card.appendChild(el('p', 'jentry__note', e.note));
+
+  /* vlastní fotka, pokud u objektu je */
+  if (rec && rec.photo) {
+    const fig = el('figure', 'photo has-photo photo--tall');
+    const img = el('img');
+    img.src = rec.photo;
+    img.alt = 'Moje fotografie ' + (obj ? obj.name : '');
+    fig.appendChild(img);
+    if (rec.photoDate) fig.appendChild(el('figcaption', 'photo__credit', 'Vyfoceno ' + rec.photoDate));
+    card.appendChild(fig);
+  }
+
+  /* co s tímhle zápisem souvisí – tady se deník propojuje s celou akademií */
+  const links = el('div', 'jentry__links');
+  function link(ico, text, fn) {
+    const b = el('button', 'jentry__link');
+    b.innerHTML = icon(ico, { size: 14 }) + '<span>' + text + '</span>';
+    b.addEventListener('click', fn);
+    links.appendChild(b);
+  }
+  if (obj) {
+    link('star', obj.designation + ' · detail objektu', function () {
+      go('object', { objectId: obj.id });
+    });
+    if (!rec || !rec.photo) {
+      link('camera', 'přidat vlastní fotku', function () { go('object', { objectId: obj.id }); });
+    }
+  }
+  const src = e.lessonId ? e.lessonId : (obj ? lessonForObject(obj.id) : null);
+  if (src) {
+    const l = LESSONS.filter(function (x) { return x.id === src; })[0];
+    if (l) {
+      link('route', 'výprava ' + l.title, function () { startLesson(l.id); });
+      const term = (l.basics || []).filter(function (t) { return state.terms[t]; })[0];
+      if (term && TERMS[term]) {
+        link('book', 'pojem ' + TERMS[term].name, function () { go('terms'); });
+      }
+      const factStep = l.steps.filter(function (st) { return st.type === 'fact' && state.facts[st.factId]; })[0];
+      if (factStep) {
+        link('bulb', FACTS[factStep.factId].title, function () { go('facts'); });
+      }
+      const r = state.lessons[l.id];
+      if (r && r.completed) {
+        links.appendChild(el('span', 'jentry__link',
+          icon('quiz', { size: 14 }) + '<span>test ' + r.score + '/' + r.total + '</span>'));
+      }
+    }
+  }
+  if (links.children.length) card.appendChild(links);
+
+  /* smazat se dá jen vlastní zápis; automatický objev je součást postupu */
+  if (e.kind !== 'objev') {
+    const del = el('button', 'jentry__link');
+    del.innerHTML = icon('trash', { size: 14 }) + '<span>vymazat zápis</span>';
+    del.addEventListener('click', function () {
+      const idx = state.journal.indexOf(e);
+      if (idx >= 0) state.journal.splice(idx, 1);
+      saveState();
+      go('journal');
+    });
+    const row = el('div', 'jentry__links');
+    row.appendChild(del);
+    card.appendChild(row);
+  }
+  return card;
+}
+
+/** Ve které výpravě se tenhle objekt objevuje jako cíl misie. */
+function lessonForObject(objectId) {
+  const l = LESSONS.filter(function (x) {
+    return x.steps.some(function (st) { return st.type === 'mission' && st.objectId === objectId; });
+  })[0];
+  return l ? l.id : null;
+}
+
+/* ======================= 11) HVĚZDNÝ TRÉNINK =============================
+   Smíšený test z otázek všech dokončených lekcí. Bez trestů, bez
+   časomíry – jen osobní rekord, který se dá překonat.                    */
 
 let training = null;   // { i, score, questions }
 
@@ -2671,7 +3324,7 @@ function collectQuestions(onlyDone) {
 
 function startTraining() {
   const pool = collectQuestions(true);
-  /* zamiešaj a vezmi desať */
+  /* zamíchej a vezmi deset */
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     const t = pool[i]; pool[i] = pool[j]; pool[j] = t;
@@ -2683,55 +3336,49 @@ function startTraining() {
 function screenTraining() {
   const s = el('div', 'screen stack');
 
-  /* úvodná obrazovka */
+  /* úvodní obrazovka */
   if (!training) {
-    s.appendChild(el('h2', 'h-step center', '🎯 HVIEZDNY TRÉNING'));
-    s.appendChild(el('p', 'lead center',
-      'Desať otázok zamiešaných zo všetkých lekcií, ktoré už máš hotové. ' +
-      'Nič sa nestráca a nič sa nepokazí – je to len tréning.'));
+    s.appendChild(el('h1', 'h-hero', 'Hvězdný trénink'));
+    s.appendChild(el('p', 'lead',
+      'Deset otázek zamíchaných ze všech lekcí, které už máš hotové. ' +
+      'Nic se neztrácí a nic se nepokazí – je to jen trénink.'));
     const done = LESSONS.filter(function (l) { return isLessonDone(l.id); }).length;
     s.appendChild(el('div', 'panel panel--tight',
-      '📚 Otázky sa berú z <strong>' + done + '</strong> dokončených lekcií.' +
-      (state.bestTraining ? '<br>🏅 Tvoj najlepší výsledok: <strong>' +
+      'Otázky se berou z <strong>' + done + '</strong> dokončených výprav.' +
+      (state.bestTraining ? '<br>Tvůj nejlepší výsledek: <strong>' +
         state.bestTraining + '/10</strong>' : '')));
-    s.appendChild(nextButton('🚀 SPUSTIŤ TRÉNING', startTraining));
-    const home = el('button', 'btn btn--ghost', '🏠 Domov');
-    home.addEventListener('click', function () { go('home'); });
-    s.appendChild(home);
+    s.appendChild(nextButton('Spustit trénink', startTraining));
     return s;
   }
 
-  /* výsledok */
+  /* výsledek */
   if (training.i >= training.questions.length) {
     const score = training.score, total = training.questions.length;
     const isBest = score > (state.bestTraining || 0);
     if (isBest) { state.bestTraining = score; saveState(); }
     const box = el('div', 'panel result stack');
     box.innerHTML =
-      '<div class="eyebrow">🎯 Tréning dokončený</div>' +
+      '<div class="eyebrow">Trénink dokončen</div>' +
       '<div class="result__score">' + score + '<small>/' + total + '</small></div>' +
       '<div class="lead">' + (isBest
-        ? '🏅 Nový osobný rekord! Lepšie než kedykoľvek predtým.'
-        : (state.bestTraining ? 'Tvoj rekord je ' + state.bestTraining + '/' + total + '. Skús to znova.' : '')) +
+        ? 'Nový osobní rekord! Lepší než kdykoli předtím.'
+        : (state.bestTraining ? 'Tvůj rekord je ' + state.bestTraining + '/' + total + '. Zkus to znovu.' : '')) +
       '</div>';
     s.appendChild(box);
     addXp(score * 5, null);
-    const again = nextButton('🔁 EŠTE RAZ', startTraining);
+    const again = nextButton('Ještě jednou', startTraining);
     s.appendChild(again);
-    const home = el('button', 'btn btn--ghost', '🏠 Domov');
-    home.addEventListener('click', function () { training = null; go('home'); });
-    s.appendChild(home);
     return s;
   }
 
   /* otázka */
   const item = training.questions[training.i];
-  s.appendChild(el('div', 'quiz__count center',
+  s.appendChild(el('div', 'quiz__count',
     'Otázka ' + (training.i + 1) + ' z ' + training.questions.length +
     ' · skóre ' + training.score));
-  s.appendChild(el('div', 'warm__from center', item.lessonIcon + ' ' + item.lessonTitle));
+  s.appendChild(el('div', 'warm__from', 'z výpravy „' + item.lessonTitle + '“'));
   renderQuestion(item.q, s, {
-    nextLabel: (training.i === training.questions.length - 1) ? 'ZOBRAZIŤ VÝSLEDOK 🏅' : 'ĎALŠIA →',
+    nextLabel: (training.i === training.questions.length - 1) ? 'Zobrazit výsledek' : 'Další',
     onAnswer: function (ok) {
       if (ok) training.score++;
       rememberMiss(item.lessonId, item.qi, ok);
@@ -2741,15 +3388,15 @@ function screenTraining() {
   return s;
 }
 
-/* ========================= 12) PREHĽAD PRE RODIČA ========================
-   Bez hodnotenia dieťaťa – len prehľad, čo už prešlo a kde sa zaseklo,
-   aby sa rodič mohol pripojiť k tomu, čo ho práve zaujíma.               */
+/* ========================= 12) PŘEHLED PRO RODIČE ========================
+   Bez hodnocení dítěte – jen přehled, co už prošlo a kde se zaseklo,
+   aby se rodič mohl připojit k tomu, co ho právě zajímá.                 */
 function screenParent() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '📊 PREHĽAD PRE RODIČA'));
+  s.appendChild(el('h1', 'h-hero', 'Pro rodiče'));
   s.appendChild(el('p', 'sub',
-    'Všetko je uložené len v tomto prehliadači, nikam sa to neposiela. ' +
-    'Tento prehľad slúži na to, aby ste vedeli, o čom sa doma rozprávať.'));
+    'Všechno je uložené jen v tomto prohlížeči, nikam se to neposílá. ' +
+    'Tento přehled slouží k tomu, abyste věděli, o čem si doma povídat.'));
 
   const doneL = LESSONS.filter(function (l) { return isLessonDone(l.id); });
   const scores = doneL.map(function (l) { return state.lessons[l.id]; });
@@ -2758,30 +3405,32 @@ function screenParent() {
 
   const g = el('div', 'stats');
   g.appendChild(el('div', 'panel stat',
-    '<div class="stat__label">✅ Hotové lekcie</div>' +
+    '<div class="stat__label">' + icon('check', { size: 14 }) + 'Hotové výpravy</div>' +
     '<div class="stat__value">' + doneL.length + ' / ' + LESSONS.length + '</div>'));
   g.appendChild(el('div', 'panel stat',
-    '<div class="stat__label">🧠 Testy dokopy</div>' +
+    '<div class="stat__label">' + icon('quiz', { size: 14 }) + 'Testy dohromady</div>' +
     '<div class="stat__value">' + (max ? sum + ' / ' + max : '—') + '</div>' +
-    '<div class="tile__meta">' + (max ? Math.round(sum / max * 100) + ' % správne' : 'zatiaľ žiadny test') + '</div>'));
+    '<div class="tile__meta">' + (max ? Math.round(sum / max * 100) + ' % správně' : 'zatím žádný test') + '</div>'));
   s.appendChild(g);
 
   const g2 = el('div', 'stats');
   g2.appendChild(el('div', 'panel stat',
-    '<div class="stat__label">📖 Naučené pojmy</div>' +
+    '<div class="stat__label">' + icon('book', { size: 14 }) + 'Naučené pojmy</div>' +
     '<div class="stat__value">' + Object.keys(state.terms).length + ' / ' +
     (typeof TERMS !== 'undefined' ? Object.keys(TERMS).length : 0) + '</div>'));
   g2.appendChild(el('div', 'panel stat',
-    '<div class="stat__label">🔭 Objavené objekty</div>' +
+    '<div class="stat__label">' + icon('telescope', { size: 14 }) + 'Objevené objekty</div>' +
     '<div class="stat__value">' + Object.keys(state.discovered).length + ' / ' + SPACE_OBJECTS.length + '</div>'));
   s.appendChild(g2);
 
-  /* na čom sa dieťa zaseklo */
+  /* na čem se dítě zaseklo */
   const missKeys = Object.keys(state.missed || {});
-  s.appendChild(el('h3', null, '🔁 ČO SA EŠTE NEUSADILO'));
+  s.appendChild(el('div', 'sechead', '<span class="sechead__t">' + icon('reset', { size: 15 }) +
+    'Co se ještě neusadilo</span>'));
   if (!missKeys.length) {
-    s.appendChild(el('div', 'panel', 'Nič – všetky otázky, ktoré kedy netrafil, si už opravil. ' +
-      'Zle zodpovedané otázky sa mu automaticky vrátia ako rozcvička na začiatku ďalšej lekcie.'));
+    s.appendChild(el('div', 'panel', 'Nic – všechny otázky, které kdy netrefil, si už opravil. ' +
+      'Špatně zodpovězené otázky se mu automaticky vrátí jako rozcvička na začátku další ' +
+      'lekce.'));
   } else {
     const list = el('div', 'stack');
     missKeys.forEach(function (k) {
@@ -2792,31 +3441,28 @@ function screenParent() {
       const q = quizStep && quizStep.questions[qi];
       if (!q) return;
       list.appendChild(el('div', 'panel panel--tight',
-        '<div class="tile__meta">' + l.icon + ' ' + l.title + '</div>' +
+        '<div class="tile__meta">' + l.title + '</div>' +
         '<div>' + q.question + '</div>' +
-        (q.explain ? '<div class="jentry__note">Správne: ' + q.explain + '</div>' : '')));
+        (q.explain ? '<div class="jentry__note">Správně: ' + q.explain + '</div>' : '')));
     });
     s.appendChild(list);
   }
 
-  /* prehľad lekcií */
-  s.appendChild(el('h3', null, '📚 LEKCIA PO LEKCII'));
+  /* přehled lekcí */
+  s.appendChild(el('h3', null, 'Výprava po výpravě'));
   const tbl = el('div', 'ptable');
   LESSONS.forEach(function (l, i) {
     const r = state.lessons[l.id];
     tbl.appendChild(el('div', 'ptable__row' + (r && r.completed ? ' is-done' : ''),
       '<span class="ptable__n">' + (i + 1) + '.</span>' +
-      '<span class="ptable__t">' + l.icon + ' ' + l.title + '</span>' +
+      '<span class="ptable__t">' + l.title + '</span>' +
       '<span class="ptable__s">' + (r && r.completed ? r.score + '/' + r.total : '—') + '</span>'));
   });
   s.appendChild(tbl);
 
-  /* vynulovanie appky – tu, kde to dieťa samo nehľadá */
+  /* vynulování aplikace – tam, kde to dítě samo nehledá */
   s.appendChild(resetBox());
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
   return s;
 }
 
@@ -2826,105 +3472,102 @@ function screenCertificate() {
   const lv = currentLevel();
   const cert = el('div', 'cert');
   cert.innerHTML =
-    '<div class="cert__seal">🏆</div>' +
-    '<div class="cert__eyebrow">VESMÍRNA AKADÉMIA</div>' +
-    '<h2 class="cert__title">DIPLOM MLADÉHO ASTRONÓMA</h2>' +
-    '<p class="cert__for">udeľuje sa</p>' +
+    '<div class="cert__seal">' + icon('trophy', { size: 40 }) + '</div>' +
+    '<div class="cert__eyebrow">VESMÍRNÁ AKADEMIE</div>' +
+    '<h2 class="cert__title">DIPLOM MLADÉHO ASTRONOMA</h2>' +
+    '<p class="cert__for">uděluje se</p>' +
     '<div class="cert__name">' + (state.name || 'mladému astronautovi') + '</div>' +
-    '<p class="cert__body">za absolvovanie všetkých ' + LESSONS.length + ' lekcií akadémie, ' +
-      'získanie ' + state.badges.length + ' odznakov, objavenie ' +
-      Object.keys(state.discovered).length + ' vesmírnych objektov a naučenie ' +
-      Object.keys(state.terms).length + ' astronomických pojmov.</p>' +
+    '<p class="cert__body">za absolvování všech ' + LESSONS.length + ' lekcí akademie, ' +
+      'získání ' + state.badges.length + ' odznaků, objevení ' +
+      Object.keys(state.discovered).length + ' vesmírných objektů a naučení ' +
+      Object.keys(state.terms).length + ' astronomických pojmů.</p>' +
     '<div class="cert__row"><span>⭐ ' + lv.level.name + '</span><span>' + state.xp + ' XP</span></div>' +
     '<div class="cert__date">' + todayText() + '</div>';
   s.appendChild(cert);
-  s.appendChild(el('p', 'sub center',
-    'Tlačidlom nižšie sa diplom dá vytlačiť alebo uložiť ako PDF.'));
+  s.appendChild(el('p', 'sub',
+    'Tlačítkem níže se diplom dá vytisknout nebo uložit jako PDF.'));
 
-  const print = el('button', 'btn btn--wide', '🖨️ VYTLAČIŤ DIPLOM');
+  const print = el('button', 'btn btn--wide', 'Vytisknout diplom');
   print.addEventListener('click', function () { window.print(); });
   s.appendChild(print);
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
   return s;
 }
 
-/* ======================= 14) RESET APLIKÁCIE ============================
-   Vymaže úplne všetko: meno, XP, úroveň, odznaky, objekty, vlastné fotky,
-   slovníček, denník, rekord aj nastavenia. Zámerne na dva kroky – aby sa
-   celoročná zbierka nedala zmazať jedným náhodným klikom.               */
+/* ======================= 14) RESET APLIKACE =============================
+   Vymaže úplně všechno: jméno, XP, úroveň, odznaky, objekty, vlastní fotky,
+   slovníček, deník, rekord i nastavení. Záměrně na dva kroky – aby se
+   celoroční sbírka nedala smazat jedním náhodným kliknutím.             */
 
-/** Prehľad toho, čo sa reset chystá vymazať – aby to bolo vidieť pred klikom. */
+/** Přehled toho, co se reset chystá vymazat – aby to bylo vidět před kliknutím. */
 function resetSummary() {
   const items = [];
   if (state.name) items.push('meno <strong>' + state.name + '</strong>');
   items.push('<strong>' + state.xp + ' XP</strong> a úroveň ' + currentLevel().level.name);
   const doneCount = LESSONS.filter(function (l) { return isLessonDone(l.id); }).length;
-  items.push('<strong>' + doneCount + '</strong> dokončených lekcií a výsledky testov');
-  items.push('<strong>' + state.badges.length + '</strong> odznakov');
+  items.push('<strong>' + doneCount + '</strong> dokončených lekcí a výsledky testů');
+  items.push('<strong>' + state.badges.length + '</strong> odznaků');
   const objs = Object.keys(state.discovered);
   const photos = objs.filter(function (id) { return state.discovered[id].photo; }).length;
-  items.push('<strong>' + objs.length + '</strong> objavených objektov' +
-             (photos ? ' vrátane <strong>' + photos + '</strong> vlastných fotiek z Dwarfu' : ''));
-  items.push('<strong>' + Object.keys(state.terms).length + '</strong> pojmov v slovníčku a ' +
-             '<strong>' + Object.keys(state.facts).length + '</strong> zaujímavostí');
+  items.push('<strong>' + objs.length + '</strong> objevených objektů' +
+             (photos ? ' včetně <strong>' + photos + '</strong> vlastních fotek z Dwarfu' : ''));
+  items.push('<strong>' + Object.keys(state.terms).length + '</strong> pojmů ve slovníčku a ' +
+             '<strong>' + Object.keys(state.facts).length + '</strong> zajímavostí');
   const j = (state.journal || []).length;
-  if (j) items.push('<strong>' + j + '</strong> zápisov v pozorovacom denníku');
-  if (state.bestTraining) items.push('rekord v tréningu (' + state.bestTraining + '/10)');
+  if (j) items.push('<strong>' + j + '</strong> zápisů v pozorovacím deníku');
+  if (state.bestTraining) items.push('rekord v tréninku (' + state.bestTraining + '/10)');
   return items;
 }
 
-/** Naozaj vymaže všetko a vráti appku do stavu ako pri prvom otvorení. */
+/** Opravdu vymaže všechno a vrátí aplikaci do stavu jako při prvním otevření. */
 function resetEverything() {
   state = structuredCopy(DEFAULT_STATE);
   try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
   saveState();
-  applyNightMode();          // vypne aj nočný režim
+  applyNightMode();          // vypne i noční režim
   quiz = null; warm = null; training = null; lesson = null;
   renderXp(false);
 }
 
 /**
- * Blok „vynulovať aplikáciu“ – dá sa vložiť na ľubovoľnú obrazovku.
- * Krok 1: tlačidlo. Krok 2: zoznam toho, čo zmizne + potvrdenie alebo zrušenie.
+ * Blok „vynulovat aplikaci“ – dá se vložit na libovolnou obrazovku.
+ * Krok 1: tlačítko. Krok 2: seznam toho, co zmizne + potvrzení nebo zrušení.
  */
 function resetBox() {
   const box = el('div', 'panel reset');
   showButton();
 
-  /* krok 1 – len tlačidlo */
+  /* krok 1 – jen tlačítko */
   function showButton() {
     box.innerHTML = '';
     box.classList.remove('is-armed');
-    box.appendChild(el('div', 'stat__label', '♻️ VYNULOVAŤ APLIKÁCIU'));
+    box.appendChild(el('div', 'stat__label', icon('reset', { size: 15 }) + 'Vynulovat aplikaci'));
     box.appendChild(el('p', 'sub',
-      'Vymaže úplne všetko a appka bude ako po prvom otvorení: meno, XP, úroveň, ' +
-      'odznaky, objavené objekty aj vlastné fotky. Nedá sa to vrátiť.'));
-    const b = el('button', 'btn btn--ghost btn--small', '♻️ Chcem vynulovať appku');
+      'Vymaže úplně všechno a aplikace bude jako po prvním otevření: jméno, XP, úroveň, ' +
+      'odznaky, objevené objekty i vlastní fotky. Nedá se to vrátit.'));
+    const b = el('button', 'btn btn--ghost btn--small', 'Chci vynulovat aplikaci');
     b.addEventListener('click', showConfirm);
     box.appendChild(b);
   }
 
-  /* krok 2 – zoznam toho, čo zmizne, a potvrdenie */
+  /* krok 2 – seznam toho, co zmizne, a potvrzení */
   function showConfirm() {
     box.innerHTML = '';
     box.classList.add('is-armed');
-    box.appendChild(el('div', 'stat__label', '⚠️ NAOZAJ VYMAZAŤ VŠETKO?'));
-    box.appendChild(el('p', 'sub', 'Zmizne toto a nedá sa to vrátiť:'));
+    box.appendChild(el('div', 'stat__label', 'Opravdu vymazat všechno?'));
+    box.appendChild(el('p', 'sub', 'Zmizí tohle a nedá se to vrátit:'));
     const ul = el('ul', 'resetlist');
     resetSummary().forEach(function (t) { ul.appendChild(el('li', null, t)); });
     box.appendChild(ul);
 
     const row = el('div', 'namerow');
-    const yes = el('button', 'btn btn--small btn--danger', '🗑️ ÁNO, VYMAZAŤ VŠETKO');
+    const yes = el('button', 'btn btn--small btn--danger', 'Ano, vymazat všechno');
     yes.addEventListener('click', function () {
       resetEverything();
-      toast('♻️ Appka je vynulovaná');
+      toast('Aplikace je vynulovaná');
       go('home');
     });
-    const no = el('button', 'btn btn--ghost btn--small', '↩️ Nie, nechať tak');
+    const no = el('button', 'btn btn--ghost btn--small', '↩️ Ne, nechat tak');
     no.addEventListener('click', showButton);
     row.appendChild(yes); row.appendChild(no);
     box.appendChild(row);
@@ -2935,9 +3578,10 @@ function resetBox() {
 
 function screenSources() {
   const s = el('div', 'screen stack');
-  s.appendChild(el('h2', 'h-step', '🔗 ZDROJE'));
-  s.appendChild(el('p', 'sub', 'Všetky údaje aj fotografie pochádzajú z oficiálnych zdrojov. ' +
-    'Fotografie NASA sú public domain, fotografie ESA/Hubble a ESO sú pod licenciou CC BY 4.0.'));
+  s.appendChild(el('h1', 'h-hero', 'Zdroje'));
+  s.appendChild(el('p', 'sub', 'Všechny údaje i fotografie pocházejí z oficiálních zdrojů. ' +
+    'Fotografie NASA jsou public domain, fotografie ESA/Hubble a ESO jsou pod licencí CC BY ' +
+    '4.0.'));
   const ul = el('ul', 'sources');
   SOURCES.forEach(function (src) {
     ul.appendChild(el('li', null, '<a href="' + src.url + '" target="_blank" rel="noopener">' + src.label + '</a>'));
@@ -2946,13 +3590,11 @@ function screenSources() {
 
   s.appendChild(resetBox());
 
-  const home = el('button', 'btn btn--ghost', '🏠 Domov');
-  home.addEventListener('click', function () { go('home'); });
-  s.appendChild(home);
   return s;
 }
 
-/* =========================== ŠTART ====================================== */
+/* =========================== START ====================================== */
 applyNightMode();
 drawStarfield();
-render();
+buildNav();
+applyHash();          // otevře obrazovku podle adresy (#/…), ne vždy domov
