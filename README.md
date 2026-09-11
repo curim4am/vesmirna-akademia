@@ -1,179 +1,319 @@
-# 🚀 VESMÍRNA AKADÉMIA
+# VESMÍRNÁ AKADEMIE
 
-**22 lekcií** od hmlovín po ďalekohľady, **9 interaktívnych simulátorov**,
-**81 pojmov v slovníčku** (z toho 34 s hlbším vysvetlením), **50 zaujímavostí
-„Vieš že?“**, **22 odznakov**, **20 objektov na objavenie**, **10 úrovní**
-(spolu 4 760 XP).
+Malá interaktivní webová aplikace pro devítiletého astronoma.
+Čistý HTML + CSS + JavaScript. Žádný framework, žádný backend, žádné přihlašování.
+Postup (XP, kvalifikace, objevené objekty, deník) se ukládá do `localStorage`
+v prohlížeči.
 
-Každá lekcia začína krokom **📖 ZÁKLADY** – pojmy, ktoré v nej budú, s obrázkami
-a porovnávacími dvojicami (nízky vs. vysoký gain, ostré vs. rozostrené…) – a väčšina
-obsahuje **interaktívnu úlohu**, v ktorej sa dá s nastaveniami naozaj hrať.
+Obsah: **22 výprav** (lekcí) od mlhovin po dalekohledy, **9 interaktivních
+simulátorů**, **81 pojmů ve slovníčku** (z toho 34 s hlubším vysvětlením),
+**50 zajímavostí „Víš, že?“**, **22 kvalifikací**, **20 objektů k objevení**,
+**10 úrovní** (dohromady 4 760 XP) a **32 odkazů** na NASA / ESA / ESO / DwarfLab.
 
-Navyše: 🌌 Vesmírna mapa · 📖 Slovníček · 💡 Zbierka zaujímavostí ·
-📚 Zbierka objavených objektov s možnosťou nahrať **vlastnú fotku z Dwarfu** ·
-🌠 Čo je práve teraz na oblohe · 📓 Pozorovací denník · 🎯 Hviezdny tréning ·
-🔁 Rozcvička z otázok, ktoré naposledy ušli · 🔴 Nočný (červený) režim ·
-🔔 Nepovinné jemné zvuky ·
-📊 Prehľad pre rodiča · 🏆 Diplom · 🔗 30+ zdrojov NASA / ESA / ESO / DwarfLab
+Každá výprava začíná krokem **Základy** – pojmy, které v ní budou, s obrázky
+a srovnávacími dvojicemi (nízký vs. vysoký gain, ostré vs. rozostřené…) – a většina
+obsahuje **interaktivní úlohu**, ve které se dá s nastavením opravdu hrát.
 
-Malá interaktívna webová aplikácia pre 9-ročného astronóma.
-Čistý HTML + CSS + JavaScript. Žiadny framework, žiadny backend, žiadne prihlasovanie.
-Pokrok (XP, odznaky, objavené objekty) sa ukladá do `localStorage` v prehliadači.
+Aplikace je celá v češtině a je lokalizovaná na **Prahu 3** (50,09° severní šířky).
+Mapa oblohy, doporučení „co je dnes vysoko“ i souřadnice objektů počítají s tímto
+místem.
 
 ---
 
-## 1) Ako to spustím?
+## 1) Jak to spustím?
 
 ### Mac
-1. Rozbaľ priečinok `vesmirna-akademia`.
-2. Dvojklik na `index.html` → otvorí sa v Safari alebo Chrome.
+1. Rozbal složku `vesmirna-akademia`.
+2. Dvojklik na `index.html` → otevře se v Safari nebo Chrome.
 
 ### Windows / PC
-1. Rozbaľ priečinok `vesmirna-akademia`.
+1. Rozbal složku `vesmirna-akademia`.
 2. Dvojklik na `index.html`.
 
-To je všetko. Nič sa neinštaluje.
+To je všechno. Nic se neinstaluje.
 
-> **Tip:** Ak chceš, aby sa fotografie z NASA/ESA/ESO načítavali, počítač musí byť online.
-> Bez internetu appka funguje rovnako – namiesto fotografií sa zobrazia vlastné
-> vesmírne ilustrácie generované priamo v kóde.
+> **Tip:** Aby se fotografie z NASA/ESA/ESO načítaly, musí být počítač online.
+> Bez internetu aplikace funguje stejně – místo fotografií se zobrazí vlastní
+> vesmírné ilustrace generované přímo v kódu.
 
-> **Voliteľne (odporúčané pri vývoji):** spusti malý lokálny server, aby sa
-> prehliadač nesťažoval na `file://`:
+> **Volitelně (doporučené při vývoji):** spusť malý lokální server, aby si
+> prohlížeč nestěžoval na `file://`:
 > ```bash
 > cd vesmirna-akademia
-> python3 -m http.server 8000    # potom otvor http://localhost:8000
+> python3 -m http.server 8000    # potom otevři http://localhost:8000
 > ```
 
 ---
 
-## 2) Štruktúra priečinkov
+## 2) Struktura složek
 
 ```text
 vesmirna-akademia/
 │
-├── index.html          – kostra aplikácie (nič obsahové sa tu needituje)
-├── style.css           – všetok dizajn
-├── app.js              – logika (obrazovky, XP, kvíz, ukladanie)
-├── sim-engine.js       – MOTOR SIMULÁCIÍ (kreslenie náhľadov na canvas)
+├── index.html          – kostra aplikace (nic obsahového se tu needituje)
+├── style.css           – všechen design (vizuální systém, verze 2)
+├── app.js              – logika (obrazovky, adresy, XP, kvíz, ukládání)
+├── icons.js            – jednotná sada SVG ikon
+├── sky-map.js          – mapa oblohy na canvasu (createSkyMap)
+├── sim-engine.js       – MOTOR SIMULACÍ (kreslení náhledů na canvas)
 │
 ├── data/
-│   ├── images.js       – register obrázkov + autori (credit) + licencie
-│   ├── objects.js      – katalóg objektov, typy objektov, SEASON_TIPS
-│   │                     (čo je v ktorom mesiaci na oblohe)
-│   ├── facts.js        – zaujímavosti „VIEŠ ŽE?“ (zbierateľné)
-│   ├── terms.js        – SLOVNÍČEK: pojmy pre krok „📖 ZÁKLADY“ + pole deep
-│   ├── sims.js         – TEXTY A OVLÁDAČE INTERAKTÍVNYCH ÚLOH
-│   └── lessons.js      – OBSAH LEKCIÍ, otázky, odznaky, úrovne, zdroje,
-│                         UPCOMING = pripravované témy vo Vesmírnej mape
+│   ├── images.js       – registr obrázků + autoři (credit) + licence
+│   ├── objects.js      – katalog objektů, typy objektů, SEASON_TIPS
+│   │                     (co je v kterém měsíci na obloze)
+│   ├── facts.js        – zajímavosti „VÍŠ, ŽE?“ (sběratelné)
+│   ├── terms.js        – SLOVNÍČEK: pojmy pro krok „Základy“ + pole deep
+│   ├── sims.js         – TEXTY A OVLADAČE INTERAKTIVNÍCH ÚLOH
+│   ├── sky.js          – OBLOHA: 55 jasných hvězd, obrazce, SKY_PLACE
+│   └── lessons.js      – OBSAH VÝPRAV, otázky, kvalifikace, úrovně, zdroje,
+│                         UPCOMING = chystaná témata
 │
-├── tools/              – kontrola dát a automatický test lekcií
-├── images/             – tu budú lokálne fotografie (aj vlastné z Dwarfu)
+├── tools/              – kontrola dat, kontrola češtiny, automatické testy,
+│                         složení jednosouborové verze
+├── images/             – tu budou lokální fotografie (i vlastní z Dwarfu)
+├── vesmirna-akademia-jeden-soubor.html – celá aplikace v jednom souboru
 └── README.md
 ```
 
+Pořadí načítání skriptů v `index.html` je závazné: nejdřív data
+(`data/images.js`, `data/objects.js`, `data/facts.js`, `data/terms.js`,
+`data/sims.js`, `data/sky.js`, `data/lessons.js`), potom logika
+(`icons.js`, `sky-map.js`, `sim-engine.js`, `app.js`). `data/sky.js` musí být
+před `sky-map.js`, protože mapa z něj bere `SKY_PLACE` i hvězdy.
+
 ---
 
-## 3) Čo kde upravím?
+## 3) Čtyři místa a adresy (#/…)
 
-| Chcem zmeniť… | Súbor | Kde presne |
+Domovská obrazovka není rozcestník s dlaždicemi. Je to obloha nad Prahou, na které
+svítí objekty, které už dítě objevilo. Navigace má **čtyři místa** (`NAV_ITEMS`
+v `app.js`) a všechno ostatní je dostupné z nich:
+
+| Místo | Co tam je | Odkud se pokračuje dál |
 |---|---|---|
-| **texty lekcie** (hádanka, vysvetlenia, WOW moment, misia) | `data/lessons.js` | `LESSONS[0].steps` – každý krok má svoj `type` a texty |
-| **otázky v kvíze** | `data/lessons.js` | krok `{ type:'quiz', questions:[…] }` |
-| **nový vesmírny objekt** | `data/objects.js` | pole `SPACE_OBJECTS` – skopíruj M42 a zmeň údaje |
-| **nový typ objektu** (galaxia, hviezdokopa…) | `data/objects.js` | objekt `OBJECT_TYPES` |
-| **obrázky, autorov, licencie** | `data/images.js` | objekt `IMAGES` |
-| **zaujímavosti „Vieš že?“** | `data/facts.js` | objekt `FACTS` – potom v lekcii `{ type:'fact', factId:'…' }` |
-| **pojmy v úvode lekcie** | `data/terms.js` | objekt `TERMS` – potom v lekcii `basics: ['expozicia', …]` |
-| **hlbšie vysvetlenie pojmu** | `data/terms.js` | pole `deep: '…'` – zobrazí sa pod pojmom ako „🤔 Prečo to tak je“ |
-| **rozšírenie vysvetlenia v lekcii** | `data/lessons.js` | pole `more: ['…', '…']` na kroku `info` – „🤔 Chcem vedieť viac“ |
-| **texty a ovládače simulácie** | `data/sims.js` | objekt `SIMS` – posuvníky, prepínače, výzva, rady |
-| **ako simulácia kreslí / počíta** | `sim-engine.js` | objekt `SIM_ENGINE` – `draw` / `stats` / `verdict` / `goal` |
-| **čo je v ktorom mesiaci na oblohe** | `data/objects.js` | pole `SEASON_TIPS` (12 mesiacov) |
-| **pripravované témy v mape** | `data/lessons.js` | pole `UPCOMING` |
-| **odznaky** | `data/lessons.js` | objekt `BADGES` |
-| **úrovne a XP hranice** | `data/lessons.js` | pole `LEVELS` |
+| **OBLOHA** | mapa oblohy, aktuální výprava, „dnes vysoko“, poslední objev, noční režim a zvuky | detail objektu, výprava, deník |
+| **VÝPRAVA** | seznam 22 výprav, hvězdný trénink, chystaná témata (`UPCOMING`) | krok výpravy |
+| **DENÍK** | zápisy z nocí (i automatické o objevech), vlastní snímky | detail objektu, sbírka |
+| **POSTUP** | tři dráhy, úroveň a XP, kvalifikace, slovníček, zajímavosti, sbírka, zdroje, pro rodiče, diplom | jednotlivé sbírky |
+
+Každá obrazovka má vlastní adresu (`ROUTE_PATHS` v `app.js`), takže funguje
+**tlačítko Zpět v prohlížeči** i **obnovení stránky (F5)** – dítě zůstane tam,
+kde bylo:
+
+```text
+#/              obloha (domov)
+#/vypravy       seznam výprav
+#/vyprava/nebulae   konkrétní výprava (výprava se doopravdy nastartuje)
+#/dennik        deník
+#/postup        postup
+#/objekt/m42    karta objektu
+#/pojmy  #/zajimavosti  #/objevy  #/trenink  #/rodic  #/zdroje  #/diplom
+```
+
+Starý název obrazovky `'home'` zůstává funkční, jen ukazuje na oblohu.
+Který route patří ke kterému místu v navigaci, říká tabulka `NAV_SECTION`.
+
+---
+
+## 4) Co kde upravím?
+
+| Chci změnit… | Soubor | Kde přesně |
+|---|---|---|
+| **texty výpravy** (hádanka, vysvětlení, WOW moment, misie) | `data/lessons.js` | `LESSONS[0].steps` – každý krok má svůj `type` a texty |
+| **otázky v kvízu** | `data/lessons.js` | krok `{ type:'quiz', questions:[…] }` |
+| **nový vesmírný objekt** | `data/objects.js` | pole `SPACE_OBJECTS` – zkopíruj M42 a změň údaje (včetně `ra`, `dec`, `coordsSource`) |
+| **nový typ objektu** (galaxie, hvězdokupa…) | `data/objects.js` | objekt `OBJECT_TYPES` |
+| **obrázky, autory, licence** | `data/images.js` | objekt `IMAGES` |
+| **zajímavosti „Víš, že?“** | `data/facts.js` | objekt `FACTS` – potom ve výpravě `{ type:'fact', factId:'…' }` |
+| **pojmy v úvodu výpravy** | `data/terms.js` | objekt `TERMS` – potom ve výpravě `basics: ['expozicia', …]` |
+| **hlubší vysvětlení pojmu** | `data/terms.js` | pole `deep: '…'` – zobrazí se pod pojmem jako „Proč to tak je“ |
+| **rozšíření vysvětlení ve výpravě** | `data/lessons.js` | pole `more: ['…', '…']` na kroku `info` – „Chci vědět víc“ |
+| **texty a ovladače simulace** | `data/sims.js` | objekt `SIMS` – posuvníky, přepínače, výzva, rady |
+| **jak simulace kreslí / počítá** | `sim-engine.js` | objekt `SIM_ENGINE` – `draw` / `stats` / `verdict` / `goal` |
+| **co je v kterém měsíci na obloze** | `data/objects.js` | pole `SEASON_TIPS` (12 měsíců) |
+| **hvězdy a obrazce na mapě** | `data/sky.js` | pole `SKY_STARS` a `SKY_ASTERISMS` |
+| **pozorovací místo** | `data/sky.js` | objekt `SKY_PLACE` (`lat`, `lon`, `decMin`) |
+| **jak se mapa kreslí** | `sky-map.js` | funkce `createSkyMap` |
+| **ikony v rozhraní** | `icons.js` | objekt `ICONS`, mapování `EMOJI_ICON` a `TYPE_ICON` |
+| **chystaná témata** | `data/lessons.js` | pole `UPCOMING` |
+| **kvalifikace (dřív odznaky)** | `data/lessons.js` | objekt `BADGES` |
+| **úrovně a hranice XP** | `data/lessons.js` | pole `LEVELS` |
+| **dráhy postupu** | `app.js` | pole `TRACKS` a `TRACK_RANKS` |
 | **zdroje na konci** | `data/lessons.js` | pole `SOURCES` |
-| **dizajn, farby, veľkosti** | `style.css` | premenné v `:root` na začiatku |
+| **design, barvy, velikosti** | `style.css` | proměnné v `:root` na začátku |
 
-V `app.js` **nie je žiadny obsah lekcie** – iba logika. Nový typ kroku sa pridá
-jednou funkciou a jedným riadkom v `STEP_RENDERERS`.
+V `app.js` **není žádný obsah výpravy** – jen logika. Nový typ kroku se přidá
+jednou funkcí a jedním řádkem v `STEP_RENDERERS`.
 
-Dostupné typy krokov lekcie:
-`guess` (hádanka) · `basics` (📖 Základy – vkladá sa automaticky) · `warmup` (🔁 Rozcvička –
-vkladá sa automaticky) · `info` (jedna myšlienka + ilustrácia, nepovinné `more`) ·
-`cards` (karty na otočenie) · `pick` (vyber správny obrázok) · `wow` (WOW moment) ·
-`compare` (dva obrázky vedľa seba) · `howto` (postup krok za krokom) ·
-**`sim` (interaktívna úloha)** · `fact` (VIEŠ ŽE?) · `mission` (Stellarium + Dwarf) · `quiz`.
+Dostupné typy kroků výpravy:
+`guess` (hádanka) · `basics` (Základy – vkládá se automaticky) · `warmup` (Rozcvička –
+vkládá se automaticky) · `info` (jedna myšlenka + ilustrace, nepovinné `more`) ·
+`cards` (karty na otočení) · `pick` (vyber správný obrázek) · `wow` (WOW moment) ·
+`compare` (dva obrázky vedle sebe) · `howto` (postup krok za krokem) ·
+**`sim` (interaktivní úloha)** · `fact` (VÍŠ, ŽE?) · `mission` (Stellarium + Dwarf) · `quiz`.
 
-**Ako funguje krok „📖 ZÁKLADY“:** do lekcie stačí pridať pole
-`basics: ['expozicia', 'gain', …]` a appka vloží krok so základmi automaticky
-hneď za hádanku (aby hádanka nestratila prekvapenie). Pojmy sa definujú raz
-v `data/terms.js`, dajú sa použiť v ľubovoľnom počte lekcií a po vysvetlení
-sa uložia do obrazovky **📖 Slovníček**, kde sa dajú kedykoľvek dohľadať.
-Pojem s poľom `compare` zobrazí dva obrázky vedľa seba (nízky/vysoký gain,
-ostré/rozostrené, zmestí sa/nezmestí sa), pojem s `warn` pridá upozornenie
-„na čo si dať pozor“.
+**Jak funguje krok „Základy“:** do výpravy stačí přidat pole
+`basics: ['expozicia', 'gain', …]` a aplikace vloží krok se základy automaticky
+hned za hádanku (aby hádanka neztratila překvapení). Pojmy se definují jednou
+v `data/terms.js`, dají se použít v libovolném počtu výprav a po vysvětlení
+se uloží do obrazovky **Slovníček**, kde se dají kdykoli dohledat.
+Pojem s polem `compare` zobrazí dva obrázky vedle sebe (nízký/vysoký gain,
+ostré/rozostřené, vejde se/nevejde se), pojem s `warn` přidá upozornění
+„na co si dát pozor“.
 
-Typy otázok v kvíze: `choice` · `image` · `truefalse` · `order` · `decide`.
+Typy otázek v kvízu: `choice` · `image` · `truefalse` · `order` · `decide`.
 
-**Ako funguje krok „🎛️ INTERAKTÍVNA ÚLOHA“:** do lekcie sa pridá jediný riadok
+**Jak funguje krok „Interaktivní úloha“:** do výpravy se přidá jediný řádek
 
 ```js
 { type: 'sim', simId: 'fotolab', xp: 25, bonusXp: 15 }
 ```
 
-Zvyšok je v dvoch súboroch:
+Zbytek je ve dvou souborech:
 
-* `data/sims.js` → `SIMS.fotolab` – nadpis, úvodný text, **ovládače**, výzva, rady.
-  Ovládač môže byť posuvník po pevných hodnotách (`values: [2, 5, 15, …]`),
-  plynulý posuvník (`min`, `max`, `step`) alebo prepínač (`options: ['AZ', 'EQ']`).
-* `sim-engine.js` → `SIM_ENGINE.fotolab` – `draw(ctx, w, h, v)` nakreslí náhľad,
-  `stats(v)` vráti čísla pod náhľadom, `verdict(v)` hodnotenie a `goal(v)` povie,
-  či je výzva splnená (vtedy sa pripíšu bonusové XP).
+* `data/sims.js` → `SIMS.fotolab` – nadpis, úvodní text, **ovladače**, výzva, rady.
+  Ovladač může být posuvník po pevných hodnotách (`values: [2, 5, 15, …]`),
+  plynulý posuvník (`min`, `max`, `step`) nebo přepínač (`options: ['AZ', 'EQ']`).
+* `sim-engine.js` → `SIM_ENGINE.fotolab` – `draw(ctx, w, h, v)` nakreslí náhled,
+  `stats(v)` vrátí čísla pod náhledem, `verdict(v)` hodnocení a `goal(v)` řekne,
+  jestli je výzva splněná (tehdy se připíšou bonusové XP).
 
-Hodnoty ovládačov prídu do všetkých štyroch funkcií ako objekt `v`
-(napr. `{ exp: 30, gain: 60, frames: 100, mode: 'EQ' }`).
+Hodnoty ovladačů přijdou do všech čtyř funkcí jako objekt `v`
+(např. `{ exp: 30, gain: 60, frames: 100, mode: 'EQ' }`).
 
-Deväť hotových simulácií: `fotolab` (expozícia/gain/snímky/AZ-EQ) · `skladanie` ·
+Devět hotových simulací: `fotolab` (expozice/gain/snímky/AZ-EQ) · `skladanie` ·
 `mesiac-fazy` · `eq-nastavenie` · `zorne-pole` · `tranzit` · `farba-teplota` ·
 `vzdialenosti` · `svetelne-znecistenie`.
 
-**Fyzika vo FOTOLABE** je zjednodušená, ale závislosti sú správne:
-jasnosť rastie logaritmicky s `expozícia × gain`, šum klesá s odmocninou
-z celkového nazbieraného času (štyrikrát dlhší čas = polovičný šum),
-oblúčiky hviezd rastú s expozíciou len v AZ režime a prepal nastane,
-keď je v jednej snímke priveľa svetla.
+**Fyzika ve FOTOLABU** je zjednodušená, ale závislosti jsou správné:
+jasnost roste logaritmicky s `expozice × gain`, šum klesá s odmocninou
+z celkového nasbíraného času (čtyřikrát delší čas = poloviční šum),
+oblouky hvězd rostou s expozicí jen v režimu AZ a přepal nastane,
+když je v jednom snímku příliš mnoho světla.
 
 ---
 
-## 4) Ako pridám vlastné fotografie z Dwarfu?
+## 5) Ikony (icons.js)
 
-1. Ulož fotku do priečinka `images/` (napr. `images/m42.jpg`).
-2. V `data/images.js` prepni:
+Rozhraní **nepoužívá emoji jako ikony**. Všechny ikony jsou SVG z jedné sady
+v `icons.js`:
+
+```js
+icon('telescope', { size: 18 })   // ikona podle názvu
+iconEmoji('🔭')                   // emoji z dat → odpovídající SVG ikona
+iconType('nebula')                // ikona podle typu objektu
+iconEl('camera')                  // hotový DOM element
+```
+
+V datech emoji zůstávají (`OBJECT_TYPES[…].icon`, `BADGES[…].icon`,
+`LESSONS[…].icon`, `UPCOMING[…].icon`), protože se v nich dobře čtou.
+Rozhraní je přes `EMOJI_ICON` a `TYPE_ICON` převede na SVG. Když se přidá
+emoji, které v mapování ještě není, vykreslí se náhradní ikona – takže
+nic nezmizí, jen to stojí za doplnění do `EMOJI_ICON`.
+
+---
+
+## 6) Mapa oblohy (sky-map.js + data/sky.js)
+
+`data/sky.js` obsahuje **55 jasných hvězd** s ověřenými souřadnicemi J2000
+(rektascenze v hodinách, deklinace ve stupních, vizuální magnituda) – u každé
+hvězdy je odkaz na zdroj v poli `source`. Dál je v souboru **14 obrazců**
+(`SKY_ASTERISMS`: Velký vůz, Orion, Kasiopeja, Letní trojúhelník, Pegasův
+čtverec…), pozorovací místo `SKY_PLACE` (Praha 3, 50,09° s. š., 14,45° v. d.,
+`decMin: -35`) a severní galaktický pól `GALACTIC_POLE`.
+
+`sky-map.js` z toho kreslí skutečnou mapu oblohy na canvasu:
+
+```js
+const mapa = createSkyMap(hostElement, { onPick: fn });
+mapa.redraw();            // po změně stavu
+mapa.flash('m42');        // rozsvícení nově objeveného objektu
+```
+
+Co na mapě je: Polárka uprostřed, kružnice deklinace +60°, +30° a 0°, hodiny
+rektascenze po obvodu, **pás Mléčné dráhy** (spočítaný z galaktických
+souřadnic přes `galacticToEquatorial`), jasné hvězdy s obrazci a objekty
+akademie – objevené červeně, neobjevené tiše, dnes viditelné s kroužkem
+a cíl aktuální výpravy s dvojitým kroužkem.
+
+Projekce je **severní polární** a vzdálenost od středu roste lineárně s úhlem
+od pólu: `r = R · (90 − dec) / (90 − decMin)`. Pro dětskou mapu je to čitelnější
+než přísně stereografická projekce, protože nezvětšuje okraj. Mapa kreslí
+oblohu po deklinaci −35°; co je pod tím, z Prahy nikdy nevyjde dost vysoko.
+
+Co je právě na jihu, určuje místní hvězdný čas (`localSiderealHours`);
+orientaci mapy dává `eveningRaHours` – rektascenze, která je dnes ve 22:00
+místního času na jihu.
+
+### Souřadnice objektů
+
+Každý nepohyblivý objekt v `data/objects.js` má:
+
+```js
+ra: 5.588, dec: -5.3875,          // 05h 35m 16.8s -05° 23' 15" (J2000)
+sizeArcmin: 65,                   // volitelně – úhlová velikost
+coordsSource: 'https://en.wikipedia.org/wiki/Orion_Nebula'
+```
+
+Pohyblivé objekty (Měsíc, Slunce, Saturn, Jupiter, ISS) souřadnice nemají a jsou
+označené `moving: true`. Mapa je nekreslí na pevné místo a v rozhraní se u nich
+píše „poloha se mění“ – přesnou polohu je vždy potřeba najít ve Stellariu.
+
+---
+
+## 7) Vizuální systém (style.css)
+
+`style.css` je celý přepsaný na vizuální systém „noční hvězdný atlas“:
+
+* jedna tmavá plocha (`--sky-0` … `--sky-3`), žádné barevné přechody
+  na pozadí ani v textu,
+* **vlasové linky** (`--line`, `--line-2`, `--line-3`) a prázdný prostor místo
+  rámečků a stínů – ne každý prvek je karta,
+* **jediný akcent: Hα červená** (`--ha`, vodíková červená z astrofotografie)
+  a jen na tři věci – hlavní akce, objevený objekt, aktuální postup,
+* písmo: **patkové na nadpisy** (`--serif`, jako v tištěném atlasu), bezpatkové
+  na rozhraní (`--font`), neproporcionální na čísla a souřadnice (`--mono`),
+* **pohyb jen v pěti okamžicích** (sekce 9 v CSS), nikdy trvale,
+* rozestupy `--s1` … `--s8` po 4 / 8 / 12 / 16 / 24 / 32 / 48 / 64 px,
+  rádiusy jen tři (`--r1` … `--r3`).
+
+Starší názvy proměnných (`--bg`, `--panel`, `--accent`, `--text`, `--radius`…)
+zůstávají na konci `:root` jako aliasy, aby se nemusel přepisovat starší kód.
+
+Sekce v souboru: 1) barvy, písmo, rozměry · 2) základ a pozadí · 3) lišta
+a navigace · 4) rozvržení a typografie · 5) komponenty · 6) obrazovky ·
+7) interaktivní úlohy · 8) noční režim a tisk · 9) pohyb · 10) responzivita.
+
+---
+
+## 8) Jak přidám vlastní fotografie z Dwarfu?
+
+1. Ulož fotku do složky `images/` (např. `images/m42.jpg`).
+2. V `data/images.js` přepni:
    ```js
    const IMAGE_CONFIG = { preferLocal: true };
    ```
-3. Skontroluj, že v danej položke je správna cesta v `local`.
+3. Zkontroluj, že je u dané položky správná cesta v `local`.
 
-Poradie načítania je: **lokálny súbor → oficiálny odkaz NASA/ESA/ESO → SVG ilustrácia.**
-Takže ak fotka chýba, nič sa nerozbije.
+Pořadí načítání je: **lokální soubor → oficiální odkaz NASA/ESA/ESO → SVG ilustrace.**
+Takže když fotka chybí, nic se nerozbije.
 
-### Najjednoduchšia cesta: nahrať fotku priamo v aplikácii
+### Nejjednodušší cesta: nahrát fotku přímo v aplikaci
 
-V karte objektu (📚 Moja zbierka → M42 → **📸 MOJA FOTOGRAFIA**) je tlačidlo
-**„📤 NAHRAŤ MOJU FOTKU“**. Vyberie sa súbor z disku a appka ho sama
-zmenší na 900 px a uloží ako JPEG do `localStorage` (+20 XP za prvú fotku
-ku každému objektu). Fotka **nikam neodchádza** – zostáva len v tomto
-prehliadači na tomto počítači.
+Na kartě objektu (POSTUP → Objevené objekty → M42 → **Moje fotografie**) je tlačítko
+**„Nahrát moji fotku“**. Vybere se soubor z disku a aplikace ho sama zmenší
+na 900 px (`MY_PHOTO_MAX`) a uloží jako JPEG do `localStorage` (+20 XP za první
+fotku ke každému objektu). Fotka **nikam neodchází** – zůstává jen v tomto
+prohlížeči na tomto počítači. Datum se uloží do `photoDate` a snímek se ukáže
+i v deníku.
 
-Keby sa `localStorage` naplnil, appka to povie a fotku neuloží
-(namiesto tichého zlyhania). Vtedy stačí niektorú starú fotku odstrániť
-tlačidlom „🗑️ Odstrániť fotku“.
+Kdyby se `localStorage` naplnil, aplikace to řekne a fotku neuloží
+(místo tichého selhání) – původní stav se vrátí zpátky. Tehdy stačí některou
+starou fotku odstranit tlačítkem „Odstranit fotku“.
 
-### Alternatíva: fotka priamo v dátach
+### Alternativa: fotka přímo v datech
 
-Ak chceš fotku pripojiť natrvalo (aj po vymazaní pokroku), dá sa uviesť
+Když chceš fotku připojit natrvalo (i po vymazání postupu), dá se uvést
 v `data/objects.js`:
 
 ```js
@@ -182,163 +322,251 @@ myPhoto: 'images/moje/m42-dwarf-2026-09-10.jpg'
 
 ---
 
-## 5) Prehľad lekcií, misií a odznakov
+## 9) Přehled výprav, misí a kvalifikací
 
-| # | Lekcia | Misia (Stellarium + Dwarf) | Odznak |
+| # | Výprava | Misie (Stellarium + Dwarf) | Kvalifikace |
 |---|---|---|---|
-| 1 | ☁️ Hmloviny | M42 Orionova hmlovina | ☁️ Lovec hmlovín |
-| 2 | 🔭 Dwarf a EQ mode | Polárka + 60 s snímka | 🧭 Navigátor oblohy |
-| 3 | ✨ Hviezdokopy | M45 Plejády | ✨ Zberateľ hviezdokôp |
-| 4 | 🌌 Naša galaxia | pás Mliečnej cesty | 🌌 Obyvateľ Mliečnej cesty |
-| 5 | 🌀 Galaxie | M31 Andromeda | 🌀 Objaviteľ galaxií |
-| 6 | 🪐 Planéty a Mesiac | Mesiac / Saturn / Jupiter | 🪐 Lovec planét |
-| 7 | ⭐ Hviezdy | Albireo (dvojhviezda) | ⭐ Znalec hviezd |
-| 8 | 💥 Supernovy | M1 Krabia hmlovina | 💥 Svedok supernovy |
-| 9 | ⚫ Čierne diery | oblasť v Strelcovi (Sgr A*) | ⚫ Prieskumník temnoty |
-| 10 | 🔭 Dwarf naostro | M44 na automatiku vs. ručne | 🔭 Operátor Dwarfu |
-| 11 | ☀️ Slnko | Slnko s ND filtrom + škvrny | ☀️ Slnečný hliadkar |
-| 12 | 🌗 Fázy a zatmenia | 10 večerov = séria fáz | 🌗 Strážca fáz |
-| 13 | 🗺️ Čítanie oblohy | M27 nájdená podľa súradníc | 🗺️ Kartograf oblohy |
-| 14 | 🛰️ Čo letí nad nami | prelet ISS | 🛰️ Sledovač oblohy |
-| 15 | 📸 Astrofoto majster | 10 vs. 100 snímok | 📸 Astrofoto majster |
-| 16 | 🔬 Z čoho sú hviezdy | spektrum cez CD/prizmu | 🔬 Čítač svetla |
-| 17 | 📏 Vesmírne vzdialenosti | model soustavy na chodníku | 📏 Merač vesmíru |
-| 18 | 🌍 Kde sme vo vesmíre | Sirius + vesmírna adresa | 🌍 Vesmírna adresa |
-| 19 | 🪐 Exoplanéty | 51 Pegasi | 🪐 Hľadač svetov |
-| 20 | ☄️ Kométy a meteory | Perzeidy (+ meteorit Košice) | ☄️ Pozorovateľ kométy |
-| 21 | 🌑 Tmavá obloha | počítanie hviezd doma vs. za mestom | 🌑 Ochránca tmy |
-| 22 | 🏛️ Ďalekohľady | moja fotka vs. Hubble | 🏛️ Znalec ďalekohľadov |
+| 1 | Mlhoviny | M42 Orionova mlhovina | Lovec mlhovin |
+| 2 | Dwarf a EQ režim | Polárka + 60s snímek | Navigátor oblohy |
+| 3 | Hvězdokupy | M45 Plejády | Sběratel hvězdokup |
+| 4 | Naše galaxie | pás Mléčné dráhy | Obyvatel Mléčné dráhy |
+| 5 | Galaxie | M31 Andromeda | Objevitel galaxií |
+| 6 | Planety a Měsíc | Měsíc / Saturn / Jupiter | Lovec planet |
+| 7 | Hvězdy | Albireo (dvojhvězda) | Znalec hvězd |
+| 8 | Supernovy | M1 Krabí mlhovina | Svědek supernovy |
+| 9 | Černé díry | směr střed galaxie (Sgr A*) | Průzkumník temnoty |
+| 10 | Dwarf naostro | M44 na automatiku vs. ručně | Operátor Dwarfu |
+| 11 | Slunce | Slunce s ND filtrem + skvrny | Sluneční hlídka |
+| 12 | Fáze a zatmění | 10 večerů = série fází | Strážce fází |
+| 13 | Čtení oblohy | M27 nalezená podle souřadnic | Kartograf oblohy |
+| 14 | Co letí nad námi | přelet ISS | Sledovač oblohy |
+| 15 | Astrofoto mistr | 10 vs. 100 snímků | Astrofoto mistr |
+| 16 | Z čeho jsou hvězdy | spektrum přes CD/hranol | Čtenář světla |
+| 17 | Vesmírné vzdálenosti | model soustavy na chodníku | Měřič vesmíru |
+| 18 | Kde jsme ve vesmíru | Sirius + vesmírná adresa | Vesmírná adresa |
+| 19 | Exoplanety | 51 Pegasi | Hledač světů |
+| 20 | Komety a meteory | Perseidy (+ meteorit Košice) | Pozorovatel komety |
+| 21 | Tmavá obloha | počítání hvězd doma vs. za městem | Ochránce tmy |
+| 22 | Dalekohledy | moje fotka vs. Hubble | Znalec dalekohledů |
 
-Úrovne: Astronóm začiatočník → Pozorovateľ (150) → Astronóm (400) →
-Deep-Sky Explorer (700) → Majster oblohy (1 100) → Kapitán vesmíru (1 600) →
-Prieskumník galaxií (2 200) → Vesmírny navigátor (2 900) → Veľmajster oblohy (3 700) →
-Legenda Vesmírnej akadémie (4 100 XP).
+Misie jsou dvou druhů: s objektem (uloží se do sbírky a do deníku) a bez objektu –
+například „vyfoť ten samý objekt s 10 a se 100 snímky“. V datech se to řídí tím,
+jestli má krok `mission` pole `objectId`.
 
-Misie sú dvoch druhov: s objektom (uloží sa do zbierky) a bez objektu –
-napríklad „odfoť ten istý objekt s 10 a so 100 snímkami“. V dátach sa to riadi
-tým, či krok `mission` má `objectId`.
+### Tři dráhy postupu
 
-## 6) Ako sa neskôr pridá ďalšia lekcia?
+Nad XP běží tři dráhy (`TRACKS` v `app.js`), které říkají něco konkrétního:
+
+| Dráha | Co měří | Maximum |
+|---|---|---|
+| **Pozorovatel** | kolik objektů jsi objevil | počet objektů v `SPACE_OBJECTS` |
+| **Fotograf** | vlastní snímky + splněné výzvy v simulátorech | objekty + simulace |
+| **Teoretik** | vysvětlené pojmy a nasbírané zajímavosti | `TERMS` + `FACTS` |
+
+Každá dráha má pět stupňů (`TRACK_RANKS`): Začátečník → Hledač → Znalec →
+Průzkumník → Mistr.
+
+**Odznaky se v rozhraní jmenují kvalifikace.** V datech i v uloženém stavu
+zůstal původní název (`BADGES`, `state.badges`), aby se nerozbil postup
+z verze 1. Kvalifikace se dá získat jen dokončenou výpravou včetně testu
+a úlohy venku.
+
+Úrovně (XP zůstaly z verze 1, protože na nich dítě už něco má):
+Astronom začátečník → Pozorovatel (150) → Astronom (400) →
+Deep-Sky Explorer (700) → Mistr oblohy (1 100) → Kapitán vesmíru (1 600) →
+Průzkumník galaxií (2 200) → Vesmírný navigátor (2 900) → Velmistr oblohy (3 700) →
+Legenda Vesmírné akademie (4 100 XP).
+
+---
+
+## 10) Jak se později přidá další výprava?
 
 ```js
 // data/lessons.js
 LESSONS.push({
   id: 'star-clusters',
   icon: '✨',
-  title: 'HVIEZDOKOPY',
+  title: 'HVĚZDOKUPY',
   teaser: '…',
   badge: 'cluster-hunter',
   quizXp: 100,
-  steps: [ /* rovnaké typy krokov ako pri hmlovinách */ ]
+  steps: [ /* stejné typy kroků jako u mlhovin */ ]
 });
 ```
 
-Všetky dáta o pokroku sú v jednom objekte v `localStorage`, kľúč
+### Uložený stav a jeho verze
+
+Všechna data o postupu jsou v jednom objektu v `localStorage`, klíč
 `vesmirna-akademia-v1`:
 
-| Kľúč | Čo je v ňom |
+| Klíč | Co je v něm |
 |---|---|
-| `xp`, `badges`, `lessons` | body, odznaky a výsledky testov |
-| `discovered` | objavené objekty vrátane vlastnej fotky (`photo`) a dátumu |
-| `facts`, `terms` | zbierka zaujímavostí a naučených pojmov |
-| `missed` | otázky, ktoré sa vrátia ako 🔁 Rozcvička |
-| `journal` | zápisy z pozorovacieho denníka |
-| `awarded` | aby sa XP za ten istý krok nepripísalo dvakrát |
-| `name`, `night`, `bestTraining` | meno, nočný režim, rekord v tréningu |
+| `v` | **verze uloženého stavu** (`state.v = 2`) |
+| `xp`, `badges`, `lessons` | body, kvalifikace a výsledky testů |
+| `discovered` | objevené objekty včetně vlastní fotky (`photo`, `photoDate`) a data |
+| `facts`, `terms` | sbírka zajímavostí a naučených pojmů |
+| `missed` | otázky, které se vrátí jako Rozcvička |
+| `journal` | zápisy z pozorovacího deníku (i automatické o objevech) |
+| `awarded` | aby se XP za tentýž krok nepřipsalo dvakrát |
+| `name`, `night`, `sound`, `bestTraining` | jméno, noční režim, zvuky, rekord v tréninku |
+
+Uložený stav má **číslo verze** a nad ním běží **migrační vrstva**
+`migrateState()` v `app.js`. Když aplikace najde starší uložení, dopočítá,
+co ve starší verzi chybělo – **nikdy nic nemaže**. Dítě, které už má
+nasbíraných 2 000 XP, pokračuje přesně tam, kde skončilo.
+
+* **v1 → v2:** přidán pozorovací deník, kvalifikační dráhy (počítají se
+  z už uloženého postupu) a automatické zápisy o objevech. Objekty objevené
+  ve verzi 1 se do deníku zapíšou zpětně, aby deník nezačínal prázdný.
+
+Verze se čte z **uloženého** stavu, ne z výchozích hodnot – jinak by se starší
+uložení tvářilo jako nové a migrace by se nikdy nespustila. Až bude potřeba
+verze 3, přidá se do `migrateState()` další blok `if (from < 3) { … }`
+a zvýší se `STATE_VERSION`.
 
 ---
 
-## 7) Vedecká správnosť a zdroje
+## 11) Vědecká správnost a zdroje
 
-Všetky fakty vychádzajú z oficiálnych zdrojov (odkazy sú aj v appke,
-obrazovka **🔗 Zdroje**):
+Všechna fakta vycházejí z oficiálních zdrojů (odkazy jsou i v aplikaci,
+obrazovka **Zdroje**):
 
-- NASA – [Messier 42 (Orionova hmlovina)](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-42/)
+- NASA – [Messier 42 (Orionova mlhovina)](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-42/)
 - NASA Space Place – [What Is a Nebula?](https://spaceplace.nasa.gov/nebula/en)
 - ESA/Hubble – [Orion Nebula](https://esahubble.org/images/heic0601a/), [Ring Nebula M57](https://esahubble.org/images/heic1310a/), [Whirlpool Galaxy M51](https://esahubble.org/images/heic0506a/), [Omega Centauri](https://esahubble.org/images/heic0809a/), [Saturn](https://esahubble.org/images/heic1917a/)
 - ESO – [Carina Nebula](https://www.eso.org/public/images/eso0905a/), [Messier 78](https://www.eso.org/public/images/eso1105b/), [Horsehead Nebula](https://www.eso.org/public/images/eso0202a/)
-- NASA – Messier [45](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-45/), [13](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-13/), [31](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/), [51](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-51/), [1](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/) · [Saturn](https://science.nasa.gov/saturn/facts/) · [Jupiter – mesiace](https://science.nasa.gov/jupiter/jupiter-moons/) · [Mesiac](https://science.nasa.gov/moon/facts/) · [dvojhviezdy](https://science.nasa.gov/solar-system/skywatching/night-sky-network/aug2024-night-sky-notes/) · [Polárka](https://science.nasa.gov/solar-system/skywatching/what-is-the-north-star-and-how-do-you-find-it/) · [Mliečna cesta](https://imagine.gsfc.nasa.gov/features/cosmic/milkyway_info.html)
-- ESO / EHT – [prvá fotografia čiernej diery v našej galaxii](https://www.eso.org/public/news/eso2208-eht-mw/), [panoráma Mliečnej cesty](https://www.eso.org/public/images/eso0932a/)
-- ESA/Hubble – [zrážka s Andromedou nie je istá (2025)](https://esahubble.org/news/heic2508/)
+- NASA – Messier [45](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-45/), [13](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-13/), [31](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/), [51](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-51/), [1](https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-1/) · [Saturn](https://science.nasa.gov/saturn/facts/) · [Jupiter – měsíce](https://science.nasa.gov/jupiter/jupiter-moons/) · [Měsíc](https://science.nasa.gov/moon/facts/) · [dvojhvězdy](https://science.nasa.gov/solar-system/skywatching/night-sky-network/aug2024-night-sky-notes/) · [Polárka](https://science.nasa.gov/solar-system/skywatching/what-is-the-north-star-and-how-do-you-find-it/) · [Mléčná dráha](https://imagine.gsfc.nasa.gov/features/cosmic/milkyway_info.html)
+- ESO / EHT – [první fotografie černé díry v naší galaxii](https://www.eso.org/public/news/eso2208-eht-mw/), [panoráma Mléčné dráhy](https://www.eso.org/public/images/eso0932a/)
+- ESA/Hubble – [srážka s Andromedou není jistá (2025)](https://esahubble.org/news/heic2508/)
 - DwarfLab – [DWARF mini](https://www.dwarflab.com/us/products/dwarf-mini-smart-telescope), [EQ Mode Setup Guide](https://help.dwarflab.com/en/docs/dwarf-mini-equatorial-setup-guide)
 
-Celý zoznam (30 odkazov) je v aplikácii na obrazovke **🔗 Zdroje**.
+Celý seznam (32 odkazů) je v aplikaci na obrazovce **Zdroje**.
+Souřadnice hvězd v `data/sky.js` a objektů v `data/objects.js` mají zdroj
+u každé položky (`source`, `coordsSource`) – jsou to katalogové údaje J2000
+(Hipparcos/Gaia) podle infoboxů na anglické Wikipedii.
 
-**Licencie obrázkov:** fotografie NASA sú public domain, fotografie
-ESA/Hubble a ESO sú pod licenciou CC BY 4.0 (vyžaduje uvedenie autora –
-credit je zobrazený pod každou fotografiou). SVG ilustrácie sú vlastné,
-vygenerované kódom, bez licenčných obmedzení.
+**Licence obrázků:** fotografie NASA jsou public domain, fotografie
+ESA/Hubble a ESO jsou pod licencí CC BY 4.0 (vyžaduje uvedení autora –
+credit je zobrazený pod každou fotografií). SVG ilustrace jsou vlastní,
+vygenerované kódem, bez licenčních omezení.
 
-Poznámka k vzdialenosti M42: NASA uvádza ~1 500 svetelných rokov, presné
-merania paralaxy dávajú ~1 350 svetelných rokov. V appke je preto
-uvedený rozsah „približne 1 300 – 1 500 svetelných rokov“.
+Poznámka ke vzdálenosti M42: NASA uvádí ~1 500 světelných let, přesná
+měření paralaxy dávají ~1 350 světelných let. V aplikaci je proto
+uvedený rozsah „přibližně 1 300 – 1 500 světelných let“.
 
 ---
 
-## 8) Nástroje na kontrolu (priečinok `tools/`)
+## 12) Nástroje (složka `tools/`)
 
-Keď pridáš novú lekciu, tieto dva príkazy overia, či je všetko v poriadku:
+| Nástroj | Co dělá | Co potřebuje |
+|---|---|---|
+| `kontrola-dat.mjs` | zkontroluje data výprav: chybějící obrázky, fakty, kvalifikace, vadné kvízy, dosažitelnost nejvyšší úrovně, splnitelnost výzev v simulátorech | jen Node.js |
+| `test-lekcie.mjs` | robot proklikává všechny výpravy v prohlížeči od začátku do konce | Node.js + Playwright |
+| `test-aplikace.mjs` | obrazovky, adresy, migrace stavu, mapa, vynulování, šířky | Node.js + Playwright |
+| `kontrola-cestiny.py` | hledá slovenské zbytky a neznámá slova v textech pro člověka | Python 3 (+ volitelně hunspell `cs_CZ`) |
+| `build-jeden-soubor.mjs` | slepí aplikaci do jednoho HTML souboru | jen Node.js |
+| `extract-texty.mjs` | vytáhne zobrazované texty z datových souborů do JSON | jen Node.js |
+| `dump-texty.mjs` | vypíše všechny texty z datových souborů na výstup | jen Node.js |
+| `extract-kod.py` | vytáhne z `app.js` a `sim-engine.js` texty a komentáře do JSON | Python 3 |
+| `uprav-texty.py` | vymění textové řetězce v datových souborech podle mapy | Python 3 |
 
-```bash
-node tools/kontrola-dat.mjs      # chýbajúce obrázky, fakty, odznaky, zlé kvízy (netreba nič inštalovať)
-node tools/test-lekcie.mjs       # robot preklikáva všetky lekcie v prehliadači
-node tools/test-lekcie.mjs sun   # len jedna lekcia podľa id
-```
-
-Prvý skript potrebuje len Node.js. Druhý naviac Playwright:
+Playwright se nainstaluje jednou:
 
 ```bash
 npm install playwright && npx playwright install chromium
 ```
 
-`kontrola-dat.mjs` okrem iného overí aj to, že **každá výzva v simulátore
-sa dá naozaj splniť** – prejde všetky kombinácie ovládačov a hľadá aspoň jednu,
-pri ktorej `goal()` vráti `true`. Ak sa výzva sprísni natoľko, že sa splniť nedá,
-skript to nahlási. `test-lekcie.mjs` zase v každej simulácii posunie každý
-ovládač do oboch krajných polôh aj do stredu a skontroluje, že sa náhľad
-prekreslil a hodnotenie vypísalo.
+Detaily, které je dobré znát:
 
-## 9) Čo sa deje na pozadí (aby to nebolo mágia)
-
-* **🔁 Rozcvička** – keď dieťa v teste netrafí otázku, zapíše sa do `state.missed`.
-  Na začiatku *ďalšej* lekcie (nie tej istej) sa mu vrátia až tri takéto otázky.
-  Keď na ne odpovie správne, zo zoznamu zmiznú. Žiadne trestanie, len druhá šanca.
-* **🌠 Čo je na oblohe** – vyberá sa podľa aktuálneho mesiaca z `SEASON_TIPS`
-  v `data/objects.js`. Nie je to výpočet polohy, je to odporúčanie pre Slovensko
-  (48° s. š.), večernú oblohu – presný čas treba vždy overiť v Stellariu.
-* **🔴 Nočný režim** – prefarbí celú appku do červena a stmaví ju. Nočné videnie
-  sa prispôsobí tme asi po 20 minútach a biele svetlo displeja to zničí za sekundu,
-  červené takmer nie.
-* **🎯 Hviezdny tréning** – zamieša otázky zo *dokončených* lekcií a vyberie
-  desať. Ukladá sa len osobný rekord (`bestTraining`), nič sa nedá pokaziť.
-* **🏆 Diplom** – dlaždica sa objaví až po dokončení všetkých 22 lekcií.
-  Tlačidlo „Vytlačiť“ použije tlač prehliadača (v CSS je `@media print`,
-  ktoré skryje pozadie aj tlačidlá).
-* **🔔 Zvuky** – sú **vypnuté**, kým si ich dieťa samo nezapne. Žiadne zvukové
-  súbory: tóny sa skladajú vo Web Audio API, takže appka zostáva jednosúborová.
-* **Zámerne tu nie sú** série, srdiečka, denné odpočty ani nič, čo by dieťa
-  trestalo za to, že jeden deň nehralo. Odmenou má byť samotný objav.
+* `kontrola-dat.mjs` kromě jiného ověří i to, že **každá výzva v simulátoru
+  se dá opravdu splnit** – projde všechny kombinace ovladačů a hledá alespoň
+  jednu, při které `goal()` vrátí `true`. Když se výzva zpřísní tak, že se
+  splnit nedá, skript to nahlásí.
+* `test-lekcie.mjs` v každé simulaci posune každý ovladač do obou krajních
+  poloh i do středu a zkontroluje, že se náhled překreslil a hodnocení vypsalo.
+  Dá se pustit i na jednu výpravu: `node tools/test-lekcie.mjs sun phases`.
+* `test-aplikace.mjs` testuje aplikaci, ne obsah: otevře **každou adresu
+  `#/…`**, zkusí obnovení stránky i tlačítko Zpět, nahraje do `localStorage`
+  uložení ve verzi 1 a ověří, že po migraci nic nechybí, zkontroluje, že mapa
+  zakreslí objekty na správné souřadnice, že vynulování opravdu všechno smaže
+  a že nic nepřetéká do strany (telefon i monitor).
+* `kontrola-cestiny.py` vytáhne z JS/HTML/CSS texty pro člověka (řetězcové
+  literály, komentáře, text v HTML) a hlásí slovenské znaky a koncovky
+  (`ľ ô ä ŕ ĺ`, infinitiv na `-ť`). S nainstalovaným českým hunspellem přidá
+  i seznam neznámých slov; `--slova` je vypíše i s místem prvního výskytu.
+  Výjimky jsou v `tools/slovnik-vyjimky.txt`. Skript končí nenulovým kódem,
+  když něco našel.
+* `build-jeden-soubor.mjs` bere **pořadí skriptů přímo z `index.html`**, aby
+  se na nový soubor nikdy nezapomnělo. Vyrobí
+  `vesmirna-akademia-jeden-soubor.html` (funguje dvojklikem i offline)
+  a `../artifact-vesmirna-akademia.html` (tělo stránky pro publikování).
 
 ---
 
-## 10) Vynulovanie aplikácie
+## 13) Co se děje na pozadí (aby to nebyla magie)
 
-Dá sa to na dvoch miestach, obe sú jedno kliknutie z domovskej obrazovky:
+* **Rozcvička** – když dítě v testu netrefí otázku, zapíše se do `state.missed`.
+  Na začátku *další* výpravy (ne té samé) se mu vrátí až tři takové otázky.
+  Když na ně odpoví správně, ze seznamu zmizí. Žádné trestání, jen druhá šance.
+* **Dnes vysoko** – vybírá se podle aktuálního měsíce ze `SEASON_TIPS`
+  v `data/objects.js`. Není to výpočet polohy, je to doporučení pro Prahu,
+  večerní oblohu – přesný čas je vždy potřeba ověřit ve Stellariu.
+* **Deník** – zápisy vznikají dvěma způsoby: dítě je napíše samo, nebo je
+  aplikace založí automaticky při objevu objektu. Z každého zápisu vedou
+  odkazy na kartu objektu, na nahrání fotky a na výpravu, ze které pochází.
+* **Noční režim** – přebarví celou aplikaci do červena a ztmaví ji. Noční vidění
+  se přizpůsobí tmě asi po 20 minutách a bílé světlo displeje to zničí za sekundu,
+  červené téměř ne.
+* **Hvězdný trénink** – zamíchá otázky z *dokončených* výprav a vybere
+  deset. Ukládá se jen osobní rekord (`bestTraining`), nic se nedá pokazit.
+  Objeví se, až jsou hotové aspoň tři výpravy.
+* **Diplom** – dostupný až po dokončení všech 22 výprav.
+  Tlačítko „Vytisknout“ použije tisk prohlížeče (v CSS je `@media print`,
+  které skryje pozadí i tlačítka).
+* **Zvuky** – jsou **vypnuté**, dokud si je dítě samo nezapne. Žádné zvukové
+  soubory: tóny se skládají ve Web Audio API, takže aplikace zůstává
+  jednosouborová a funguje i offline.
+* **Záměrně tu nejsou** série, srdíčka, denní odpočty ani nic, co by dítě
+  trestalo za to, že jeden den nehrálo. Odměnou má být samotný objev.
 
-* **📊 Pre rodiča** → dole *„♻️ Vynulovať aplikáciu“*
-* **🔗 Zdroje** → dole to isté
+---
 
-Je to zámerne na **dva kroky**: prvé tlačidlo len vypíše, čo presne zmizne
-(meno, XP a úroveň, dokončené lekcie a výsledky testov, odznaky, objavené objekty
-vrátane vlastných fotiek z Dwarfu, pojmy, zaujímavosti, zápisy v denníku, rekord
-v tréningu), a až druhé to naozaj vymaže. Dá sa medzitým vycúvať tlačidlom
-*„Nie, nechať tak“*.
+## 14) Vynulování aplikace
 
-Po vynulovaní je appka presne ako po prvom otvorení – vypne sa aj nočný režim
-a zvuky a znova sa spýta na meno. **Nedá sa to vrátiť.**
+Dá se to na dvou místech, obě jsou jedno kliknutí z obrazovky POSTUP:
 
-Ručne to ide aj cez konzolu prehliadača:
+* **Pro rodiče** → dole *„Vynulovat aplikaci“*
+* **Zdroje** → dole to samé
+
+Je to záměrně na **dva kroky**: první tlačítko jen vypíše, co přesně zmizí
+(jméno, XP a úroveň, dokončené výpravy a výsledky testů, kvalifikace, objevené
+objekty včetně vlastních fotek z Dwarfu, pojmy, zajímavosti, zápisy v deníku,
+rekord v tréninku), a až druhé to opravdu vymaže. Dá se mezitím vycouvat
+tlačítkem *„Ne, nechat tak“*.
+
+Po vynulování je aplikace přesně jako po prvním otevření – vypne se i noční režim
+a zvuky a znovu se zeptá na jméno. **Nedá se to vrátit.**
+
+Ručně to jde i přes konzoli prohlížeče:
 
 ```js
 localStorage.removeItem('vesmirna-akademia-v1'); location.reload();
 ```
+
+---
+
+## 15) Jak si to ověřit
+
+Po každé úpravě dat nebo kódu stačí tyhle čtyři příkazy ze složky projektu:
+
+```bash
+node tools/kontrola-dat.mjs        # data výprav: chybějící obrázky, fakty, kvalifikace, vadné kvízy, splnitelné výzvy
+node tools/test-lekcie.mjs         # robot proklikává všech 22 výprav v prohlížeči a hlásí chyby z konzole
+node tools/test-aplikace.mjs       # obrazovky a adresy #/…, tlačítko Zpět, migrace starého uložení, mapa, vynulování, šířky
+python3 tools/kontrola-cestiny.py  # hledá slovenské zbytky a neznámá slova ve všech textech pro člověka
+```
+
+První a čtvrtý potřebují jen Node.js, resp. Python 3. Druhý a třetí navíc
+Playwright (`npm install playwright && npx playwright install chromium`).
+Když některý skript skončí nenulovým kódem, vypíše, co přesně a v jakém
+souboru je špatně.
